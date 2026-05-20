@@ -1,34 +1,86 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { techContext } from '../data/tech-context';
+
+const principles = [
+  '문제를 먼저 정의합니다 — 기능 단위가 아니라 사용자·팀 비용 단위로 봅니다.',
+  '사용자의 다음 행동을 기준으로 화면을 설계합니다.',
+  '성능 문제를 사용 흐름의 문제로 바라봅니다.',
+  '반복되는 구현은 구조로 해결하려고 합니다.'
+];
 ---
 
 <BaseLayout
   title="About | 김민찬 포트폴리오"
-  description="복잡한 도메인을 사용자 경험으로 바꾸는 문제 해결 방식과 협업 스타일"
+  description="복잡한 도메인을 사용자가 이해하고 실행할 수 있는 흐름으로 바꾸는 프론트엔드 개발자"
 >
   <section class="space-y-6">
     <h1 class="text-3xl font-bold">About</h1>
-    <p class="max-w-3xl text-slate-300">
-      저는 복잡한 도메인의 규칙과 제약을 사용자가 이해 가능한 인터페이스로 바꾸는 프론트엔드 개발자입니다.
-      기능 구현 자체보다도, 사용자가 막히지 않고 다음 행동으로 자연스럽게 이어지도록 흐름을 설계하는 데 집중합니다.
+    <div class="max-w-3xl space-y-4 text-slate-300">
+      <p>
+        저는 복잡한 도메인을 사용자가 이해하고 실행할 수 있는 흐름으로 바꾸는 프론트엔드 개발자입니다.
+      </p>
+      <p>
+        AI Agent, 시계열 데이터, 클라우드 설정, 워크플로우처럼 처음 접한 사용자가 이해하기 어려운 화면을
+        다뤄왔습니다.
+      </p>
+      <p>
+        단순히 기능을 구현하는 것보다, 사용자가 현재 상태를 이해하고 다음 행동으로 자연스럽게 이어질 수 있는
+        UI 구조를 고민합니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-10 space-y-4">
+    <h2 class="text-xl font-semibold">제가 중요하게 보는 것</h2>
+    <ol class="max-w-3xl list-decimal space-y-3 pl-5 text-slate-300">
+      {principles.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="mt-10 grid gap-4 md:grid-cols-2">
+    <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <h2 class="text-lg font-semibold">문제 해결 방식</h2>
+      <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
+        <li>문제를 기능 단위가 아니라 사용자·팀 비용 단위로 정의합니다.</li>
+        <li>대안별 트레이드오프를 먼저 정리하고, 확장 가능한 선택을 합니다.</li>
+        <li>결과를 정량 지표와 협업 변화로 함께 검증합니다.</li>
+      </ul>
+    </article>
+    <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <h2 class="text-lg font-semibold">협업 스타일</h2>
+      <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
+        <li>기획·디자인·백엔드와 구현 가능한 단위로 요구사항을 정리합니다.</li>
+        <li>상태 정의와 UI 피드백 규칙을 문서화해 해석 차이를 줄입니다.</li>
+        <li>반복되는 UI 패턴을 공통 구조로 바꿔 팀 전체 속도를 높입니다.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="mt-14 space-y-4">
+    <h2 class="text-xl font-semibold">기술 스택과 사용 맥락</h2>
+    <p class="max-w-3xl text-sm text-slate-400">
+      기술을 아는 것보다, 어떤 문제를 해결하기 위해 썼는지가 더 중요하다고 봅니다.
     </p>
-    <div class="grid gap-4 md:grid-cols-2">
-      <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-        <h2 class="text-lg font-semibold">문제 해결 방식</h2>
-        <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
-          <li>문제를 기능 단위가 아니라 사용자/팀 비용 단위로 정의합니다.</li>
-          <li>대안별 트레이드오프를 먼저 정리하고, 확장 가능한 선택을 합니다.</li>
-          <li>결과를 정량 지표와 협업 변화로 함께 검증합니다.</li>
-        </ul>
-      </article>
-      <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-        <h2 class="text-lg font-semibold">협업 스타일</h2>
-        <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
-          <li>기획/디자인/백엔드와 구현 가능한 단위로 요구사항을 정리합니다.</li>
-          <li>상태 정의와 UI 피드백 규칙을 문서화해 해석 차이를 줄입니다.</li>
-          <li>반복되는 UI 패턴을 공통 구조로 바꿔 팀 전체 속도를 높입니다.</li>
-        </ul>
-      </article>
+    <div class="overflow-x-auto rounded-xl border border-slate-800">
+      <table class="w-full min-w-[28rem] text-left text-sm">
+        <thead class="border-b border-slate-800 bg-slate-900 text-slate-400">
+          <tr>
+            <th class="px-5 py-3 font-medium">기술</th>
+            <th class="px-5 py-3 font-medium">사용 맥락</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800 bg-slate-900/50">
+          {techContext.map(({ name, context }) => (
+            <tr>
+              <td class="px-5 py-3 font-medium text-cyan-200">{name}</td>
+              <td class="px-5 py-3 text-slate-300">{context}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 </BaseLayout>
