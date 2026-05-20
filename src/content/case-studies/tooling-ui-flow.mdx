@@ -33,8 +33,6 @@ import Mermaid from '../../components/Mermaid.astro';
 - 입·출력 핸들 색이 단조로워 **어떤 포트끼리 연결되는지** 한눈에 어려웠습니다.
 - Placeholder 노드 추가 시 **깜빡임(flickering)** 이 발생했습니다.
 - 기능이 나열된 구조라 작업 순서가 화면에서 명확히 드러나지 않았습니다.
-- QA와 신규 개발자가 동일한 시나리오를 재현하는 데 시간이 오래 걸렸습니다.
-- 결과 확인 방식이 분산되어 실패 원인을 추적하기 어려웠습니다.
 
 ## Options
 
@@ -53,13 +51,13 @@ import Mermaid from '../../components/Mermaid.astro';
 
 **Before** — 핸들·엣지 구분이 약해 잘못된 연결을 시도하기 쉬웠습니다.
 
-![연결 UX 개선 전](/images/case-studies/tooling-ui-flow/connection-before.png)
+![연결 UX 개선 전](../../../public/images/case-studies/tooling-ui-flow/connection-before.png)
 
 *Before: 포트 색이 단조로워 연결 가능 여부를 한눈에 파악하기 어려움*
 
 **After** — 노드 타입(데이터셋·라벨링·학습 등)마다 핸들·엣지 색을 맞춰 연결 경로를 시각적으로 고정했습니다.
 
-![연결 UX 개선 후](/images/case-studies/tooling-ui-flow/connection-after.png)
+![연결 UX 개선 후](../../../public/images/case-studies/tooling-ui-flow/connection-after.png)
 
 *After: 타입별 색상 핸들로 연결 가능한 포트를 표시 (DAISY 프로젝트 캔버스)*
 
@@ -106,25 +104,16 @@ export const PipelineEdge = memo(PipelineEdgeComponent);
 
 **Before** — 노드 드래그·핸들 연결·Placeholder 추가 시 끊김이 두드러졌습니다.
 
-![렌더링 최적화 전](/images/case-studies/tooling-ui-flow/render-before.png)
+![렌더링 최적화 전](../../../public/images/case-studies/tooling-ui-flow/render-before.gif)
 
 *Before: 노드 수정·연결 인터랙션 시 캔버스 멈춤(100~400ms, 생성 시 ~2s)*
 
 **After** — 동일 파이프라인에서 수정·연결이 끊기지 않습니다.
 
-![렌더링 최적화 후](/images/case-studies/tooling-ui-flow/render-after.png)
+![렌더링 최적화 후](../../../public/images/case-studies/tooling-ui-flow/render-after.gif)
 
 *After: memo·구독 범위 축소 후 인터랙션 지연 체감 제거*
 
-### 단계 UI·피드백
-
-- 단계별 상태를 명시적으로 노출하고, 다음 행동을 버튼/가이드 문구로 연결
-- 결과 영역을 수행 맥락과 가까운 위치로 이동해 피드백 루프 단축
-
-```ts
-const stepLabels = ["입력", "검증", "실행", "결과"];
-const isNextActionEnabled = currentStep.isValid && !isRunning;
-```
 
 ## Results
 
@@ -132,7 +121,6 @@ const isNextActionEnabled = currentStep.isValid && !isRunning;
 - **기존 노드 수정·캔버스 인터랙션** 시 100~400ms 멈춤 해소
 - 타입별 색상 핸들로 연결 실수·QA/신규 개발자 온보딩 비용 감소
 - 복잡한 기능의 이해 비용을 문서 의존이 아닌 UI 자체에서 흡수
-- QA-개발 간 상태·연결 해석 불일치 감소
 
 ## What I'd do next
 

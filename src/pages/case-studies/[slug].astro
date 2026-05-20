@@ -71,7 +71,7 @@ const { Content } = await render(study);
       },
     });
 
-    await mermaid.run({ nodes: [...nodes] });
+    await mermaid.run({ nodes: Array.from(nodes) as HTMLElement[] });
   };
 
   initMermaid();
