@@ -4,6 +4,19 @@
 
 **배포 URL:** https://mucho7.github.io/minchan-portfolio/
 
+## 이 레포의 목적
+
+이 레포는 복잡한 인터랙션을 과시하는 데모 앱이 아니라, 실무 프로젝트의 **문제 정의·의사결정·성과**를 Case Study 콘텐츠로 구조화해 전달하기 위한 포트폴리오입니다. 코드 깊이보다 콘텐츠 설득력과 유지보수 가능한 정적 구조를 우선합니다.
+
+## Why Astro
+
+React Island를 쓰기 위해 Astro를 선택한 것이 아닙니다. 대부분의 페이지가 정적 콘텐츠 중심이고 필요한 인터랙션이 거의 없기 때문에, Astro + MDX + Content Collection이 더 단순하고 적합하다고 판단했습니다.
+
+- 정적 콘텐츠 중심 페이지에 맞는 빌드 구조
+- MDX 기반 Case Study 작성·확장과 스키마 검증 (`content.config.ts`)
+- 불필요한 클라이언트 JavaScript 최소화 (React SPA 미사용)
+- GitHub Pages 서브패스 배포와의 단순한 호환
+
 ## 주요 페이지
 
 | 페이지 | 경로 | 설명 |
@@ -18,8 +31,12 @@
 - [Astro](https://astro.build/) 6 — 정적 사이트 생성
 - [Tailwind CSS](https://tailwindcss.com/) 4 — 스타일링
 - [MDX](https://mdxjs.com/) — Case Study 콘텐츠 작성
-- [Mermaid](https://mermaid.js.org/) — 다이어그램 렌더링
+- [Mermaid](https://mermaid.js.org/) — Case Study 상세 페이지 다이어그램 (클라이언트 렌더링)
 - GitHub Pages + GitHub Actions — 배포
+
+### Mermaid와 JavaScript
+
+본문 페이지는 정적 HTML 중심으로 제공합니다. 구조 설명이 필요한 **Case Study 상세**(`/case-studies/[slug]/`)에서만 Mermaid 클라이언트 스크립트를 로드해 다이어그램을 렌더링합니다. 랜딩·목록·About·Contact에는 Mermaid JS가 포함되지 않습니다.
 
 ## 사전 요구사항
 
@@ -135,6 +152,24 @@ export default defineConfig({
   base: '/minchan-portfolio/',
   // ...
 });
+```
+
+## GitHub 리포지토리 About (권장)
+
+리포지토리 메인 페이지 **About** 편집 시 아래 값을 사용하면 됩니다.
+
+| 항목 | 값 |
+| --- | --- |
+| Description | 복잡한 도메인 UI를 Case Study 중심으로 정리한 FE 포트폴리오 (Astro + MDX) |
+| Website | https://mucho7.github.io/minchan-portfolio/ |
+| Topics | `astro`, `mdx`, `portfolio`, `frontend`, `case-study` |
+
+`gh` CLI가 있다면 한 번에 설정할 수 있습니다.
+
+```sh
+gh repo edit --description "복잡한 도메인 UI를 Case Study 중심으로 정리한 FE 포트폴리오 (Astro + MDX)" \
+  --homepage "https://mucho7.github.io/minchan-portfolio/" \
+  --add-topic astro --add-topic mdx --add-topic portfolio --add-topic frontend --add-topic case-study
 ```
 
 ## 연락처
