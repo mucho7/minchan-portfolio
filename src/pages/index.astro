@@ -16,12 +16,15 @@ const caseStudies = (await getCollection('case-studies'))
   <section class="space-y-6">
     <p class="text-sm text-cyan-300">FE Developer 김민찬</p>
     <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
-      경력기술서에 담기지 않은
+      복잡한 도구형 UI를
       <br />
-      문제 해결의 맥락까지 보여주는 포트폴리오
+      사용자가 실행 가능한 흐름으로 바꾸는 
+      <br />
+      프론트엔드 개발자 김민찬
     </h1>
     <p class="max-w-3xl text-lg text-slate-300">
       복잡한 도메인을 사용자가 실행 가능한 흐름으로 바꾸는 과정을
+      <br />
       문제 정의, 의사결정, 구현, 성과 중심으로 정리했습니다.
     </p>
     <div class="flex flex-wrap gap-4 pt-2">
@@ -50,7 +53,7 @@ const caseStudies = (await getCollection('case-studies'))
     <div class="grid gap-5 md:grid-cols-3">
       {caseStudies.map((study) => (
         <a
-          href={`${baseUrl}case-studies/${study.id}/`}
+          href={`${baseUrl}/case-studies/${study.id}/`}
           class="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400"
         >
           <p class="text-xs text-slate-400">{study.data.period}</p>
