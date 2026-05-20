@@ -1,22 +1,22 @@
 ---
 import '../styles/global.css';
+import { withBase } from '../utils/withBase';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = '복잡한 도메인을 이해 가능한 인터페이스로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오' } = Astro.props;
+const { title, description = '복잡한 도구형 UI를 사용자가 실행 가능한 흐름으로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오' } = Astro.props;
 
-const baseUrl = import.meta.env.BASE_URL;
 const siteUrl = import.meta.env.SITE;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
 const navItems = [
-  { href: `${baseUrl}`, label: 'Home' },
-  { href: `${baseUrl}about/`, label: 'About' },
-  { href: `${baseUrl}case-studies/`, label: 'Case Studies' },
-  { href: `${baseUrl}contact/`, label: 'Contact' }
+  { href: withBase(), label: 'Home' },
+  { href: withBase('about/'), label: 'About' },
+  { href: withBase('case-studies/'), label: 'Case Studies' },
+  { href: withBase('contact/'), label: 'Contact' }
 ];
 ---
 
@@ -40,7 +40,7 @@ const navItems = [
   <body class="bg-slate-950 text-slate-100">
     <header class="border-b border-slate-800">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href={baseUrl} class="text-sm font-semibold tracking-wide text-cyan-300">MINCHAN PORTFOLIO</a>
+        <a href={withBase()} class="text-sm font-semibold tracking-wide text-cyan-300">MINCHAN PORTFOLIO</a>
         <nav class="flex gap-4 text-sm text-slate-300">
           {navItems.map((item) => (
             <a href={item.href} class="transition hover:text-white">{item.label}</a>
@@ -54,7 +54,7 @@ const navItems = [
     <footer class="border-t border-slate-800">
       <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-3 px-6 py-6 text-sm text-slate-400">
         <p>© {new Date().getFullYear()} 김민찬</p>
-        <p>복잡한 기능을 실행 가능한 경험으로 바꾸는 FE Developer</p>
+        <p>복잡한 도구형 UI를 실행 가능한 제품 경험으로 바꾸는 FE Developer</p>
       </div>
     </footer>
   </body>
