@@ -51,7 +51,7 @@ const caseStudies = (await getCollection('case-studies'))
     </div>
     <div class="grid gap-5 md:grid-cols-3">
       {caseStudies.map((study) => (
-        <CaseStudyCard study={study} showPreview />
+        <CaseStudyCard study={study} />
       ))}
     </div>
   </section>
