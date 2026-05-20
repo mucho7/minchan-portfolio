@@ -1,5 +1,5 @@
 ---
-title: "Agent UI 공통화로 프로젝트 간 코드 재사용률 60% 달성"
+title: "Agent UI 공통화로 반복 구현 영역 약 60% 재사용"
 summary: "반복 구현되던 입력·실행·결과 UI를 npm 패키지로 분리·publish해 3개 이상 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
 order: 1
 period: "2024.11 - 재직중"
@@ -13,12 +13,12 @@ skills:
   - WebSocket
   - LLM
 metrics:
-  - "프로젝트 간 코드 재사용률 약 60%"
+  - "반복 UI·store·훅 영역 약 60% 재사용 (추정)"
   - "3개 이상 Agent 프로젝트 동일 수정 반복 해소"
 preview:
   problem: "고객사별 Agent 프로젝트마다 입력 폼, 실행 상태, 결과 표시 UI가 반복 구현되고 있었습니다."
   decision: "반복 인터랙션을 npm 패키지로 publish하고, 도메인별 UI는 소비 앱에서만 확장했습니다."
-  result: "3개 Agent 프로젝트에서 약 60% 수준의 코드 재사용률을 확보했습니다."
+  result: "3개 Agent 프로젝트의 반복 UI를 공통 패키지로 전환해, 약 60% 수준의 재사용(추정)을 확보했습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';
@@ -121,7 +121,7 @@ flowchart TB
 ## Results
 
 - 3개 이상 Agent 프로젝트의 동일 수정을 패키지 한 곳으로 흡수
-- 프로젝트 간 코드 재사용률 약 60% 달성
+- 반복 구현 영역 약 60% 재사용 (추정, 패키지 vs 앱 전용 화면 비율 기준)
 - 신규 Agent 초기 화면 구성 시간 단축
 - 패키지 버전 기준으로 리뷰·품질 기준 일관화
 
