@@ -27,6 +27,5 @@ npm run dev
 
 ## 구조
 
-- `src/pages/` — Home, About, Case Studies, Resume, Contact
+- `src/pages/` — Home, About, Case Studies, Contact
 - `src/content/case-studies/` — Case Study MDX 콘텐츠
-- `public/resume/resume.pdf` — 범용 이력서 PDF
