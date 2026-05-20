@@ -1,6 +1,6 @@
 ---
 title: "Agent UI 공통화로 프로젝트 간 코드 재사용률 60% 달성"
-summary: "반복 구현되던 입력·실행·결과 UI를 공통 패키지로 분리해 3개 이상 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
+summary: "반복 구현되던 입력·실행·결과 UI를 npm 패키지로 분리·publish해 3개 이상 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
 order: 1
 period: "2024.11 - 재직중"
 role: "단독 FE / 구조 설계 / 공통 컴포넌트"
@@ -8,54 +8,123 @@ skills:
   - React
   - TypeScript
   - Zustand
-  - React Hook Form
+  - React Query
+  - SSE
+  - WebSocket
 metrics:
   - "프로젝트 간 코드 재사용률 약 60%"
   - "3개 이상 Agent 프로젝트 동일 수정 반복 해소"
 preview:
   problem: "고객사별 Agent 프로젝트마다 입력 폼, 실행 상태, 결과 표시 UI가 반복 구현되고 있었습니다."
-  decision: "프로젝트별 요구사항은 분리하되, 실행 흐름과 상태 표현은 공통 컴포넌트·Hook·상태 규약으로 추상화했습니다."
+  decision: "반복 인터랙션을 npm 패키지로 publish하고, 도메인별 UI는 소비 앱에서만 확장했습니다."
   result: "3개 Agent 프로젝트에서 약 60% 수준의 코드 재사용률을 확보했습니다."
 ---
 
+import Mermaid from '../../components/Mermaid.astro';
+
 ## Context
 
-제조 AI MLOps 플랫폼에서 고객사별 Agent 웹앱 요청이 빠르게 늘어났습니다.  
-프로젝트마다 요구사항은 조금씩 달랐지만, 입력 폼/실행 상태/결과 표시 같은 흐름은 반복됐습니다.
+Agent마다 입력·결과 표현은 달랐지만, **입력 → 실행 → 결과 확인** 흐름은 동일했습니다.
+화면 복제만으로는 프로젝트가 늘수록 수정 비용과 품질 편차가 커지는 구조였습니다.
 
 ## Problem
 
-- Agent 프로젝트가 3개 이상으로 늘어나면서 동일한 UI/로직을 프로젝트별로 재구현하면서 유지보수 비용이 커졌습니다.
-- 수정 사항이 생기면 여러 레포에 같은 변경을 반복 반영해야 했습니다.
-- 신규 프로젝트 온보딩 시 구현 기준이 분산되어 품질 편차가 발생했습니다.
+- 입력·실행 상태·결과 UI가 프로젝트마다 유사하게 재구현됨
+- 상태/에러 기준 변경 시 여러 레포에 동일 수정 반복
+- 신규 프로젝트마다 UI·흐름 기준이 달라짐
 
 ## Options
 
-1. 프로젝트별 독립 구현 유지
-2. 화면 단위로 공통 컴포넌트만 추출
-3. 반복 인터랙션을 기준으로 컴포넌트 + Hook + 상태 규약을 패키지화
+1. 프로젝트별 독립 구현 유지  
+2. 화면 단위 공통 컴포넌트만 추출  
+3. **컴포넌트 + Hook + 상태 규약을 npm 패키지로 publish** ← 선택
 
-프로젝트별 차이는 남기되 반복 흐름을 구조적으로 흡수하기 위해 3번을 선택했습니다.
+고객사 요구를 막지 않으면서, 반복 실행 흐름은 한 곳에서 고치고 신규 프로젝트에 빠르게 조립할 수 있어야 했습니다.
 
 ## Solution
 
-- 공통화 대상: 입력 검증 흐름, 실행 상태 전이, 결과 패널 패턴
-- 분리 전략: `도메인별 확장 포인트`와 `반복 인터랙션 핵심`을 분리
-- 배포 방식: 별도 패키지로 관리해 신규 프로젝트에서 즉시 재사용
+반복 인터랙션을 **`@ara/agent-ui` 패키지**로 추출해 npm publish했습니다.  
+소비 앱(제조 MLOps · 유통 · 의료)은 패키지를 의존성으로 설치하고, 도메인 전용 입력·결과 UI만 추가합니다.
 
-```ts
-// 예시: 공통 상태 전이 패턴
-type AgentRunState = "idle" | "running" | "success" | "error";
-```
+<Mermaid
+  caption="패키지 publish 후 3개 도메인 앱에서 소비"
+  chart={`
+flowchart TB
+  pkg["@ara/agent-ui npm"]
+  subgraph package [Published package]
+    common[Common UI]
+    core[Hooks + Zustand stores]
+    parsers[Stream parsers + query keys]
+  end
+  pkg --> package
+  package --> mlops[제조 MLOps]
+  package --> retail[유통]
+  package --> medical[의료]
+`}
+/>
+
+### 공통 흐름 · 레이어
+
+<Mermaid
+  caption="사용자 흐름(고정) vs 패키지/도메인 경계"
+  chart={`
+flowchart LR
+  subgraph flow [공통 사용자 흐름]
+    in[입력] --> run[실행]
+    run --> out[결과 동기화]
+  end
+  subgraph pkg [npm package]
+    L1[Common]
+    L2[Execution hooks]
+    L3[State stores]
+  end
+  subgraph app [Consumer app]
+    D[Domain UI only]
+  end
+  pkg --> app
+  flow -.-> pkg
+`}
+/>
+
+### 실행 상태 · 도메인 확장
+
+패키지에는 **idle → running → success/error** 축을 공통 규약으로 두고, 전송 방식만 도메인에서 확장했습니다.
+
+<Mermaid
+  caption="상태 축 통일 + 도메인별 실행·결과"
+  chart={`
+flowchart TB
+  state["공통 상태: idle → running → success / error"]
+  state --> ml[제조 MLOps]
+  state --> rt[유통]
+  state --> md[의료]
+  ml --> ml_run["SSE + Workflow 폴링"]
+  ml --> ml_out["실행 큐 · 로그"]
+  rt --> rt_run["SSE parser"]
+  rt --> rt_out["매칭 · 다운로드"]
+  md --> md_run["WebSocket partial"]
+  md --> md_out["Question · Report"]
+`}
+/>
+
+| 도메인 | 패키지에서 가져옴 | 앱에서만 구현 |
+|--------|------------------|---------------|
+| 제조 MLOps | Common, execution store, SSE 훅 | Workflow 노드 입력, 큐·로그 패널 |
+| 유통 | stream store, SSE parser, Common | 엑셀 업로드, 매칭 결과 버블 |
+| 의료 | stream store, agent parser, Common | 선택지 UI, 리포트·지식 그래프 |
+
+**재사용률 ~60% (추정):** Common · store · 실행 훅 · 파서를 패키지에서 가져오고, 도메인 전용 화면만 추가하는 비율 기준.
+
+**의도적 분리:** API 스키마, 이벤트 타입, 결과 렌더링, 인증·라우팅은 앱에 유지해 과도한 추상화를 피했습니다.
 
 ## Results
 
-- 3개 이상 Agent 프로젝트에서 반복되던 동일 수정 작업을 공통 패키지로 흡수
+- 3개 이상 Agent 프로젝트의 동일 수정을 패키지 한 곳으로 흡수
 - 프로젝트 간 코드 재사용률 약 60% 달성
-- 신규 Agent 프로젝트 초기 화면 구성 시간을 단축
-- 공통 모듈 기준으로 협업해 코드 리뷰/품질 기준이 일관화
+- 신규 Agent 초기 화면 구성 시간 단축
+- 패키지 버전 기준으로 리뷰·품질 기준 일관화
 
 ## What I'd do next
 
-- 공통 패키지의 버전 정책과 변경 로그를 강화해 팀 간 의존성 충돌을 줄입니다.
-- 반복 패턴 탐지를 자동화해 공통화 후보를 더 빠르게 발견합니다.
+- semver·CHANGELOG 기준을 강화해 소비 앱 간 의존성 충돌을 줄입니다.
+- breaking change 시 마이그레이션 가이드를 패키지 README에 함께 제공합니다.

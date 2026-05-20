@@ -42,8 +42,38 @@ const { Content } = await render(study);
         ))}
       </ul>
     </header>
-    <div class="space-y-4 [&_code]:rounded [&_code]:bg-slate-800 [&_code]:px-1 [&_code]:py-0.5 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:text-slate-300">
+    <div class="space-y-4 [&_code]:rounded [&_code]:bg-slate-800 [&_code]:px-1 [&_code]:py-0.5 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:text-slate-300 [&_table]:w-full [&_table]:text-sm [&_td]:border [&_td]:border-slate-700 [&_td]:px-3 [&_td]:py-2 [&_th]:border [&_th]:border-slate-700 [&_th]:bg-slate-800 [&_th]:px-3 [&_th]:py-2">
       <Content />
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  import mermaid from 'mermaid';
+
+  const initMermaid = async () => {
+    const nodes = document.querySelectorAll('pre.mermaid');
+    if (nodes.length === 0) return;
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      securityLevel: 'loose',
+      flowchart: { curve: 'basis' },
+      themeVariables: {
+        primaryColor: '#0e7490',
+        primaryTextColor: '#e2e8f0',
+        primaryBorderColor: '#22d3ee',
+        lineColor: '#64748b',
+        secondaryColor: '#1e293b',
+        tertiaryColor: '#0f172a',
+        fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      },
+    });
+
+    await mermaid.run({ nodes: [...nodes] });
+  };
+
+  initMermaid();
+  document.addEventListener('astro:page-load', initMermaid);
+</script>
