@@ -1,0 +1,41 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const studies = await getCollection('case-studies');
+  return studies.map((study) => ({
+    params: { slug: study.id },
+    props: { study }
+  }));
+}
+
+interface Props {
+  study: CollectionEntry<'case-studies'>;
+}
+
+const { study } = Astro.props;
+const { Content } = await render(study);
+---
+
+<BaseLayout title={`${study.data.title} | Case Study`}>
+  <article class="space-y-8">
+    <header class="space-y-3">
+      <p class="text-sm text-cyan-300">Case Study</p>
+      <h1 class="text-3xl font-bold">{study.data.title}</h1>
+      <p class="text-slate-300">{study.data.summary}</p>
+      <div class="flex flex-wrap gap-4 text-sm text-slate-400">
+        <span>{study.data.period}</span>
+        <span>{study.data.role}</span>
+      </div>
+      <ul class="flex flex-wrap gap-2">
+        {study.data.metrics.map((metric) => (
+          <li class="rounded-md border border-cyan-900 bg-cyan-950/40 px-3 py-1 text-xs text-cyan-200">{metric}</li>
+        ))}
+      </ul>
+    </header>
+    <div class="space-y-4 [&_code]:rounded [&_code]:bg-slate-800 [&_code]:px-1 [&_code]:py-0.5 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:text-slate-300">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

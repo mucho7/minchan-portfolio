@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Contact | 김민찬 포트폴리오">
+  <section class="space-y-4">
+    <h1 class="text-3xl font-bold">Contact</h1>
+    <p class="max-w-3xl text-slate-300">
+      프로젝트 상세 내용, 협업 방식, 이직 관련 문의는 아래 채널로 편하게 연락 주세요.
+    </p>
+  </section>
+
+  <section class="mt-10 grid gap-4 md:grid-cols-3">
+    <a href="mailto:ydjm1994@gmail.com" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Email</p>
+      <p class="mt-1 text-sm font-semibold">ydjm1994@gmail.com</p>
+    </a>
+    <a href="tel:01099573068" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Phone</p>
+      <p class="mt-1 text-sm font-semibold">010-9957-3068</p>
+    </a>
+    <a href="https://velog.io/@kimjih94/posts" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">Blog</p>
+      <p class="mt-1 text-sm font-semibold">velog.io/@kimjih94/posts</p>
+    </a>
+  </section>
+</BaseLayout>
