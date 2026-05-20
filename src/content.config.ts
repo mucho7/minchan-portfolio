@@ -1,6 +1,8 @@
+import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
 
 const caseStudies = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/case-studies' }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
