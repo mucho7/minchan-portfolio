@@ -8,12 +8,16 @@ interface Props {
 
 const { title, description = '복잡한 도메인을 이해 가능한 인터페이스로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오' } = Astro.props;
 
+const baseUrl = import.meta.env.BASE_URL;
+const siteUrl = import.meta.env.SITE;
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+
 const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/case-studies', label: 'Case Studies' },
-  { href: '/resume', label: 'Resume' },
-  { href: '/contact', label: 'Contact' }
+  { href: `${baseUrl}`, label: 'Home' },
+  { href: `${baseUrl}about/`, label: 'About' },
+  { href: `${baseUrl}case-studies/`, label: 'Case Studies' },
+  { href: `${baseUrl}resume/`, label: 'Resume' },
+  { href: `${baseUrl}contact/`, label: 'Contact' }
 ];
 ---
 
@@ -23,16 +27,21 @@ const navItems = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="김민찬 Portfolio" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <title>{title}</title>
   </head>
   <body class="bg-slate-950 text-slate-100">
     <header class="border-b border-slate-800">
       <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="/" class="text-sm font-semibold tracking-wide text-cyan-300">MINCHAN PORTFOLIO</a>
+        <a href={baseUrl} class="text-sm font-semibold tracking-wide text-cyan-300">MINCHAN PORTFOLIO</a>
         <nav class="flex gap-4 text-sm text-slate-300">
           {navItems.map((item) => (
             <a href={item.href} class="transition hover:text-white">{item.label}</a>

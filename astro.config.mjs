@@ -7,7 +7,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kimminchan.github.io',
+  site: 'https://mucho7.github.io',
   base: '/minchan-portfolio',
   vite: {
     plugins: [tailwindcss()]

@@ -2,12 +2,17 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 const caseStudies = (await getCollection('case-studies'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 ---
 
-<BaseLayout title="김민찬 | FE Developer Portfolio">
+<BaseLayout
+  title="김민찬 | FE Developer Portfolio"
+  description="경력기술서에 담기지 않은 문제 정의, 기술 선택, 성과 수치를 Case Study로 정리한 프론트엔드 개발자 김민찬의 포트폴리오"
+>
   <section class="space-y-6">
     <p class="text-sm text-cyan-300">FE Developer 김민찬</p>
     <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
@@ -19,16 +24,33 @@ const caseStudies = (await getCollection('case-studies'))
       복잡한 도메인을 사용자가 실행 가능한 흐름으로 바꾸는 과정을
       문제 정의, 의사결정, 구현, 성과 중심으로 정리했습니다.
     </p>
+    <div class="flex flex-wrap gap-4 pt-2">
+      <a
+        href={`${baseUrl}case-studies/`}
+        class="inline-block rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-cyan-500"
+      >
+        Case Study 읽기
+      </a>
+      <a
+        href="mailto:ydjm1994@gmail.com"
+        class="inline-block rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-cyan-400 hover:text-white"
+      >
+        이메일로 연락하기
+      </a>
+    </div>
   </section>
 
   <section class="mt-14 space-y-5">
     <div class="flex items-end justify-between">
       <h2 class="text-2xl font-semibold">대표 Case Study</h2>
-      <a href="/case-studies" class="text-sm text-cyan-300 hover:text-cyan-200">전체 보기</a>
+      <a href={`${baseUrl}case-studies/`} class="text-sm text-cyan-300 hover:text-cyan-200">전체 보기</a>
     </div>
     <div class="grid gap-5 md:grid-cols-3">
       {caseStudies.map((study) => (
-        <a href={`/case-studies/${study.id}`} class="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400">
+        <a
+          href={`${baseUrl}case-studies/${study.id}/`}
+          class="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400"
+        >
           <p class="text-xs text-slate-400">{study.data.period}</p>
           <h3 class="mt-2 text-lg font-semibold">{study.data.title}</h3>
           <p class="mt-2 text-sm text-slate-300">{study.data.summary}</p>

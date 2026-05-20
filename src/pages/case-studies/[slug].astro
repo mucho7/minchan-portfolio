@@ -18,7 +18,10 @@ const { study } = Astro.props;
 const { Content } = await render(study);
 ---
 
-<BaseLayout title={`${study.data.title} | Case Study`}>
+<BaseLayout
+  title={`${study.data.title} | Case Study`}
+  description={study.data.summary}
+>
   <article class="space-y-8">
     <header class="space-y-3">
       <p class="text-sm text-cyan-300">Case Study</p>

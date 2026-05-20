@@ -1,44 +1,52 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const resumes = [
-  {
-    name: '코드잇 지원 이력서',
-    oneLine: '학습 경험과 도구형 UI 개선 경험을 중심으로 정리한 버전',
-    highlights: ['Agent UI 공통화(재사용률 60%)', '대용량 시계열 데이터 성능 개선', 'Monaco 기반 웹 에디터 구현'],
-    href: '#'
-  },
-  {
-    name: '오늘의집 지원 이력서',
-    oneLine: '사용자 행동 흐름과 콘텐츠 탐색 경험 연결을 강조한 버전',
-    highlights: ['사용자 행동 기반 경험 설계', '반복 UI 패턴 공통화', '배포/운영 자동화 학습 적용'],
-    href: '#'
-  }
-];
+const resumePdfUrl = `${import.meta.env.BASE_URL}resume/resume.pdf`;
+
+const resume = {
+  name: 'FE Developer 이력서',
+  oneLine: '복잡한 도메인을 사용자 경험으로 바꾸는 프론트엔드 개발 경력을 정리한 범용 이력서입니다.',
+  highlights: [
+    'Agent UI 공통화 및 재사용 구조 설계 (재사용률 ~60%)',
+    '대용량 시계열 데이터 시각화 성능 개선 (5천만 건, LTTB)',
+    'Monaco Editor 기반 웹 에디터 및 클라우드 콘솔 UI 개발'
+  ]
+};
 ---
 
-<BaseLayout title="Resume | 김민찬 포트폴리오">
+<BaseLayout
+  title="Resume | 김민찬 포트폴리오"
+  description="김민찬 FE Developer 이력서 PDF 다운로드 및 경력 요약"
+>
   <section class="space-y-4">
     <h1 class="text-3xl font-bold">Resume</h1>
     <p class="max-w-3xl text-slate-300">
-      지원 포지션에 맞춰 이력서 버전을 관리합니다. 원본 PDF는 민감 정보 검토 후 공유할 수 있도록 준비 중입니다.
+      이력서 PDF와 함께 Case Study에서 프로젝트별 문제 해결 맥락을 더 자세히 확인할 수 있습니다.
     </p>
   </section>
 
-  <section class="mt-10 grid gap-5 md:grid-cols-2">
-    {resumes.map((resume) => (
-      <article class="rounded-xl border border-slate-800 bg-slate-900 p-6">
-        <h2 class="text-xl font-semibold">{resume.name}</h2>
-        <p class="mt-2 text-sm text-slate-300">{resume.oneLine}</p>
-        <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-300">
-          {resume.highlights.map((highlight) => (
-            <li>{highlight}</li>
-          ))}
-        </ul>
-        <a href={resume.href} class="mt-6 inline-block text-sm text-cyan-300 hover:text-cyan-200">
-          PDF 링크 (준비 중)
+  <section class="mt-10">
+    <article class="rounded-xl border border-slate-800 bg-slate-900 p-6">
+      <h2 class="text-xl font-semibold">{resume.name}</h2>
+      <p class="mt-2 text-sm text-slate-300">{resume.oneLine}</p>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-300">
+        {resume.highlights.map((highlight) => (
+          <li>{highlight}</li>
+        ))}
+      </ul>
+      <div class="mt-6 flex flex-wrap gap-4">
+        <a
+          href={resumePdfUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-cyan-500"
+        >
+          PDF 다운로드
         </a>
-      </article>
-    ))}
+        <a href={`${import.meta.env.BASE_URL}case-studies/`} class="inline-block text-sm text-cyan-300 hover:text-cyan-200">
+          Case Study 보기 →
+        </a>
+      </div>
+    </article>
   </section>
 </BaseLayout>

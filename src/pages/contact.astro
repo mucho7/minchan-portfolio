@@ -2,7 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Contact | 김민찬 포트폴리오">
+<BaseLayout
+  title="Contact | 김민찬 포트폴리오"
+  description="김민찬 FE Developer 연락처 — 이메일, GitHub, Velog"
+>
   <section class="space-y-4">
     <h1 class="text-3xl font-bold">Contact</h1>
     <p class="max-w-3xl text-slate-300">
@@ -10,7 +13,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </p>
   </section>
 
-  <section class="mt-10 grid gap-4 md:grid-cols-3">
+  <section class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
     <a href="mailto:ydjm1994@gmail.com" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
       <p class="text-sm text-slate-400">Email</p>
       <p class="mt-1 text-sm font-semibold">ydjm1994@gmail.com</p>
@@ -19,7 +22,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="text-sm text-slate-400">Phone</p>
       <p class="mt-1 text-sm font-semibold">010-9957-3068</p>
     </a>
-    <a href="https://velog.io/@kimjih94/posts" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+    <a href="https://github.com/mucho7" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
+      <p class="text-sm text-slate-400">GitHub</p>
+      <p class="mt-1 text-sm font-semibold">github.com/mucho7</p>
+    </a>
+    <a href="https://velog.io/@kimjih94/posts" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-slate-800 bg-slate-900 p-5">
       <p class="text-sm text-slate-400">Blog</p>
       <p class="mt-1 text-sm font-semibold">velog.io/@kimjih94/posts</p>
     </a>
