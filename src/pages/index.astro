@@ -7,37 +7,86 @@ import { withBase } from '../utils/withBase';
 const caseStudies = (await getCollection('case-studies'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
+
+const focusDomains = ['AI Agent UI', '시계열·대용량 탐색', '워크플로우·도구형 UX'];
+
+const valueProps = [
+  {
+    label: '문제',
+    description: '기능 단위가 아니라 사용자·팀 비용 단위로 정의합니다.'
+  },
+  {
+    label: '설계',
+    description: '상태 파악에서 다음 행동까지 이어지는 정보 구조를 만듭니다.'
+  },
+  {
+    label: '결과',
+    description: '정량 지표와 협업 변화로 의사결정을 검증합니다.'
+  }
+];
+
+const HERO_EYEBROW_CLASSNAME = 'text-sm font-medium tracking-wide text-cyan-300';
+const HERO_HEADLINE_CLASSNAME = 'text-4xl font-bold leading-tight sm:text-5xl';
+const HERO_HIGHLIGHT_CLASSNAME = 'text-cyan-300';
+const HERO_LEAD_CLASSNAME = 'max-w-3xl text-lg leading-relaxed text-slate-300';
+const HERO_DOMAIN_CHIP_CLASSNAME =
+  'rounded-full border border-slate-800 bg-slate-900/80 px-3 py-1 text-xs text-slate-300';
+const HERO_VALUE_CARD_CLASSNAME =
+  'rounded-xl border border-slate-800 bg-slate-900/60 p-4';
+const HERO_CTA_PRIMARY_CLASSNAME =
+  'inline-block rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-cyan-500';
+const HERO_CTA_SECONDARY_CLASSNAME =
+  'inline-block rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-cyan-400 hover:text-white';
 ---
 
 <BaseLayout
   title="김민찬 | FE Developer Portfolio"
   description="복잡한 도구형 UI를 실행 가능한 제품 경험으로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오"
 >
-  <section class="space-y-6">
-    <p class="text-sm text-cyan-300">FE Developer 김민찬</p>
-    <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
-      복잡한 도구형 UI를
-      <br />
-      사용자가 실행 가능한 흐름으로 바꾸는
-      <br />
-      프론트엔드 개발자
-    </h1>
-    <p class="max-w-3xl text-lg text-slate-300">
-      Agent, 시계열 데이터, 워크플로우처럼 이해하기 어려운 도메인을
-      문제 정의, 의사결정, 구현, 성과 중심으로 정리했습니다.
-    </p>
-    <div class="flex flex-wrap gap-4 pt-2">
-      <a
-        href={withBase('case-studies/')}
-        class="inline-block rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-cyan-500"
-      >
+  <section class="space-y-8">
+    <p class={HERO_EYEBROW_CLASSNAME}>Frontend Developer · 김민찬</p>
+
+    <div class="space-y-5">
+      <h1 class={HERO_HEADLINE_CLASSNAME}>
+        복잡한 도메인을
+        <br />
+        <span class={HERO_HIGHLIGHT_CLASSNAME}>판단하고 실행할 수 있는</span>
+        <br />
+        인터페이스로 바꿉니다
+      </h1>
+      <p class={HERO_LEAD_CLASSNAME}>
+        AI Agent, 시계열 데이터, 워크플로우처럼 진입 장벽이 높은 환경에서 사용자의 다음 행동을
+        기준으로 UI를 설계합니다. 화면 구현을 넘어 문제 정의, 의사결정, 성과 검증까지 한 흐름으로
+        기록했습니다.
+      </p>
+      <ul class="flex flex-wrap gap-2" aria-label="주요 경험 도메인">
+        {focusDomains.map((domain) => (
+          <li class={HERO_DOMAIN_CHIP_CLASSNAME}>{domain}</li>
+        ))}
+      </ul>
+    </div>
+
+    <ul class="grid gap-3 sm:grid-cols-3" aria-label="문제 해결 접근">
+      {valueProps.map(({ label, description }) => (
+        <li class={HERO_VALUE_CARD_CLASSNAME}>
+          <p class="text-xs font-medium uppercase tracking-wider text-cyan-300">{label}</p>
+          <p class="mt-2 text-sm leading-relaxed text-slate-300">{description}</p>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex flex-wrap gap-4">
+      <a href={withBase('case-studies/')} class={HERO_CTA_PRIMARY_CLASSNAME}>
         Case Study 보기
+      </a>
+      <a href={withBase('about/')} class={HERO_CTA_SECONDARY_CLASSNAME}>
+        About 읽기
       </a>
       <a
         href="https://velog.io/@kimjih94/posts"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-cyan-400 hover:text-white"
+        class={HERO_CTA_SECONDARY_CLASSNAME}
       >
         블로그 방문하기
       </a>
