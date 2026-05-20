@@ -1,17 +1,21 @@
 ---
-title: "Agent UI 공통화 및 재사용 구조 설계"
-summary: "고객사별 프로젝트마다 반복되던 입력/실행/결과 UI를 공통 패키지로 분리해 재사용률 60%를 달성했습니다."
+title: "Agent UI 공통화로 프로젝트 간 코드 재사용률 60% 달성"
+summary: "반복 구현되던 입력·실행·결과 UI를 공통 패키지로 분리해 3개 이상 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
 order: 1
 period: "2024.11 - 재직중"
-role: "Frontend Engineer"
+role: "단독 FE / 구조 설계 / 공통 컴포넌트"
 skills:
   - React
   - TypeScript
   - Zustand
-  - UI Architecture
+  - React Hook Form
 metrics:
   - "프로젝트 간 코드 재사용률 약 60%"
-  - "3개 이상 Agent 프로젝트에서 동일 수정 반복 문제 해소"
+  - "3개 이상 Agent 프로젝트 동일 수정 반복 해소"
+preview:
+  problem: "고객사별 Agent 프로젝트마다 입력 폼, 실행 상태, 결과 표시 UI가 반복 구현되고 있었습니다."
+  decision: "프로젝트별 요구사항은 분리하되, 실행 흐름과 상태 표현은 공통 컴포넌트·Hook·상태 규약으로 추상화했습니다."
+  result: "3개 Agent 프로젝트에서 약 60% 수준의 코드 재사용률을 확보했습니다."
 ---
 
 ## Context

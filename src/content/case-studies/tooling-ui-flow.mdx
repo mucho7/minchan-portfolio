@@ -1,17 +1,21 @@
 ---
-title: "복잡한 도구형 UI 사용 흐름 설계"
-summary: "워크플로우 기반 화면에서 단계/상태/결과 표현을 재정렬해 신규 사용자와 QA의 초기 이해 비용을 낮췄습니다."
+title: "워크플로우 실행 흐름 재설계로 사용자 이해 비용 개선"
+summary: "단계·상태·결과 표현을 재정렬하고 노드 수정 지연을 줄여 QA와 신규 사용자의 온보딩 비용을 낮췄습니다."
 order: 3
 period: "2024.11 - 재직중"
-role: "Frontend Engineer"
+role: "FE / UX 흐름 설계 / 상태 모델링"
 skills:
+  - React Flow
   - UX Flow Design
-  - Information Architecture
   - State Modeling
   - Cross-functional Collaboration
 metrics:
   - "워크플로우 노드 수정 지연 2000ms → 20ms 이하"
   - "QA·신규 개발자 온보딩 비용 감소"
+preview:
+  problem: "기능은 충분했지만 작업 순서가 드러나지 않고, 노드 수정 시 약 2초 지연으로 흐름이 끊겼습니다."
+  decision: "상태 전이 중심으로 단계 UI·피드백 체계를 재설계하고 결과 영역을 수행 맥락 가까이 배치했습니다."
+  result: "노드 수정 지연을 20ms 이하로 줄이고, QA·개발 간 상태 해석 불일치를 감소시켰습니다."
 ---
 
 ## Context
