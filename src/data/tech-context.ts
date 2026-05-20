@@ -12,8 +12,8 @@ export const techContext = [
     context: '서버 상태와 UI 상태 분리, 캐시 기반 데이터 탐색'
   },
   {
-    name: 'Recharts / Canvas',
-    context: '대용량 시계열 시각화 및 커스텀 렌더링 부하 개선'
+    name: 'Canvas / LTTB',
+    context: 'DAISY 대용량 시계열 탐색·서버 다운샘플링·렌더 부하 개선'
   },
   {
     name: 'React Flow',
