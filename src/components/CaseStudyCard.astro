@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../utils/withBase';
+
+interface Props {
+  study: CollectionEntry<'case-studies'>;
+  showPreview?: boolean;
+  variant?: 'grid' | 'list';
+}
+
+const { study, showPreview = false, variant = 'grid' } = Astro.props;
+const { title, summary, period, role, skills, metrics, preview } = study.data;
+const href = withBase(`case-studies/${study.id}/`);
+
+const CARD_BASE_CLASSNAME =
+  'block rounded-xl border border-slate-800 bg-slate-900 transition hover:border-cyan-400';
+const CARD_GRID_CLASSNAME = `${CARD_BASE_CLASSNAME} p-5 hover:-translate-y-0.5`;
+const CARD_LIST_CLASSNAME = `${CARD_BASE_CLASSNAME} p-6`;
+---
+
+<a href={href} class={variant === 'list' ? CARD_LIST_CLASSNAME : CARD_GRID_CLASSNAME}>
+  <p class="text-xs text-slate-400">
+    {period} · {role}
+  </p>
+  <h3 class:list={['font-semibold', variant === 'list' ? 'mt-1 text-xl' : 'mt-2 text-lg']}>
+    {title}
+  </h3>
+  <p class="mt-2 text-slate-300">{summary}</p>
+  <ul class="mt-3 flex flex-wrap gap-2">
+    {skills.map((skill) => (
+      <li class="rounded-md bg-slate-800 px-2 py-1 text-xs text-slate-200">{skill}</li>
+    ))}
+  </ul>
+  {metrics.length > 0 && (
+    <ul class="mt-3 flex flex-wrap gap-2">
+      {metrics.slice(0, 2).map((metric) => (
+        <li class="rounded-md border border-cyan-900 bg-cyan-950/40 px-2 py-1 text-xs text-cyan-200">
+          {metric}
+        </li>
+      ))}
+    </ul>
+  )}
+  {showPreview && preview && (
+    <dl class="mt-4 space-y-2 border-t border-slate-800 pt-4 text-xs text-slate-400">
+      <div>
+        <dt class="font-medium text-slate-500">Problem</dt>
+        <dd class="mt-0.5 text-slate-300">{preview.problem}</dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-500">Decision</dt>
+        <dd class="mt-0.5 text-slate-300">{preview.decision}</dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-500">Result</dt>
+        <dd class="mt-0.5 text-slate-300">{preview.result}</dd>
+      </div>
+    </dl>
+  )}
+</a>

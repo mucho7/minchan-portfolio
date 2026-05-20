@@ -32,6 +32,11 @@ const { Content } = await render(study);
         <span>{study.data.role}</span>
       </div>
       <ul class="flex flex-wrap gap-2">
+        {study.data.skills.map((skill) => (
+          <li class="rounded-md bg-slate-800 px-2 py-1 text-xs text-slate-200">{skill}</li>
+        ))}
+      </ul>
+      <ul class="flex flex-wrap gap-2">
         {study.data.metrics.map((metric) => (
           <li class="rounded-md border border-cyan-900 bg-cyan-950/40 px-3 py-1 text-xs text-cyan-200">{metric}</li>
         ))}

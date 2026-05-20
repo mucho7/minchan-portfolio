@@ -10,7 +10,12 @@ const caseStudies = defineCollection({
     period: z.string(),
     role: z.string(),
     skills: z.array(z.string()),
-    metrics: z.array(z.string())
+    metrics: z.array(z.string()),
+    preview: z.object({
+      problem: z.string(),
+      decision: z.string(),
+      result: z.string()
+    })
   })
 });
 
