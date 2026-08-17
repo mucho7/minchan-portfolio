@@ -10,16 +10,19 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
   title="Case Studies | 김민찬 포트폴리오"
   description="Agent UI 공통화, 대용량 시계열 성능, 도구형 UI 흐름 설계 등 프론트엔드 프로젝트 Case Study"
 >
-  <section class="space-y-4">
-    <h1 class="text-3xl font-bold">Case Studies</h1>
-    <p class="max-w-3xl text-slate-300">
-      어떤 문제를 맡았고, 어떤 기준으로 의사결정했으며, 그 결과 제품과 팀에 어떤 변화가 있었는지 정리했습니다.
-    </p>
+  <section class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Selected work</p>
+    <div>
+      <h1 class="text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">Case Studies</h1>
+      <p class="mt-5 max-w-2xl text-black/60">
+        어떤 문제를 맡았고, 어떤 기준으로 의사결정했으며, 그 결과 제품과 팀에 어떤 변화가 있었는지 정리했습니다.
+      </p>
+    </div>
   </section>
 
-  <section class="mt-10 space-y-4">
-    {caseStudies.map((study) => (
-      <CaseStudyCard study={study} variant="list" showPreview />
+  <section class="border-b border-black/25">
+    {caseStudies.map((study, index) => (
+      <CaseStudyCard study={study} variant="list" showPreview index={index} />
     ))}
   </section>
 </BaseLayout>

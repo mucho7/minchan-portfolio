@@ -4,102 +4,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CaseStudyCard from '../components/CaseStudyCard.astro';
 import { withBase } from '../utils/withBase';
 
-const caseStudies = (await getCollection('case-studies'))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
-
-const focusDomains = ['AI Agent UI', '시계열·대용량 탐색', '워크플로우·도구형 UX'];
-
-const valueProps = [
-  {
-    label: '문제',
-    description: '기능 단위가 아니라\n사용자·팀 비용 단위로 정의합니다.'
-  },
-  {
-    label: '설계',
-    description: '상태 파악에서 멈추지 않고\n다음 행동으로 이어지는 정보 구조를 만듭니다.'
-  },
-  {
-    label: '결과',
-    description: '정량 지표와 협업 변화로 의사결정을 검증합니다.'
-  }
+const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const evidence = [
+  { value: '4주', label: 'AI Agent MVP\nFrontend 단독 개발' },
+  { value: '50M+', label: '시계열 데이터\n탐색 경험' },
+  { value: '20–30 → 2', label: 'Web IDE 주요 동작\n렌더링 횟수' }
 ];
-
-const HERO_EYEBROW_CLASSNAME = 'text-sm font-medium tracking-wide text-cyan-300';
-const HERO_HEADLINE_CLASSNAME = 'text-4xl font-bold leading-tight sm:text-5xl';
-const HERO_HIGHLIGHT_CLASSNAME = 'text-cyan-300';
-const HERO_LEAD_CLASSNAME = 'max-w-3xl text-lg leading-relaxed text-slate-300';
-const HERO_DOMAIN_CHIP_CLASSNAME =
-  'rounded-full border border-slate-800 bg-slate-900/80 px-3 py-1 text-xs text-slate-300';
-const HERO_VALUE_CARD_CLASSNAME =
-  'rounded-xl border border-slate-800 bg-slate-900/60 p-4 whitespace-pre-line';
-const HERO_CTA_PRIMARY_CLASSNAME =
-  'inline-block rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-cyan-500';
-const HERO_CTA_SECONDARY_CLASSNAME =
-  'inline-block rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-cyan-400 hover:text-white';
 ---
 
-<BaseLayout
-  title="김민찬 | FE Developer Portfolio"
-  description="복잡한 도구형 UI를 실행 가능한 제품 경험으로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오"
->
-  <section class="space-y-8">
-    <p class={HERO_EYEBROW_CLASSNAME}>Frontend Developer · 김민찬</p>
-
-    <div class="space-y-5">
-      <h1 class={HERO_HEADLINE_CLASSNAME}>
-        복잡한 도메인을
-        <br />
-        <span class={HERO_HIGHLIGHT_CLASSNAME}>판단하고 실행할 수 있는</span>
-        <br />
-        인터페이스로 바꿉니다
-      </h1>
-      <p class={HERO_LEAD_CLASSNAME}>
-        AI Agent 실행 흐름, 5천만 건 시계열 탐색, 워크플로우 캔버스처럼 사용자가 막히기 쉬운 화면을
-        상태·행동·피드백이 분명한 UI로 정리해왔습니다.
-        <br />
-        화면 구현을 넘어 문제 정의, 의사결정, 성과 검증까지 한 흐름으로 기록했습니다.
+<BaseLayout title="김민찬 | Frontend Engineer" description="AI Agent, 스마트팩토리, 비전 검사와 클라우드 제품의 복잡한 흐름을 설계하고 구현하는 프론트엔드 엔지니어 김민찬">
+  <section class="grid gap-10 border-b border-black/25 pb-16 sm:pb-24 lg:grid-cols-[1fr_18rem] lg:gap-20">
+    <div>
+      <p class="mb-7 font-mono text-xs uppercase tracking-[0.16em] text-black/45">Frontend Engineer · Seoul</p>
+      <h1 class="max-w-4xl text-[clamp(2.8rem,7vw,6.5rem)] font-semibold leading-[0.97] tracking-[-0.065em]">복잡한 제품을<br />명료한 흐름으로.</h1>
+      <p class="mt-8 max-w-2xl text-base leading-7 text-black/65 sm:text-lg sm:leading-8">
+        AI Agent, 스마트팩토리, 비전 검사, 클라우드·Web IDE를 개발해왔습니다.
+        단독 FE부터 FE Lead·Scrum Master까지 맡아 문제 정의, 기술 선택, 구현과 현장 검증을 연결합니다.
       </p>
-      <ul class="flex flex-wrap gap-2" aria-label="주요 경험 도메인">
-        {focusDomains.map((domain) => (
-          <li class={HERO_DOMAIN_CHIP_CLASSNAME}>{domain}</li>
-        ))}
-      </ul>
     </div>
+    <aside class="self-end border-t border-black/25 pt-4 text-sm leading-6 text-black/60 lg:border-l lg:border-t-0 lg:pl-6">
+      <p class="font-medium text-black">Currently</p>
+      <p class="mt-1">AHHA Labs<br />Frontend Engineer<br />2024.11 — Present</p>
+      <a href={withBase('about/')} class="mt-5 inline-block text-[#315c4c] underline">경력 전체 보기</a>
+    </aside>
+  </section>
 
-    <ul class="grid gap-3 sm:grid-cols-3" aria-label="문제 해결 접근">
-      {valueProps.map(({ label, description }) => (
-        <li class={HERO_VALUE_CARD_CLASSNAME}>
-          <p class="text-xs font-medium uppercase tracking-wider text-cyan-300">{label}</p>
-          <p class="mt-2 text-sm leading-relaxed text-slate-300">{description}</p>
-        </li>
-      ))}
-    </ul>
+  <section class="grid border-b border-black/25 py-12 sm:grid-cols-3 sm:py-16" aria-label="대표 성과">
+    {evidence.map(({ value, label }, index) => (
+      <div class:list={['py-5 sm:py-0', index > 0 && 'border-t border-black/20 sm:border-l sm:border-t-0 sm:pl-8']}>
+        <p class="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">{value}</p>
+        <p class="mt-3 whitespace-pre-line text-sm leading-5 text-black/50">{label}</p>
+      </div>
+    ))}
+  </section>
 
-    <div class="flex flex-wrap gap-4">
-      <a href={withBase('case-studies/')} class={HERO_CTA_PRIMARY_CLASSNAME}>
-        Case Study 보기
-      </a>
-      <a
-        href="https://velog.io/@kimjih94/posts"
-        target="_blank"
-        rel="noopener noreferrer"
-        class={HERO_CTA_SECONDARY_CLASSNAME}
-      >
-        블로그 방문하기
-      </a>
+  <section class="pt-16 sm:pt-24">
+    <div class="mb-8 flex items-end justify-between">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/40">Selected work</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-[-0.04em]">판단과 실행을 바꾼 작업</h2>
+      </div>
+      <a href={withBase('case-studies/')} class="hidden text-sm underline sm:block">모든 작업 보기</a>
+    </div>
+    <div class="border-b border-black/25">
+      {caseStudies.map((study, index) => <CaseStudyCard study={study} index={index} />)}
     </div>
   </section>
 
-  <section class="mt-14 space-y-5">
-    <div class="flex items-end justify-between">
-      <h2 class="text-2xl font-semibold">대표 Case Study</h2>
-      <a href={withBase('case-studies/')} class="text-sm text-cyan-300 hover:text-cyan-200">전체 보기</a>
-    </div>
-    <div class="grid gap-5 md:grid-cols-3">
-      {caseStudies.map((study) => (
-        <CaseStudyCard study={study} />
-      ))}
+  <section class="grid gap-8 py-20 sm:grid-cols-2 sm:py-28">
+    <h2 class="max-w-lg text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl">기술보다 먼저 데이터의 특성과 사용자의 행동을 봅니다.</h2>
+    <div class="max-w-xl space-y-5 text-sm leading-7 text-black/65 sm:text-base">
+      <p>WebSocket, SSE, polling, 전역 상태 관리, Canvas는 목적이 아니라 선택지입니다. 필요한 응답성과 시스템 비용, 사용자가 실제로 수행하는 행동을 기준으로 고릅니다.</p>
+      <p>성능 문제도 단순한 최적화 API보다 상태의 소유권, 구독 범위와 렌더링 경계를 먼저 확인합니다.</p>
+      <div class="flex gap-6 pt-2 text-sm text-[#315c4c]">
+        <a href={withBase('about/')} class="underline">소개와 경력</a>
+        <a href={withBase('contact/')} class="underline">연락하기</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

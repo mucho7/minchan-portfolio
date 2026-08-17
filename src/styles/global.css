@@ -1,12 +1,39 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
+:root {
+  --paper: #f4f1ea;
+  --ink: #171714;
+  --muted: #6c6a63;
+  --line: #cbc7bd;
+  --accent: #315c4c;
+  --accent-soft: #dce6df;
 }
 
-html,
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--paper); }
 body {
   margin: 0;
   padding: 0;
   font-family: "Pretendard", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+::selection { background: #bed2c4; }
+a { text-underline-offset: 0.2em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* Long-form pages inherit the new editorial palette. */
+body .text-slate-200, body .text-slate-300 { color: #3f3e39; }
+body .text-slate-400, body .text-slate-500 { color: var(--muted); }
+body .text-cyan-200, body .text-cyan-300 { color: var(--accent); }
+body .border-slate-700, body .border-slate-800 { border-color: var(--line); }
+body .border-cyan-900 { border-color: #9eb6a7; }
+body .bg-slate-800 { background: #e7e3da; }
+body .bg-slate-900, body .bg-slate-900\/50 { background: transparent; }
+body .bg-cyan-950\/40 { background: var(--accent-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
 }

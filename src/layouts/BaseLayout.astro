@@ -2,20 +2,14 @@
 import '../styles/global.css';
 import { withBase } from '../utils/withBase';
 
-interface Props {
-  title: string;
-  description?: string;
-}
-
-const { title, description = '복잡한 도구형 UI를 사용자가 실행 가능한 흐름으로 바꾸는 프론트엔드 개발자 김민찬의 포트폴리오' } = Astro.props;
-
+interface Props { title: string; description?: string; }
+const { title, description = '복잡한 제품의 데이터와 상태를 사용자가 판단하고 실행할 수 있는 흐름으로 설계하는 프론트엔드 엔지니어 김민찬' } = Astro.props;
 const siteUrl = import.meta.env.SITE;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-
 const navItems = [
-  { href: withBase(), label: 'Home' },
-  { href: withBase('about/'), label: 'About' },
-  { href: withBase('case-studies/'), label: 'Case Studies' },
+  { href: withBase(), label: 'Index' },
+  { href: withBase('about/'), label: 'Experience' },
+  { href: withBase('case-studies/'), label: 'Work' },
   { href: withBase('contact/'), label: 'Contact' }
 ];
 ---
@@ -37,24 +31,24 @@ const navItems = [
     <meta name="twitter:description" content={description} />
     <title>{title}</title>
   </head>
-  <body class="bg-slate-950 text-slate-100">
-    <header class="border-b border-slate-800">
-      <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href={withBase()} class="text-sm font-semibold tracking-wide text-cyan-300">MINCHAN PORTFOLIO</a>
-        <nav class="flex gap-4 text-sm text-slate-300">
-          {navItems.map((item) => (
-            <a href={item.href} class="transition hover:text-white">{item.label}</a>
+  <body>
+    <header class="border-b border-black/20">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+        <a href={withBase()} class="text-sm font-semibold tracking-[-0.02em]">김민찬 <span class="font-normal text-black/45">/ Frontend Engineer</span></a>
+        <nav aria-label="주요 메뉴" class="flex gap-3 text-xs sm:gap-6 sm:text-sm">
+          {navItems.map((item, index) => (
+            <a href={item.href} class="group flex gap-1.5 text-black/60 transition hover:text-black">
+              <span class="hidden text-[10px] text-black/35 sm:inline">0{index + 1}</span>{item.label}
+            </a>
           ))}
         </nav>
       </div>
     </header>
-    <main class="mx-auto max-w-5xl px-6 py-12">
-      <slot />
-    </main>
-    <footer class="border-t border-slate-800">
-      <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-3 px-6 py-6 text-sm text-slate-400">
+    <main class="mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20"><slot /></main>
+    <footer class="border-t border-black/20">
+      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-xs text-black/55 sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>© {new Date().getFullYear()} 김민찬</p>
-        <p>복잡한 도구형 UI를 실행 가능한 제품 경험으로 바꾸는 FE Developer</p>
+        <p>Seoul, Korea · 복잡한 제품을 명료한 인터페이스로</p>
       </div>
     </footer>
   </body>
