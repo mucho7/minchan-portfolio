@@ -1,7 +1,7 @@
 export const techContext = [
   {
     name: 'React / TypeScript',
-    context: '복잡한 도구형 UI와 상태 기반 화면 구현'
+    context: 'AI Agent, 제조 관제, Web IDE처럼 상태와 인터랙션이 복잡한 제품 구현'
   },
   {
     name: 'Zustand',
@@ -22,5 +22,13 @@ export const techContext = [
   {
     name: 'React Hook Form',
     context: '반복 입력 폼 구조화 및 검증 흐름 개선'
+  },
+  {
+    name: 'SSE / WebSocket',
+    context: 'Agent 실행 상태와 부분 결과를 사용자가 이해할 수 있는 피드백으로 연결'
+  },
+  {
+    name: 'Vite / Docker / GitHub Actions',
+    context: '프론트엔드 개발 환경, 컨테이너 기반 전달과 배포 자동화'
   }
 ] as const;

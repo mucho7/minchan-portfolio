@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../utils/withBase';
 
 export async function getStaticPaths() {
   const studies = await getCollection('case-studies');
@@ -21,28 +22,36 @@ const { Content } = await render(study);
 <BaseLayout
   title={`${study.data.title} | Case Study`}
   description={study.data.summary}
+  socialImage={null}
 >
-  <article class="space-y-8">
-    <header class="space-y-3">
-      <p class="text-sm text-cyan-300">Case Study</p>
-      <h1 class="text-3xl font-bold">{study.data.title}</h1>
-      <p class="text-slate-300">{study.data.summary}</p>
-      <div class="flex flex-wrap gap-4 text-sm text-slate-400">
-        <span>{study.data.period}</span>
-        <span>{study.data.role}</span>
+  <article>
+    <a href={withBase('case-studies/')} class="mb-10 inline-block text-sm text-black/55 underline">← 모든 작업</a>
+    <header class="border-b border-black/25 pb-12 sm:pb-16">
+      <div class="grid gap-8 sm:grid-cols-[1fr_3fr]">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent)]">Case Study</p>
+          <p class="mt-4 font-mono text-xs leading-5 text-black/45">{study.data.period}</p>
+        </div>
+        <div>
+          <h1 class="max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.05em] sm:text-6xl">{study.data.title}</h1>
+          <p class="mt-6 max-w-3xl text-base leading-8 text-black/60 sm:text-lg">{study.data.summary}</p>
+          <p class="mt-6 text-sm text-black/50">{study.data.role}</p>
+        </div>
       </div>
-      <ul class="flex flex-wrap gap-2">
-        {study.data.skills.map((skill) => (
-          <li class="rounded-md bg-slate-800 px-2 py-1 text-xs text-slate-200">{skill}</li>
-        ))}
-      </ul>
-      <ul class="flex flex-wrap gap-2">
-        {study.data.metrics.map((metric) => (
-          <li class="rounded-md border border-cyan-900 bg-cyan-950/40 px-3 py-1 text-xs text-cyan-200">{metric}</li>
-        ))}
-      </ul>
+      <div class="mt-10 grid gap-6 border-t border-black/20 pt-6 sm:grid-cols-2">
+        <div>
+          <p class="font-mono text-[10px] uppercase tracking-[0.14em] text-black/40">Evidence</p>
+          <ul class="mt-3 space-y-2">
+            {study.data.metrics.map((metric) => <li class="text-sm font-medium text-[var(--accent)]">{metric}</li>)}
+          </ul>
+        </div>
+        <div>
+          <p class="font-mono text-[10px] uppercase tracking-[0.14em] text-black/40">Technology</p>
+          <p class="mt-3 text-sm leading-6 text-black/55">{study.data.skills.join(' · ')}</p>
+        </div>
+      </div>
     </header>
-    <div class="space-y-4 [&_code]:rounded [&_code]:bg-slate-800 [&_code]:px-1 [&_code]:py-0.5 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_li]:ml-5 [&_li]:list-disc [&_p]:text-slate-300 [&_table]:w-full [&_table]:text-sm [&_td]:border [&_td]:border-slate-700 [&_td]:px-3 [&_td]:py-2 [&_th]:border [&_th]:border-slate-700 [&_th]:bg-slate-800 [&_th]:px-3 [&_th]:py-2">
+    <div class="case-study-body mx-auto max-w-3xl py-14 sm:py-20">
       <Content />
     </div>
   </article>
@@ -51,29 +60,33 @@ const { Content } = await render(study);
 <script>
   import mermaid from 'mermaid';
 
-  const initMermaid = async () => {
+  const renderMermaid = async () => {
     const nodes = document.querySelectorAll('pre.mermaid');
     if (nodes.length === 0) return;
 
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'dark',
+      theme: 'base',
       securityLevel: 'loose',
       flowchart: { curve: 'basis' },
       themeVariables: {
-        primaryColor: '#0e7490',
-        primaryTextColor: '#e2e8f0',
-        primaryBorderColor: '#22d3ee',
-        lineColor: '#64748b',
-        secondaryColor: '#1e293b',
-        tertiaryColor: '#0f172a',
+        background: '#f4f1ea',
+        primaryColor: '#dce6df',
+        primaryTextColor: '#171714',
+        primaryBorderColor: '#315c4c',
+        lineColor: '#6c6a63',
+        secondaryColor: '#e7e3da',
+        tertiaryColor: '#f4f1ea',
         fontFamily: 'ui-sans-serif, system-ui, sans-serif',
       },
     });
 
-    await mermaid.run({ nodes: Array.from(nodes) as HTMLElement[] });
+    await mermaid.run({ querySelector: 'pre.mermaid' });
   };
 
-  initMermaid();
-  document.addEventListener('astro:page-load', initMermaid);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid, { once: true });
+  } else {
+    renderMermaid();
+  }
 </script>

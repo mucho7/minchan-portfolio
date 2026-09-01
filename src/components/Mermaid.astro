@@ -7,13 +7,13 @@ interface Props {
 const { chart, caption } = Astro.props;
 ---
 
-<figure class="my-6 space-y-2">
+<figure class="my-8 space-y-3">
   {
     caption && (
-      <figcaption class="text-center text-sm text-slate-400">{caption}</figcaption>
+      <figcaption class="text-center text-sm text-black/50">{caption}</figcaption>
     )
   }
-  <div class="overflow-x-auto rounded-lg border border-slate-700/80 bg-slate-900/50 p-4">
+  <div class="overflow-x-auto border-y border-black/20 bg-[#ebe7de] p-4 sm:p-6">
     <pre class="mermaid">{chart.trim()}</pre>
   </div>
 </figure>

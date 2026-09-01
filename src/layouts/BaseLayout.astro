@@ -2,10 +2,21 @@
 import '../styles/global.css';
 import { withBase } from '../utils/withBase';
 
-interface Props { title: string; description?: string; }
-const { title, description = '복잡한 제품의 데이터와 상태를 사용자가 판단하고 실행할 수 있는 흐름으로 설계하는 프론트엔드 엔지니어 김민찬' } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  socialImage?: string | null;
+  immersive?: boolean;
+}
+const {
+  title,
+  description = '복잡한 제품의 데이터와 상태를 사용자가 판단하고 실행할 수 있는 흐름으로 설계하는 프론트엔드 엔지니어 김민찬',
+  socialImage = withBase('og.png'),
+  immersive = false
+} = Astro.props;
 const siteUrl = import.meta.env.SITE;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const socialImageUrl = socialImage ? new URL(socialImage, siteUrl).href : undefined;
 const navItems = [
   { href: withBase(), label: 'Index' },
   { href: withBase('about/'), label: 'Experience' },
@@ -19,6 +30,7 @@ const navItems = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={title} />
@@ -26,30 +38,44 @@ const navItems = [
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="김민찬 Portfolio" />
-    <meta name="twitter:card" content="summary" />
+    {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
+    {socialImageUrl && <meta property="og:image:width" content="1200" />}
+    {socialImageUrl && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content={socialImageUrl ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
+    <meta name="theme-color" content="#f4f1ea" />
     <title>{title}</title>
   </head>
   <body>
-    <header class="border-b border-black/20">
+    {!immersive && <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--paper)] focus:px-4 focus:py-3">
+      본문으로 건너뛰기
+    </a>}
+    {!immersive && <header class="border-b border-black/20">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
         <a href={withBase()} class="text-sm font-semibold tracking-[-0.02em]">김민찬 <span class="font-normal text-black/45">/ Frontend Engineer</span></a>
         <nav aria-label="주요 메뉴" class="flex gap-3 text-xs sm:gap-6 sm:text-sm">
           {navItems.map((item, index) => (
-            <a href={item.href} class="group flex gap-1.5 text-black/60 transition hover:text-black">
+            <a
+              href={item.href}
+              aria-current={item.href === withBase()
+                ? Astro.url.pathname === item.href ? 'page' : undefined
+                : Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
+              class="group flex gap-1.5 text-black/60 transition hover:text-black aria-[current=page]:text-black"
+            >
               <span class="hidden text-[10px] text-black/35 sm:inline">0{index + 1}</span>{item.label}
             </a>
           ))}
         </nav>
       </div>
-    </header>
-    <main class="mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20"><slot /></main>
-    <footer class="border-t border-black/20">
+    </header>}
+    <main id="main-content" class:list={[immersive ? 'min-h-screen' : 'mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20']}><slot /></main>
+    {!immersive && <footer class="border-t border-black/20">
       <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-xs text-black/55 sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>© {new Date().getFullYear()} 김민찬</p>
         <p>Seoul, Korea · 복잡한 제품을 명료한 인터페이스로</p>
       </div>
-    </footer>
+    </footer>}
   </body>
 </html>

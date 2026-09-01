@@ -1,0 +1,79 @@
+---
+title: "Web IDE 주요 갱신 렌더링을 20–30회에서 2회로 축소"
+summary: "Monaco Editor와 IndexedDB 기반 Web IDE에서 상태 소유권과 구독 경계를 다시 설계해 편집·저장 흐름의 불필요한 렌더링을 줄였습니다."
+order: 3
+period: "2023.08 - 2024.11"
+role: "GAIA PX FE 단독 개발 / 상태·성능 설계"
+skills:
+  - React
+  - TypeScript
+  - Monaco Editor
+  - IndexedDB
+  - State Modeling
+metrics:
+  - "주요 상태 갱신 렌더링 20–30회 → 2회"
+  - "Web IDE 프론트엔드 단독 개발"
+preview:
+  problem: "파일 탐색·편집·오류 확인·저장 상태가 넓게 공유되어 주요 동작마다 관련 없는 컴포넌트까지 반복 렌더링됐습니다."
+  decision: "편집 데이터와 화면 상태의 소유권을 나누고, 필요한 컴포넌트만 변경을 구독하도록 렌더링 경계를 다시 설계했습니다."
+  result: "주요 상태 갱신 시 발생하던 20–30회의 렌더링을 2회로 줄였습니다."
+---
+
+import Mermaid from '../../components/Mermaid.astro';
+
+## Context
+
+GAIA PX는 슈퍼앱 내부에서 파일을 탐색하고 코드를 편집·실행하는 Web IDE입니다.
+프론트엔드를 단독으로 맡아 파일 트리, Monaco Editor 자동완성·오류 마커, 실행 결과와 IndexedDB 기반 로컬 저장을 하나의 작업 흐름으로 연결했습니다.
+
+## Problem
+
+- 파일 선택, 편집 내용, 오류 마커, 저장 여부가 넓은 상태 범위를 함께 구독했습니다.
+- 주요 상태가 한 번 바뀔 때 관련 없는 컴포넌트까지 연쇄적으로 갱신됐습니다.
+- 편집·저장 같은 핵심 동작에서 렌더링이 **20–30회** 발생해 인터랙션 비용이 커졌습니다.
+
+## Options
+
+1. 개별 컴포넌트에 `memo`만 추가
+2. 편집 이벤트를 debounce해 갱신 횟수만 제한
+3. **상태 소유권·구독 범위·컴포넌트 경계를 함께 재설계** ← 선택
+
+증상만 가리는 최적화보다 어떤 상태를 누가 소유하고, 어느 컴포넌트가 그 변경을 알아야 하는지 먼저 정리해야 했습니다.
+
+## Decision
+
+<Mermaid
+  caption="편집 상태와 화면 상태의 소유권을 분리한 구조"
+  chart={`
+flowchart LR
+  editor["Monaco Editor"] --> document["Document state"]
+  document --> persistence["IndexedDB persistence"]
+  document --> markers["Error markers"]
+  selection["Selected file"] --> tree["File tree"]
+  selection --> editor
+  ui["Panel / layout state"] --> shell["IDE shell"]
+`}
+/>
+
+- 편집 내용과 저장 상태는 문서 단위로 묶고, 파일 트리와 패널 UI 상태에서 분리했습니다.
+- 컴포넌트는 자신이 실제로 표시하는 state slice만 구독하게 했습니다.
+- IndexedDB 저장 흐름은 렌더링과 직접 결합하지 않고 문서 변경 이후의 별도 책임으로 두었습니다.
+- 파일 선택처럼 여러 영역이 함께 바뀌는 동작도 필요한 경계만 갱신하도록 데이터 전달 경로를 줄였습니다.
+
+## Implementation
+
+Monaco Editor 인스턴스와 React 상태가 서로를 반복 갱신하지 않도록 편집 이벤트의 방향을 고정했습니다.
+파일 트리, 에디터, 오류 표시, 실행 패널은 하나의 큰 상태 객체 대신 각 화면이 필요한 최소 상태만 전달받았습니다.
+
+측정은 동일한 주요 상태 갱신 시나리오에서 React 렌더링 횟수를 비교하는 방식으로 진행했습니다.
+
+## Result
+
+- 주요 상태 갱신 시 렌더링을 **20–30회에서 2회**로 축소
+- 파일 탐색 → 편집 → 오류 확인 → 저장 흐름을 한 제품 안에서 구현
+- 성능 문제를 API 호출이나 `memo` 하나가 아니라 상태 소유권과 구독 경계의 문제로 해결
+
+## Limitation
+
+공개 가능한 범위상 제품 화면과 내부 코드는 포함하지 않았습니다.
+렌더링 횟수는 당시 동일 동작을 기준으로 비교한 수치이며, 전체 Web IDE의 모든 인터랙션에 동일하게 적용되는 값은 아닙니다.

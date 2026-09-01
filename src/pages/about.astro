@@ -2,83 +2,116 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { techContext } from '../data/tech-context';
 
-const principles = [
-  '문제를 먼저 정의합니다 — 기능 단위가 아니라 사용자·팀 비용 단위로 봅니다.',
-  '사용자의 다음 행동을 기준으로 화면을 설계합니다.',
-  '성능 문제를 사용 흐름의 문제로 바라봅니다.',
-  '반복되는 구현은 구조로 해결하려고 합니다.'
+const experience = [
+  {
+    company: 'AHHA Labs',
+    period: '2024.11 — Present',
+    scope: '제조 AI MLOps · AI Agent UI · 자동화 공정 관제',
+    highlights: [
+      'SSE 채팅과 Workflow Builder를 포함한 AI Agent MVP를 FE 1인으로 4주 내 완성',
+      '유일한 FE이자 Scrum Master로 1·2차 제조 관제 PoC 구현과 협업 조율, 프로젝트 수주에 기여',
+      '5천만 건 이상 시계열 데이터의 다운샘플링·상태 구독·렌더링 구조 개선',
+      'Codex Skill과 승인 기반 ClickUp 등록으로 태스크 작성·계획 수립을 약 1시간에서 10–13분으로 단축'
+    ]
+  },
+  {
+    company: 'Tmax Cloud',
+    period: '2023.08 — 2024.11',
+    scope: '슈퍼앱 내부 Code Editor · 클라우드 플랫폼 관리 콘솔',
+    highlights: [
+      'GAIA PX Web IDE 프론트엔드를 단독 개발하고 파일 탐색·자동완성·오류 표시·실행·로컬 저장 흐름 구현',
+      '상태 구독과 컴포넌트 경계를 개선해 주요 갱신 시 렌더링을 20–30회에서 2회로 축소',
+      '보안 그룹·로드밸런서·네트워크·DB 세션의 관계와 API 제약을 반영한 IaaS 관리 화면 구현'
+    ]
+  }
 ];
 ---
 
 <BaseLayout
-  title="About | 김민찬 포트폴리오"
-  description="복잡한 도메인을 사용자가 이해하고 실행할 수 있는 흐름으로 바꾸는 프론트엔드 개발자"
+  title="Experience | 김민찬 Frontend Engineer"
+  description="AI·제조·클라우드 제품에서 복잡한 데이터와 상태를 다뤄온 프론트엔드 엔지니어 김민찬의 경력과 작업 방식"
 >
-  <section class="space-y-6">
-    <h1 class="text-3xl font-bold">About</h1>
-    <div class="max-w-3xl space-y-4 text-slate-300">
-      <p>
-        저는 복잡한 도메인을 사용자가 이해하고 실행할 수 있는 흐름으로 바꾸는 프론트엔드 개발자입니다.
+  <header class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Experience & approach</p>
+    <div>
+      <h1 class="text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">복잡한 현장을<br />제품의 언어로 바꿉니다.</h1>
+      <p class="mt-6 max-w-2xl text-base leading-8 text-black/60">
+        AI·제조·클라우드 제품의 초기 개발부터 성능 개선과 업무 자동화까지 경험했습니다.
+        화면 구현에 머물지 않고 문제 정의, 기술 선택, 협업과 현장 검증을 연결합니다.
       </p>
-      <p>
-        AI Agent, 시계열 데이터, 클라우드 설정, 워크플로우처럼 진입 장벽이 높은 도메인에서 사용자의 판단과 행동을 돕는 UI를 설계하고 구현해왔습니다.
+    </div>
+  </header>
+
+  <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="experience-heading">
+    <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
+      <h2 id="experience-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Career</h2>
+      <div class="space-y-14">
+        {experience.map((item) => (
+          <article>
+            <div class="flex flex-col gap-2 border-b border-black/20 pb-5 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h3 class="text-2xl font-semibold tracking-[-0.03em]">{item.company}</h3>
+                <p class="mt-1 text-sm text-black/50">{item.scope}</p>
+              </div>
+              <p class="font-mono text-xs text-black/45">{item.period}</p>
+            </div>
+            <ul class="mt-5 space-y-3 text-sm leading-6 text-black/65">
+              {item.highlights.map((highlight) => <li class="relative pl-5 before:absolute before:left-0 before:content-['—']">{highlight}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-8 border-b border-black/25 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">How I work with AI</h2>
+    <div class="space-y-6">
+      <h3 class="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em]">AI 제품을 만든 경험과<br />AI로 개발하는 방식을 구분합니다.</h3>
+      <p class="max-w-2xl leading-7 text-black/65">
+        Agent 제품에서는 입력·실행·결과의 사용자 흐름을 설계합니다. 개발 도구로 Codex를 사용할 때는 프로젝트 맥락과 변경 제약을 먼저 제공하고, 생성된 diff를 직접 리뷰합니다.
       </p>
-      <p>
-        단순히 화면을 만드는 것에 그치지 않고, 사용자가 현재 상태를 파악하고 다음 행동으로 자연스럽게 이어질 수 있도록 정보 구조, 인터랙션, 성능을 함께 고민합니다.
+      <ol class="grid gap-px bg-black/20 sm:grid-cols-4">
+        {['맥락·제약 제공', '생성 diff 리뷰', '타입·테스트 확인', '브라우저 동작 검증'].map((step, index) => (
+          <li class="bg-[var(--paper)] p-5">
+            <span class="font-mono text-xs text-[var(--accent)]">0{index + 1}</span>
+            <p class="mt-4 text-sm font-medium">{step}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="max-w-2xl text-sm leading-6 text-black/55">
+        제안이 상태 소유권을 흐리거나 추상화를 과도하게 만들면 채택하지 않고 직접 경계를 다시 설계합니다.
       </p>
     </div>
   </section>
 
-  <section class="mt-10 space-y-4">
-    <h2 class="text-xl font-semibold">제가 중요하게 보는 것</h2>
-    <ol class="max-w-3xl list-decimal space-y-3 pl-5 text-slate-300">
-      {principles.map((item) => (
-        <li>{item}</li>
+  <section class="grid gap-8 border-b border-black/25 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Technology in context</h2>
+    <dl class="divide-y divide-black/20 border-y border-black/20">
+      {techContext.map(({ name, context }) => (
+        <div class="grid gap-2 py-4 sm:grid-cols-[12rem_1fr]">
+          <dt class="font-medium text-[var(--accent)]">{name}</dt>
+          <dd class="text-sm leading-6 text-black/60">{context}</dd>
+        </div>
       ))}
-    </ol>
+    </dl>
   </section>
 
-  <section class="mt-10 grid gap-4 md:grid-cols-2">
-    <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-      <h2 class="text-lg font-semibold">문제 해결 방식</h2>
-      <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
-        <li>문제를 기능 단위가 아니라 사용자·팀 비용 단위로 정의합니다.</li>
-        <li>대안별 트레이드오프를 먼저 정리하고, 확장 가능한 선택을 합니다.</li>
-        <li>결과를 정량 지표와 협업 변화로 함께 검증합니다.</li>
-      </ul>
-    </article>
-    <article class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-      <h2 class="text-lg font-semibold">협업 스타일</h2>
-      <ul class="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-300">
-        <li>기획·디자인·백엔드와 구현 가능한 단위로 요구사항을 정리합니다.</li>
-        <li>상태 정의와 UI 피드백 규칙을 문서화해 해석 차이를 줄입니다.</li>
-        <li>반복되는 UI 패턴을 공통 구조로 바꿔 팀 전체 속도를 높입니다.</li>
-      </ul>
-    </article>
-  </section>
-
-  <section class="mt-14 space-y-4">
-    <h2 class="text-xl font-semibold">기술 스택과 사용 맥락</h2>
-    <p class="max-w-3xl text-sm text-slate-400">
-      기술을 아는 것보다, 어떤 문제를 해결하기 위해 썼는지가 더 중요하다고 봅니다.
-    </p>
-    <div class="overflow-x-auto rounded-xl border border-slate-800">
-      <table class="w-full min-w-[28rem] text-left text-sm">
-        <thead class="border-b border-slate-800 bg-slate-900 text-slate-400">
-          <tr>
-            <th class="px-5 py-3 font-medium">기술</th>
-            <th class="px-5 py-3 font-medium">사용 맥락</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-800 bg-slate-900/50">
-          {techContext.map(({ name, context }) => (
-            <tr>
-              <td class="px-5 py-3 font-medium text-cyan-200">{name}</td>
-              <td class="px-5 py-3 text-slate-300">{context}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  <section class="grid gap-8 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Education & contribution</h2>
+    <div class="grid gap-8 sm:grid-cols-2">
+      <div>
+        <h3 class="text-lg font-semibold">Education</h3>
+        <p class="mt-4 leading-7 text-black/65">경북대학교 전자공학부<br />SSAFY · 웹 개발</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Open source</h3>
+        <p class="mt-4 leading-7 text-black/65">
+          toss/react-simplikit 공개 초기 이슈 제보<br />
+          재현 조건과 개선 방향 논의 ·
+          <a href="https://github.com/toss/react-simplikit/issues/172" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">Issue #172</a>
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
