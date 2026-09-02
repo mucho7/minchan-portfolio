@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+type Decision = {
+  boundary: string;
+  before: string;
+  after: string;
+  reason: string;
+};
+
+const decisions = [
+  {
+    boundary: 'Content → UI',
+    before: '스키마와 React Project 타입을 각각 관리',
+    after: 'Content Collection 타입에서 ViewModel을 파생',
+    reason: '콘텐츠 필드 변경을 컴파일 단계에서 모든 소비자에 전파'
+  },
+  {
+    boundary: 'Dialog state',
+    before: '홈 컴포넌트가 URL·포커스·선택 상태를 모두 소유',
+    after: 'useProjectDialog와 useFocusTrap으로 상태 계약 분리',
+    reason: '상호작용을 독립적으로 테스트하고 재사용 가능하게 관리'
+  },
+  {
+    boundary: 'Animation',
+    before: '컴포넌트마다 transition 객체를 직접 작성',
+    after: 'Variants·Transition 타입을 적용한 motion 토큰',
+    reason: '모션 언어를 일관되게 유지하고 잘못된 값을 타입으로 차단'
+  },
+  {
+    boundary: 'Quality gate',
+    before: '빌드 성공만 확인',
+    after: '타입 → 단위 테스트 → 브라우저 테스트 → 빌드',
+    reason: '정적 타입과 실제 사용자 동작을 서로 다른 계층에서 검증'
+  }
+] satisfies Decision[];
+
+const qualityGates = [
+  ['01', 'Schema', 'MDX frontmatter를 Zod로 검증'],
+  ['02', 'Type', 'Astro strict mode로 페이지와 React 경계 검사'],
+  ['03', 'Unit', 'ViewModel·URL 상태·컴포넌트 계약 검증'],
+  ['04', 'Browser', '데스크톱·모바일 팝업과 포커스 흐름 검증'],
+  ['05', 'Build', 'GitHub Pages 경로로 정적 산출물 생성']
+] as const;
+---
+
+<BaseLayout
+  title="Engineering | 김민찬 Frontend Engineer"
+  description="김민찬의 포트폴리오를 TypeScript-first 제품으로 설계한 타입 구조, 상호작용 상태, 테스트와 배포 검증 기록"
+>
+  <header class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Engineering the portfolio</p>
+    <div>
+      <h1 class="max-w-4xl text-4xl font-semibold leading-[1.02] tracking-[-0.055em] sm:text-6xl">
+        이 포트폴리오도<br />하나의 제품으로 다룹니다.
+      </h1>
+      <p class="mt-7 max-w-2xl text-base leading-8 text-black/60 sm:text-lg">
+        모든 화면을 React로 바꾸는 대신, 정적 콘텐츠에는 Astro를 유지하고 상호작용이 필요한 경계에만 React와 TypeScript를 사용했습니다. 중요한 것은 확장자가 아니라 데이터와 상태가 어디에서 검증되는지라고 판단했습니다.
+      </p>
+    </div>
+  </header>
+
+  <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="type-flow-heading">
+    <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
+      <h2 id="type-flow-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Typed data flow</h2>
+      <div>
+        <h3 class="text-3xl font-semibold tracking-[-0.04em]">하나의 콘텐츠 계약이 두 렌더링 경로를 연결합니다.</h3>
+        <div class="mt-8 grid gap-px bg-black/20 sm:grid-cols-4" aria-label="콘텐츠 타입 전달 구조">
+          {['MDX + Zod', 'CollectionEntry', 'Typed ViewModel', 'Astro + React'].map((step, index) => (
+            <div class="relative bg-[var(--paper)] p-5">
+              <p class="font-mono text-xs text-[var(--accent)]">0{index + 1}</p>
+              <p class="mt-8 font-semibold">{step}</p>
+              {index < 3 && <span aria-hidden="true" class="absolute -right-2 top-1/2 z-10 hidden text-black/35 sm:block">→</span>}
+            </div>
+          ))}
+        </div>
+        <p class="mt-6 max-w-2xl text-sm leading-7 text-black/55">
+          Case Study 필드가 바뀌면 상세 페이지, 홈 팝업, 테스트 중 영향을 받는 지점이 타입 오류로 드러납니다. UI가 콘텐츠 구조를 임의로 다시 정의하지 않습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="decisions-heading">
+    <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
+      <h2 id="decisions-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Architecture decisions</h2>
+      <div class="divide-y divide-black/20 border-y border-black/20">
+        {decisions.map((decision) => (
+          <article class="py-7">
+            <p class="font-mono text-xs uppercase tracking-[0.12em] text-[var(--accent)]">{decision.boundary}</p>
+            <div class="mt-4 grid gap-5 sm:grid-cols-2">
+              <div><p class="text-xs text-black/40">Before</p><p class="mt-2 text-sm leading-6 text-black/60">{decision.before}</p></div>
+              <div><p class="text-xs text-black/40">After</p><p class="mt-2 text-sm leading-6">{decision.after}</p></div>
+            </div>
+            <p class="mt-5 border-l border-black/25 pl-4 text-sm leading-6 text-black/55">{decision.reason}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="quality-heading">
+    <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
+      <h2 id="quality-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Quality gates</h2>
+      <div>
+        <h3 class="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em]">배포는 다섯 개의 서로 다른 검증을 통과해야 합니다.</h3>
+        <ol class="mt-8 divide-y divide-black/20 border-y border-black/20">
+          {qualityGates.map(([number, name, description]) => (
+            <li class="grid gap-2 py-5 sm:grid-cols-[4rem_8rem_1fr] sm:items-center">
+              <span class="font-mono text-xs text-black/40">{number}</span>
+              <span class="font-semibold">{name}</span>
+              <span class="text-sm leading-6 text-black/55">{description}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-8 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Trade-offs</h2>
+    <div class="space-y-5 text-sm leading-7 text-black/65 sm:text-base">
+      <p><strong class="text-black">Astro와 MDX는 유지했습니다.</strong> 콘텐츠 중심 페이지까지 TSX로 옮기면 클라이언트 코드와 유지보수 비용만 늘어납니다. Astro frontmatter도 strict TypeScript 검사 대상입니다.</p>
+      <p><strong class="text-black">접근성을 상태 계약으로 다룹니다.</strong> 팝업의 시각적 open 상태는 <code>aria-expanded</code>, URL query, 배경 <code>inert</code>, 초기 포커스와 함께 움직입니다.</p>
+      <p><strong class="text-black">Mermaid는 필요할 때만 불러옵니다.</strong> 상세 페이지의 최초 실행 스크립트를 608,677 bytes에서 2,784 bytes로 줄였습니다. Mermaid와 다이어그램별 의존성은 DOM에서 실제 다이어그램을 확인한 뒤 동적으로 요청됩니다. 최종 전송량을 숨기지 않고 초기 실행 경로와 지연 청크를 구분해 기록합니다.</p>
+      <p><strong class="text-black">보안 업데이트도 검증 과정에 포함했습니다.</strong> Astro 6에서 7, MDX 5에서 8로 올리고 Mermaid·DOMPurify·esbuild를 수정 버전으로 갱신했습니다. 전체 타입·단위·E2E·빌드 검증 후 배포 의존성 감사 결과는 0건입니다.</p>
+      <p>
+        <a href="https://github.com/mucho7/minchan-portfolio" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">GitHub에서 구현과 테스트 보기 ↗</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

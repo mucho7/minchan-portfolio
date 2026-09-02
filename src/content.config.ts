@@ -1,22 +1,25 @@
 import { glob } from 'astro/loaders';
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
+
+export const caseStudySchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  order: z.number(),
+  period: z.string(),
+  role: z.string(),
+  skills: z.array(z.string()),
+  metrics: z.array(z.string()),
+  preview: z.object({
+    problem: z.string(),
+    decision: z.string(),
+    result: z.string()
+  })
+});
 
 const caseStudies = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/case-studies' }),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    order: z.number(),
-    period: z.string(),
-    role: z.string(),
-    skills: z.array(z.string()),
-    metrics: z.array(z.string()),
-    preview: z.object({
-      problem: z.string(),
-      decision: z.string(),
-      result: z.string()
-    })
-  })
+  schema: caseStudySchema
 });
 
 export const collections = {

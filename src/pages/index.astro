@@ -2,23 +2,15 @@
 import { getCollection } from 'astro:content';
 import PortfolioExperience from '../components/PortfolioExperience';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { toProjectViewModel } from '../mappers/case-study';
+import { FEATURED_PROJECT_SLUGS } from '../types/portfolio';
 import { withBase } from '../utils/withBase';
 
-const featuredIds = [
-  'time-series-performance',
-  'agent-ui-reuse',
-  'web-ide-rendering',
-  'tooling-ui-flow'
-];
 const allCaseStudies = await getCollection('case-studies');
-const projects = featuredIds
+const projects = FEATURED_PROJECT_SLUGS
   .map((id) => allCaseStudies.find((study) => study.id === id))
   .filter((study): study is (typeof allCaseStudies)[number] => Boolean(study))
-  .map((study) => ({
-    slug: study.id,
-    ...study.data,
-    href: withBase(`case-studies/${study.id}/`)
-  }));
+  .map((study) => toProjectViewModel(study, (slug) => withBase(`case-studies/${slug}/`)));
 ---
 
 <BaseLayout
@@ -32,6 +24,7 @@ const projects = featuredIds
     homeHref={withBase()}
     aboutHref={withBase('about/')}
     workHref={withBase('case-studies/')}
+    engineeringHref={withBase('engineering/')}
     contactHref={withBase('contact/')}
   />
 </BaseLayout>
