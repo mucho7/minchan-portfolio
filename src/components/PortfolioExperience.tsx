@@ -57,7 +57,6 @@ export default function PortfolioExperience({
           <a href={homeHref} className={`text-sm font-semibold tracking-[-0.02em] ${FOCUS_CLASSNAME}`}>
             김민찬 <span className="font-normal opacity-60">/ FE</span>
           </a>
-          <p className="hidden font-mono text-[0.65rem] uppercase tracking-[0.16em] sm:block">Seoul · Available for conversation</p>
         </header>
 
         <nav aria-label="페이지 섹션" className="fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
@@ -89,7 +88,10 @@ export default function PortfolioExperience({
             ))}
           </h1>
           <div className="mt-10 grid gap-8 border-t border-black/25 pt-6 sm:grid-cols-[1fr_18rem]">
-            <p className="max-w-2xl text-base leading-7 text-black/65 sm:text-lg">React와 TypeScript로 대용량 데이터, 복잡한 상태, 현장 제약을 사용자가 판단하고 실행할 수 있는 화면으로 연결합니다.</p>
+            <p className="max-w-3xl text-base leading-7 text-black/65 sm:text-lg">
+              <span className="block">React와 TypeScript로 대용량 데이터, 복잡한 상태, 현장 제약을</span>
+              <span className="block">사용자가 판단하고 실행할 수 있는 화면으로 연결합니다.</span>
+            </p>
             <p className="text-sm leading-6 text-black/55">AHHA Labs<br />Frontend Engineer<br />2024.11 — Present</p>
           </div>
         </section>
@@ -118,7 +120,10 @@ export default function PortfolioExperience({
           <div className={`${SHELL_CLASSNAME} grid gap-12 py-24 sm:py-32 lg:grid-cols-[1fr_1.1fr]`}>
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/45">Approach</p>
-              <h2 className="mt-5 max-w-xl text-4xl font-semibold leading-[1.05] tracking-[-0.05em] sm:text-6xl">기술보다 먼저 데이터와 행동을 봅니다.</h2>
+              <h2 className="mt-5 max-w-xl text-4xl font-semibold leading-[1.05] tracking-[-0.05em] sm:text-6xl">
+                <span className="block">기술보단</span>
+                <span className="block">데이터와 행동을</span>
+              </h2>
             </div>
             <div className="max-w-2xl space-y-6 text-base leading-8 text-white/65 sm:text-lg">
               <p>TanStack Query, Zustand, Canvas, SSE와 WebSocket은 목적이 아니라 선택지입니다. 응답성과 시스템 비용, 사용자의 실제 행동을 기준으로 고릅니다.</p>

@@ -5,10 +5,10 @@ import type {
   SectionNavigationItem
 } from '../types/portfolio';
 
-export const HERO_LINES = ['복잡한 데이터와', '상태를 명료한', '제품 흐름으로.'] as const;
+export const HERO_LINES = ['복잡한 데이터를', '명료한 제품흐름으로'] as const;
 
 export const EVIDENCE = [
-  { value: '4주', label: 'AI Agent MVP · FE 단독 개발' },
+  { value: '4주', label: 'AI Agent MVP · FE 구현' },
   { value: '50M+', label: '시계열 데이터 탐색 경험' },
   { value: '20–30 → 2', label: 'Web IDE 주요 갱신 렌더링' },
   { value: '1h → 10–13m', label: 'AI 태스크 자동화 · 검토 포함' }

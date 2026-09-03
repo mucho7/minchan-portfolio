@@ -3,7 +3,7 @@ title: "Web IDE 주요 갱신 렌더링을 20–30회에서 2회로 축소"
 summary: "Monaco Editor와 IndexedDB 기반 Web IDE에서 상태 소유권과 구독 경계를 다시 설계해 편집·저장 흐름의 불필요한 렌더링을 줄였습니다."
 order: 3
 period: "2023.08 - 2024.11"
-role: "GAIA PX FE 단독 개발 / 상태·성능 설계"
+role: "GAIA PX FE / 상태·성능 설계"
 skills:
   - React
   - TypeScript
@@ -12,7 +12,7 @@ skills:
   - State Modeling
 metrics:
   - "주요 상태 갱신 렌더링 20–30회 → 2회"
-  - "Web IDE 프론트엔드 단독 개발"
+  - "Web IDE 핵심 편집 흐름 구현"
 preview:
   problem: "파일 탐색·편집·오류 확인·저장 상태가 넓게 공유되어 주요 동작마다 관련 없는 컴포넌트까지 반복 렌더링됐습니다."
   decision: "편집 데이터와 화면 상태의 소유권을 나누고, 필요한 컴포넌트만 변경을 구독하도록 렌더링 경계를 다시 설계했습니다."
@@ -24,7 +24,7 @@ import Mermaid from '../../components/Mermaid.astro';
 ## Context
 
 GAIA PX는 슈퍼앱 내부에서 파일을 탐색하고 코드를 편집·실행하는 Web IDE입니다.
-프론트엔드를 단독으로 맡아 파일 트리, Monaco Editor 자동완성·오류 마커, 실행 결과와 IndexedDB 기반 로컬 저장을 하나의 작업 흐름으로 연결했습니다.
+프론트엔드를 맡아 파일 트리, Monaco Editor 자동완성·오류 마커, 실행 결과와 IndexedDB 기반 로컬 저장을 하나의 작업 흐름으로 연결했습니다.
 
 ## Problem
 
