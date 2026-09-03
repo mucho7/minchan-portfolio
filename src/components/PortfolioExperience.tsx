@@ -126,8 +126,8 @@ export default function PortfolioExperience({
               </h2>
             </div>
             <div className="max-w-2xl space-y-6 text-base leading-8 text-white/65 sm:text-lg">
-              <p>TanStack Query, Zustand, Canvas, SSE와 WebSocket은 목적이 아니라 선택지입니다. 응답성과 시스템 비용, 사용자의 실제 행동을 기준으로 고릅니다.</p>
-              <p>AI가 제안한 코드도 같은 기준으로 봅니다. 맥락과 제약을 제공하고, diff를 직접 읽은 뒤 타입·테스트·브라우저 동작을 확인합니다.</p>
+              <p>프로젝트마다 해결해야 할 문제와 제약이 다르기에, 익숙한 기술에 답을 맞추지 않습니다. 필요한 기술을 빠르게 학습하고 응답성, 시스템 비용, 사용자의 실제 행동을 기준으로 적합성을 검토해 제품에 적용합니다.</p>
+              <p>AI는 반복 작업의 자동화와 상세 구현을 빠르게 전개하는 데 활용합니다. 무엇을 해결할지 정하고 선택의 근거를 세우는 일, 동료와 맥락을 맞추고 결과에 책임지는 일은 제가 직접 주도합니다.</p>
               <div className="flex flex-wrap gap-6">
                 <a href={aboutHref} className={`inline-flex border-b border-white/60 pb-1 text-sm text-white ${FOCUS_CLASSNAME}`}>경력과 작업 방식 ↗</a>
                 <a href={engineeringHref} className={`inline-flex border-b border-white/60 pb-1 text-sm text-white ${FOCUS_CLASSNAME}`}>이 사이트의 설계 기록 ↗</a>
