@@ -30,20 +30,9 @@ const experience = [
   title="Experience | 김민찬 Frontend Engineer"
   description="AI·제조·클라우드 제품에서 복잡한 데이터와 상태를 다뤄온 프론트엔드 엔지니어 김민찬의 경력과 작업 방식"
 >
-  <header class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
-    <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Experience & approach</p>
-    <div>
-      <h1 class="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">B2B 업무를<br />안정적인 도구로 만듭니다.</h1>
-      <p class="mt-6 max-w-2xl text-base leading-8 text-black/60">
-        React와 TypeScript로 클라우드, 비전 검사, 제조 관제 도메인의 웹 클라이언트를 개발했습니다.
-        대용량 데이터 렌더링, 공통 UI 패키지, 시스템 간 의존성이 복잡한 화면을 다뤄왔습니다.
-      </p>
-    </div>
-  </header>
-
   <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="experience-heading">
     <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
-      <h2 id="experience-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Career</h2>
+      <h2 id="experience-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">경력</h2>
       <div class="space-y-14">
         {experience.map((item) => (
           <article>
@@ -64,27 +53,7 @@ const experience = [
   </section>
 
   <section class="grid gap-8 border-b border-black/25 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
-    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">How I work with AI</h2>
-    <div class="space-y-6">
-      <h3 class="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em]">AI 제품을 만든 경험과<br />AI로 개발하는 방식을 구분합니다.</h3>
-      <p class="max-w-2xl leading-7 text-black/65">
-        Agent 제품에서는 입력·실행·결과의 사용자 흐름을 설계합니다. 개발 도구로 Codex를 사용할 때는 프로젝트 맥락과 변경 제약을 먼저 제공하고, 생성된 diff를 직접 리뷰합니다.
-      </p>
-      <ol class="grid gap-px bg-black/20 sm:grid-cols-4">
-        {['맥락·제약 제공', '생성 diff 리뷰', '타입·테스트 확인', '브라우저 동작 검증'].map((step) => (
-          <li class="bg-[var(--paper)] p-5">
-            <p class="text-sm font-medium">{step}</p>
-          </li>
-        ))}
-      </ol>
-      <p class="max-w-2xl text-sm leading-6 text-black/55">
-        제안이 상태 소유권을 흐리거나 추상화를 과도하게 만들면 채택하지 않고 직접 경계를 다시 설계합니다.
-      </p>
-    </div>
-  </section>
-
-  <section class="grid gap-8 border-b border-black/25 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
-    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Technology in context</h2>
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">사용 기술</h2>
     <dl class="divide-y divide-black/20 border-y border-black/20">
       {techContext.map(({ name, context }) => (
         <div class="grid gap-2 py-4 sm:grid-cols-[12rem_1fr]">
@@ -96,7 +65,7 @@ const experience = [
   </section>
 
   <section class="grid gap-8 py-14 sm:grid-cols-[1fr_2fr] sm:py-20">
-    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Education & contribution</h2>
+    <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">교육 & contribution</h2>
     <div class="grid gap-8 sm:grid-cols-2">
       <div>
         <h3 class="text-lg font-semibold">Education</h3>
@@ -104,11 +73,9 @@ const experience = [
       </div>
       <div>
         <h3 class="text-lg font-semibold">Open source</h3>
-        <p class="mt-4 leading-7 text-black/65">
-          toss/react-simplikit 공개 초기 이슈 제보<br />
-          재현 조건과 개선 방향 논의
-          <a href="https://github.com/toss/react-simplikit/issues/172" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">Issue #172</a>
-        </p>
+        <a href="https://github.com/toss/react-simplikit/issues/172" target="_blank" rel="noopener noreferrer" class="mt-4 leading-7 text-black/65 underline">
+          toss/react-simplikit 이슈 제보
+        </a>
       </div>
     </div>
   </section>

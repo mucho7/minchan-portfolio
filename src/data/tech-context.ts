@@ -12,12 +12,12 @@ export const techContext = [
     context: '서버 상태와 UI 상태 분리, 캐시 기반 데이터 탐색'
   },
   {
-    name: 'Canvas / LTTB',
+    name: 'Canvas / Recharts',
     context: 'DAISY 대용량 시계열 탐색·서버 다운샘플링·렌더 부하 개선'
   },
   {
     name: 'React Flow',
-    context: 'Agent 워크플로우 빌더 UI 구현'
+    context: 'Agent 워크플로우 빌더 UI 및 DAISY 워크플로우 구현'
   },
   {
     name: 'React Hook Form',
@@ -28,7 +28,7 @@ export const techContext = [
     context: 'Agent 실행 상태와 부분 결과를 사용자가 이해할 수 있는 피드백으로 연결'
   },
   {
-    name: 'Vite / Docker / GitHub Actions',
+    name: 'Vite / Docker',
     context: '프론트엔드 개발 환경, 컨테이너 기반 전달과 배포 자동화'
   }
 ] as const;
