@@ -6,7 +6,7 @@
 
 ## 이 레포의 목적
 
-이 레포는 실무 프로젝트의 **문제 정의·의사결정·성과**를 Case Study로 전달하는 동시에, 콘텐츠부터 상호작용과 배포까지 TypeScript로 검증하는 포트폴리오입니다. 정적 페이지에는 Astro를, 상태가 필요한 프로젝트 팝업에는 React island를 사용합니다.
+이 레포는 실무 프로젝트의 **문제 정의·의사결정·성과**를 Case Study로 전달하는 동시에, 콘텐츠부터 상호작용과 배포까지 TypeScript로 검증하는 포트폴리오입니다. 정적 페이지와 Case Study에는 Astro·MDX를, 홈의 프로젝트 탐색 경험에는 React island를 사용합니다.
 
 ## Why Astro
 
@@ -20,8 +20,8 @@ React Island를 쓰기 위해 Astro를 선택한 것이 아닙니다. 대부분�
 ## TypeScript-first 원칙
 
 - Content Collection 타입을 UI 데이터 계약의 단일 소스로 사용
-- Astro, React Props, URL 상태와 Framer Motion variants를 strict mode로 검사
-- 팝업의 open·focus·URL·ARIA 상태를 분리된 TypeScript 훅으로 관리
+- Astro, React Props, 탭 상태와 Framer Motion variants를 strict mode로 검사
+- 프로젝트 선택·패널·Case Study 링크를 하나의 타입 계약으로 관리
 - GitHub Actions에서 타입 검사와 사용자 상호작용 테스트를 통과한 결과만 배포
 
 자세한 설계와 트레이드오프는 [TypeScript-first 전환 기록](./docs/typescript-first-architecture.md)에서 확인할 수 있습니다.
@@ -95,13 +95,12 @@ npm run preview
 ```
 src/
 ├── components/
-│   └── portfolio/         # 프로젝트 목록·Detail dialog와 상태 스타일
+│   └── portfolio/         # 프로젝트 탭·패널과 상태 스타일
 ├── content/
 │   └── case-studies/      # Case Study MDX 콘텐츠
 ├── data/
 │   ├── portfolio.ts       # 타입 검사되는 홈 데이터와 UI 토큰
 │   └── tech-context.ts    # About 페이지 기술 스택 데이터
-├── hooks/                 # URL·dialog focus 상태 계약
 ├── layouts/
 │   └── BaseLayout.astro   # 공통 레이아웃 (헤더, 푸터, SEO 메타)
 ├── mappers/               # Content Entry → UI ViewModel

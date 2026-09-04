@@ -2,7 +2,7 @@
 
 ## 1. 목표
 
-이 작업의 목표는 파일 확장자를 모두 `.ts` 또는 `.tsx`로 바꾸는 것이 아니다. 콘텐츠, 페이지, React 상호작용, URL 상태, 애니메이션과 배포 사이에 검증 가능한 타입 계약을 만들고 그 계약을 CI에서 강제하는 것이다.
+이 작업의 목표는 파일 확장자를 모두 `.ts` 또는 `.tsx`로 바꾸는 것이 아니다. 콘텐츠, 페이지, React 상호작용, 애니메이션과 배포 사이에 검증 가능한 타입 계약을 만들고 그 계약을 CI에서 강제하는 것이다.
 
 정적 콘텐츠에 적합한 Astro와 MDX는 유지한다. Astro frontmatter의 코드는 strict TypeScript 검사 대상이며, 브라우저 상태가 필요한 영역만 React island로 제공한다.
 
@@ -26,34 +26,24 @@ MDX frontmatter
   → Zod schema
   → CollectionEntry<'case-studies'>
   → toProjectViewModel()
-  → Astro 상세 페이지 / React 프로젝트 팝업
+  → Astro 상세 페이지 / React 프로젝트 탭 패널
 ```
 
 필드가 추가·삭제되면 스키마, ViewModel, React Props와 테스트가 컴파일 단계에서 함께 영향을 받는다.
 
-### 팝업 상태 계약 분리
+### 프로젝트 탐색 상태 계약
 
-`useProjectDialog`가 다음 상태를 하나의 계약으로 관리한다.
+`ProjectShowcase` 하나가 선택된 탭, 표시할 패널, Case Study 링크를 같은 `activeIndex`에서 파생한다. 사용자는 모달을 열고 닫지 않고도 같은 자리에서 네 개의 작업을 비교할 수 있다.
 
-- 선택된 프로젝트 slug
-- `?project=<slug>` URL query
-- 유효하지 않은 slug 거부
-- 팝업 trigger 저장
-- 닫은 뒤 trigger로 포커스 복귀
-
-`useFocusTrap`은 다음 브라우저 책임을 별도로 관리한다.
-
-- 팝업이 열릴 때 body 스크롤 잠금
-- 닫기 버튼에 초기 포커스
-- Tab/Shift+Tab 순환
-- Escape 닫기
-- unmount 시 이벤트와 body 상태 복구
-
-시각적 open 스타일, `aria-expanded`, dialog 렌더링과 URL 상태는 동일한 `selectedSlug`에서 파생된다.
+- `role="tablist"`, `role="tab"`, `role="tabpanel"` 구조
+- `aria-selected`, `aria-controls`, `aria-labelledby` 연결
+- 좌·우 방향키와 Home·End 키로 선택과 포커스 이동
+- 선택된 프로젝트의 색상, 카피, 성과, 링크를 동시에 갱신
+- 시각적 화살표 버튼 없이 탭 목록을 수평 스크롤
 
 ### 모션도 타입 있는 디자인 토큰으로 관리
 
-Framer Motion의 easing, section reveal, dialog panel variants를 `src/motion/variants.ts`로 분리했다. `Variants`와 `Transition`의 `satisfies` 검사를 통해 잘못된 모션 속성을 컴파일 단계에서 발견한다. `useReducedMotion()` 분기는 계속 유지한다.
+Framer Motion의 easing과 section reveal을 `src/motion/variants.ts`로 분리했다. `Variants`와 `Transition`의 `satisfies` 검사를 통해 잘못된 모션 속성을 컴파일 단계에서 발견한다. `useReducedMotion()` 분기는 계속 유지한다.
 
 ### Mermaid 지연 로딩
 
@@ -91,22 +81,16 @@ Astro 7이 요구하는 Node 22.12 이상은 기존 `engines` 조건과 일치�
 Vitest와 Testing Library가 다음을 검증한다.
 
 - Content Entry → Project ViewModel 변환
-- 프로젝트 URL query 파싱과 보존
-- 프로젝트 open 상태와 `aria-expanded` 동기화
-- 실제 trigger 전달
-- 팝업 초기 포커스와 Escape 닫기
-- 닫은 뒤 기존 trigger로 포커스 복귀
+- 탭 클릭 시 `aria-selected`, 패널, Case Study 링크의 동기화
+- 방향키 입력 시 다음 탭 선택과 포커스 이동
 
 ### `npm run test:e2e`
 
 Playwright가 데스크톱 Chrome과 모바일 viewport에서 다음 실제 사용자 흐름을 검증한다.
 
-- 프로젝트 클릭 후 dialog와 URL query 노출
-- 배경 `inert` 처리
-- 닫기 버튼 초기 포커스
-- Escape 닫기
-- trigger 포커스 복귀
-- 홈과 팝업의 가로 스크롤 부재
+- 프로젝트 탭 클릭 후 선택 상태와 패널 카피 갱신
+- 선택된 프로젝트의 Case Study 링크 갱신
+- 홈과 프로젝트 패널의 가로 스크롤 부재
 
 ### `npm run verify`
 
@@ -115,7 +99,7 @@ Playwright가 데스크톱 Chrome과 모바일 viewport에서 다음 실제 사�
 전환 완료 시점의 검증 결과:
 
 - Astro/TypeScript 검사: 33 files, 오류·경고·힌트 0건
-- Vitest: 4 files, 8 tests 통과
+- Vitest: 2 files, 3 tests 통과
 - Playwright: desktop·mobile 총 4 tests 통과
 - Astro production build: 9 routes 생성
 
@@ -123,10 +107,8 @@ Playwright가 데스크톱 Chrome과 모바일 viewport에서 다음 실제 사�
 
 - `src/types/portfolio.ts`: 콘텐츠에서 파생한 공통 타입과 대표 프로젝트 slug
 - `src/mappers/case-study.ts`: 서버 콘텐츠를 클라이언트 ViewModel로 변환
-- `src/hooks/useProjectDialog.ts`: URL과 선택 상태 계약
-- `src/hooks/useFocusTrap.ts`: dialog 키보드·포커스 계약
-- `src/components/portfolio/ProjectList.tsx`: trigger의 시각·ARIA 상태
-- `src/components/portfolio/ProjectDetailDialog.tsx`: 접근 가능한 Detail 팝업
+- `src/data/portfolio.ts`: 프로젝트별 색상·탭 레이블·헤드라인 계약
+- `src/components/portfolio/ProjectShowcase.tsx`: 접근 가능한 탭·패널 탐색 UI
 - `src/motion/variants.ts`: 타입 있는 모션 토큰
 - `src/scripts/render-mermaid.ts`: 조건부 Mermaid 로더
 - `src/pages/engineering.astro`: 방문자가 읽을 수 있는 설계 요약
@@ -145,6 +127,6 @@ npm run verify    # check + test + build
 ## 8. 트레이드오프와 후속 과제
 
 - 모든 `.astro` 파일을 TSX로 바꾸지 않았다. 정적 HTML에 React hydration 비용을 추가할 이유가 없기 때문이다.
-- 직접 구현한 focus trap은 현재 팝업 요구사항에 맞지만 복잡한 중첩 dialog가 생기면 검증된 접근성 라이브러리 또는 native dialog 도입을 다시 평가한다.
+- 홈 탭 선택은 현재 URL에 보존하지 않는다. 특정 프로젝트를 직접 공유해야 할 요구가 생기면 query 또는 hash 상태를 다시 검토한다.
 - E2E 테스트는 핵심 흐름만 다룬다. 시각 회귀 테스트는 디자인이 더 안정된 뒤 스냅샷 유지 비용과 함께 검토한다.
 - 의존성 감사 경고는 기능 변경과 분리해 원인 패키지·실제 배포 영향·업데이트 위험을 확인한 뒤 처리한다. 자동 `npm audit fix`는 실행하지 않는다.
