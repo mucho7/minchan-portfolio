@@ -28,6 +28,7 @@ test('Case Study 목록은 공통 GNB와 특화 기술 chip을 사용한다', as
   await page.goto('./case-studies/');
   await expect(page.getByRole('navigation', { name: '주요 메뉴' })).toContainText('Work');
   await expect(page.getByRole('navigation', { name: '주요 메뉴' })).toContainText('About');
+  await expect(page.getByRole('navigation', { name: '주요 메뉴' })).not.toContainText('Engineering');
   const skills = page.getByRole('list', { name: '프로젝트 특화 기술' });
   await expect(skills.first()).toBeVisible();
   await expect(page.getByText('React', { exact: true })).toHaveCount(0);

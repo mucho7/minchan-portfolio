@@ -47,7 +47,6 @@ export default function PortfolioExperience({
         homeHref={homeHref}
         workHref={workHref}
         aboutHref={aboutHref}
-        engineeringHref={engineeringHref}
         contactHref={contactHref}
       />
 
