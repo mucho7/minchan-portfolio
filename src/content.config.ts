@@ -4,6 +4,7 @@ import { z } from 'astro/zod';
 
 export const caseStudySchema = z.object({
   title: z.string(),
+  company: z.string(),
   summary: z.string(),
   order: z.number(),
   period: z.string(),

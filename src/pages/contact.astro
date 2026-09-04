@@ -12,33 +12,21 @@ const channels = [
   title="Contact | 김민찬 Frontend Engineer"
   description="프론트엔드 엔지니어 김민찬의 이메일, GitHub, 기술 블로그"
 >
-  <header class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
-    <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Contact</p>
-    <div>
-      <h1 class="text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">제품과 기술에 관한<br />대화를 기다립니다.</h1>
-      <p class="mt-6 max-w-xl text-base leading-8 text-black/60">
-        복잡한 도메인 UI, 대용량 데이터 탐색, AI 제품 개발과 협업 경험이 궁금하다면 편하게 연락해 주세요.
-      </p>
-    </div>
+  <header class="border-b border-black/25 pb-12 sm:pb-16">
+    <h1 class="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">Contact</h1>
   </header>
 
-  <section class="border-b border-black/25" aria-label="연락 채널">
-    {channels.map((channel, index) => (
+  <section class="grid gap-3 py-10 md:grid-cols-3 sm:py-14" aria-label="연락 채널">
+    {channels.map((channel) => (
       <a
         href={channel.href}
         target={channel.href.startsWith('http') ? '_blank' : undefined}
         rel={channel.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-        class="group grid gap-2 border-t border-black/25 py-7 first:border-t-0 sm:grid-cols-[5rem_1fr_auto] sm:items-center sm:py-9"
+        class="group min-w-0 rounded-2xl bg-[var(--surface)] p-6 transition-colors hover:bg-[var(--nav-surface)] focus-visible:outline-offset-2 sm:min-h-44"
       >
-        <span class="font-mono text-xs text-black/40">0{index + 1}</span>
-        <span>
-          <span class="block text-xs uppercase tracking-[0.12em] text-black/45">{channel.label}</span>
-          <span class="mt-2 block text-xl font-semibold tracking-[-0.03em] group-hover:underline sm:text-2xl">{channel.value}</span>
-        </span>
-        <span aria-hidden="true" class="text-xl text-black/35 transition-transform group-hover:translate-x-1">↗</span>
+        <span class="block text-sm font-medium text-[var(--ink-muted)]">{channel.label}</span>
+        <span class="mt-8 block break-words text-base font-semibold tracking-[-0.02em] group-hover:underline lg:text-lg">{channel.value}</span>
       </a>
     ))}
   </section>
-
-  <p class="py-10 text-sm leading-6 text-black/50">가장 빠른 연락 채널은 이메일입니다.</p>
 </BaseLayout>

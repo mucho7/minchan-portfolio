@@ -1,10 +1,11 @@
 import type { CollectionEntry } from 'astro:content';
 
 export const FEATURED_PROJECT_SLUGS = [
+  'manufacturing-monitoring-poc',
   'time-series-performance',
   'agent-ui-reuse',
-  'web-ide-rendering',
-  'tooling-ui-flow'
+  'tooling-ui-flow',
+  'web-ide-rendering'
 ] as const;
 
 export type FeaturedProjectSlug = (typeof FEATURED_PROJECT_SLUGS)[number];

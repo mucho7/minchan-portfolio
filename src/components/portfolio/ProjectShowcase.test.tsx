@@ -8,6 +8,7 @@ const projects = [
   {
     slug: 'time-series-performance',
     title: '시계열 성능 개선',
+    company: '(주) 아하랩스',
     summary: '대량 시계열 탐색 성능을 개선했습니다.',
     order: 1,
     period: '2024',
@@ -20,6 +21,7 @@ const projects = [
   {
     slug: 'agent-ui-reuse',
     title: 'Agent UI 공통화',
+    company: '(주) 아하랩스',
     summary: '반복 구현을 공통 패키지로 전환했습니다.',
     order: 2,
     period: '2024',
@@ -39,6 +41,7 @@ describe('ProjectShowcase', () => {
     await userEvent.click(agentTab);
 
     expect(agentTab).toHaveAttribute('aria-selected', 'true');
+    expect(agentTab).toHaveStyle({ backgroundColor: '#f26130', color: '#ffffff' });
     expect(screen.getByRole('tabpanel')).toHaveTextContent('반복 구현 영역을');
     expect(screen.getByRole('link', { name: '전체 Case Study 읽기' })).toHaveAttribute('href', '/case-studies/agent-ui-reuse/');
   });

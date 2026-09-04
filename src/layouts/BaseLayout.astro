@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { SiteHeader } from '../components/SiteHeader';
 import { withBase } from '../utils/withBase';
 
 interface Props {
@@ -17,13 +18,6 @@ const {
 const siteUrl = import.meta.env.SITE;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const socialImageUrl = socialImage ? new URL(socialImage, siteUrl).href : undefined;
-const navItems = [
-  { href: withBase(), label: 'Home' },
-  { href: withBase('about/'), label: 'Experience' },
-  { href: withBase('case-studies/'), label: 'Work' },
-  { href: withBase('engineering/'), label: 'Engineering' },
-  { href: withBase('contact/'), label: 'Contact' }
-];
 ---
 
 <!doctype html>
@@ -53,31 +47,20 @@ const navItems = [
     {!immersive && <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--paper)] focus:px-4 focus:py-3">
       본문으로 건너뛰기
     </a>}
-    {!immersive && <header class="border-b border-black/20">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
-        <a href={withBase()} class="text-sm font-semibold tracking-[-0.02em]">김민찬 <span class="font-normal text-black/45">/ Frontend Engineer</span></a>
-        <nav aria-label="주요 메뉴" class="flex gap-3 text-xs sm:gap-6 sm:text-sm">
-          {navItems.map((item) => (
-            <a
-              href={item.href}
-              aria-current={item.href === withBase()
-                ? Astro.url.pathname === item.href ? 'page' : undefined
-                : Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
-              class="text-black/60 transition hover:text-black aria-[current=page]:text-black"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </header>}
+    {!immersive && <SiteHeader
+      homeHref={withBase()}
+      workHref={withBase('case-studies/')}
+      aboutHref={withBase('about/')}
+      engineeringHref={withBase('engineering/')}
+      contactHref={withBase('contact/')}
+      currentPath={Astro.url.pathname}
+    />}
     {immersive
       ? <div id="main-content" class="min-h-screen"><slot /></div>
       : <main id="main-content" class="mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20"><slot /></main>}
     {!immersive && <footer class="border-t border-black/20">
-      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-xs text-black/55 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <div class="mx-auto max-w-6xl px-5 py-8 text-xs text-black/55 sm:px-8">
         <p>© {new Date().getFullYear()} 김민찬</p>
-        <p>Seoul, Korea · 복잡한 제품을 명료한 인터페이스로</p>
       </div>
     </footer>}
   </body>

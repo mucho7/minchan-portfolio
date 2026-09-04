@@ -1,79 +1,66 @@
 ---
-title: "Web IDE 주요 갱신 렌더링을 20–30회에서 2회로 축소"
-summary: "Monaco Editor와 IndexedDB 기반 Web IDE에서 상태 소유권과 구독 경계를 다시 설계해 편집·저장 흐름의 불필요한 렌더링을 줄였습니다."
-order: 3
+title: "IndexedDB 기반 Web IDE 로컬 파일 저장 구조 설계"
+company: "티맥스 클라우드"
+summary: "브라우저 저장 용량 한계를 해결하기 위해 파일 단위의 IndexedDB 저장·복원 구조를 만들고, AST 분석 결과를 자동완성과 오류 표기에 연결했습니다."
+order: 5
 period: "2023.08 - 2024.11"
-role: "GAIA PX FE / 상태·성능 설계"
+role: "GAIA PX Web IDE Frontend"
 skills:
   - React
   - TypeScript
   - Monaco Editor
   - IndexedDB
-  - State Modeling
+  - AST
 metrics:
-  - "주요 상태 갱신 렌더링 20–30회 → 2회"
-  - "Web IDE 핵심 편집 흐름 구현"
+  - "IndexedDB 기반 파일 저장·복원 구조 구현"
+  - "AST 분석 기반 자동완성·오류 표기 제공"
 preview:
-  problem: "파일 탐색·편집·오류 확인·저장 상태가 넓게 공유되어 주요 동작마다 관련 없는 컴포넌트까지 반복 렌더링됐습니다."
-  decision: "편집 데이터와 화면 상태의 소유권을 나누고, 필요한 컴포넌트만 변경을 구독하도록 렌더링 경계를 다시 설계했습니다."
-  result: "주요 상태 갱신 시 발생하던 20–30회의 렌더링을 2회로 줄였습니다."
+  problem: "프로젝트 전체 소스와 파일 구조를 브라우저에 보존해야 했지만 기존 저장 방식은 용량이 부족했습니다."
+  decision: "소스를 파일 단위로 IndexedDB에 저장·복원하고, 저장된 소스의 AST 분석 결과를 편집기에 연결했습니다."
+  result: "파일 탐색·편집·저장·복원 흐름과 코드 자동완성·오류 표기를 하나의 Web IDE에 구현했습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';
 
 ## Context
 
-GAIA PX는 슈퍼앱 내부에서 파일을 탐색하고 코드를 편집·실행하는 Web IDE입니다.
-프론트엔드를 맡아 파일 트리, Monaco Editor 자동완성·오류 마커, 실행 결과와 IndexedDB 기반 로컬 저장을 하나의 작업 흐름으로 연결했습니다.
+GAIA PX는 슈퍼앱 내부에서 파일을 탐색하고 코드를 편집하는 Web IDE입니다. 코드 자동완성과 오류 분석을 위해 프로젝트 전체 소스와 파일 구조를 브라우저에 보존해야 했습니다.
 
 ## Problem
 
-- 파일 선택, 편집 내용, 오류 마커, 저장 여부가 넓은 상태 범위를 함께 구독했습니다.
-- 주요 상태가 한 번 바뀔 때 관련 없는 컴포넌트까지 연쇄적으로 갱신됐습니다.
-- 편집·저장 같은 핵심 동작에서 렌더링이 **20–30회** 발생해 인터랙션 비용이 커졌습니다.
-
-## Options
-
-1. 개별 컴포넌트에 `memo`만 추가
-2. 편집 이벤트를 debounce해 갱신 횟수만 제한
-3. **상태 소유권·구독 범위·컴포넌트 경계를 함께 재설계** ← 선택
-
-증상만 가리는 최적화보다 어떤 상태를 누가 소유하고, 어느 컴포넌트가 그 변경을 알아야 하는지 먼저 정리해야 했습니다.
+- 기존 저장 방식으로는 프로젝트 전체 소스를 보존하기 어려웠습니다.
+- 파일 탐색, 편집, 저장, 복원이 하나의 작업 흐름으로 연결되어야 했습니다.
+- 저장된 소스를 분석해 자동완성과 오류 정보로 제공해야 했습니다.
 
 ## Decision
 
+브라우저 메모리에만 소스를 두지 않고, 파일 단위로 IndexedDB에 저장하고 복원하는 구조를 선택했습니다. 이 구조는 프로젝트 파일 구성을 유지하고, 저장된 소스를 AST 분석의 입력으로 다시 사용할 수 있게 했습니다.
+
 <Mermaid
-  caption="편집 상태와 화면 상태의 소유권을 분리한 구조"
+  caption="IndexedDB에 저장한 파일을 분석해 편집기에 연결하는 구조"
   chart={`
 flowchart LR
-  editor["Monaco Editor"] --> document["Document state"]
-  document --> persistence["IndexedDB persistence"]
-  document --> markers["Error markers"]
-  selection["Selected file"] --> tree["File tree"]
-  selection --> editor
-  ui["Panel / layout state"] --> shell["IDE shell"]
+  tree["파일 트리"] --> storage["IndexedDB 파일 저장"]
+  storage --> restore["프로젝트 복원"]
+  storage --> ast["AST 분석"]
+  ast --> completion["자동완성"]
+  ast --> markers["오류 표기"]
+  restore --> editor["Monaco Editor"]
 `}
 />
 
-- 편집 내용과 저장 상태는 문서 단위로 묶고, 파일 트리와 패널 UI 상태에서 분리했습니다.
-- 컴포넌트는 자신이 실제로 표시하는 state slice만 구독하게 했습니다.
-- IndexedDB 저장 흐름은 렌더링과 직접 결합하지 않고 문서 변경 이후의 별도 책임으로 두었습니다.
-- 파일 선택처럼 여러 영역이 함께 바뀌는 동작도 필요한 경계만 갱신하도록 데이터 전달 경로를 줄였습니다.
-
 ## Implementation
 
-Monaco Editor 인스턴스와 React 상태가 서로를 반복 갱신하지 않도록 편집 이벤트의 방향을 고정했습니다.
-파일 트리, 에디터, 오류 표시, 실행 패널은 하나의 큰 상태 객체 대신 각 화면이 필요한 최소 상태만 전달받았습니다.
-
-측정은 동일한 주요 상태 갱신 시나리오에서 React 렌더링 횟수를 비교하는 방식으로 진행했습니다.
+- 프로젝트 소스를 파일 단위로 IndexedDB에 저장하고 복원했습니다.
+- 저장된 소스를 AST로 분석해 코드 구조와 오류 정보를 파악했습니다.
+- AST 분석 결과를 Monaco Editor의 자동완성과 오류 표기에 연결했습니다.
 
 ## Result
 
-- 주요 상태 갱신 시 렌더링을 **20–30회에서 2회**로 축소
-- 파일 탐색 → 편집 → 오류 확인 → 저장 흐름을 한 제품 안에서 구현
-- 성능 문제를 API 호출이나 `memo` 하나가 아니라 상태 소유권과 구독 경계의 문제로 해결
+- IndexedDB 기반으로 프로젝트 소스의 파일 단위 저장·복원 구조 구현
+- 파일 탐색 → 편집 → 저장 → 복원 흐름 구현
+- AST 분석을 활용한 코드 자동완성과 오류 표기 제공
 
 ## Limitation
 
-공개 가능한 범위상 제품 화면과 내부 코드는 포함하지 않았습니다.
-렌더링 횟수는 당시 동일 동작을 기준으로 비교한 수치이며, 전체 Web IDE의 모든 인터랙션에 동일하게 적용되는 값은 아닙니다.
+내부 저장 코드와 제품 화면은 공개 범위에서 제외했습니다.

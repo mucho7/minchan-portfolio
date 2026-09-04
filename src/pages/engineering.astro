@@ -36,11 +36,11 @@ const decisions = [
 ] satisfies Decision[];
 
 const qualityGates = [
-  ['01', 'Schema', 'MDX frontmatter를 Zod로 검증'],
-  ['02', 'Type', 'Astro strict mode로 페이지와 React 경계 검사'],
-  ['03', 'Unit', 'ViewModel·탭 상태·컴포넌트 계약 검증'],
-  ['04', 'Browser', '데스크톱·모바일 탭과 링크 흐름 검증'],
-  ['05', 'Build', 'GitHub Pages 경로로 정적 산출물 생성']
+  ['Schema', 'MDX frontmatter를 Zod로 검증'],
+  ['Type', 'Astro strict mode로 페이지와 React 경계 검사'],
+  ['Unit', 'ViewModel·탭 상태·컴포넌트 계약 검증'],
+  ['Browser', '데스크톱·모바일 탭과 링크 흐름 검증'],
+  ['Build', 'GitHub Pages 경로로 정적 산출물 생성']
 ] as const;
 ---
 
@@ -68,8 +68,7 @@ const qualityGates = [
         <div class="mt-8 grid gap-px bg-black/20 sm:grid-cols-4" aria-label="콘텐츠 타입 전달 구조">
           {['MDX + Zod', 'CollectionEntry', 'Typed ViewModel', 'Astro + React'].map((step, index) => (
             <div class="relative bg-[var(--paper)] p-5">
-              <p class="font-mono text-xs text-[var(--accent)]">0{index + 1}</p>
-              <p class="mt-8 font-semibold">{step}</p>
+              <p class="font-semibold">{step}</p>
               {index < 3 && <span aria-hidden="true" class="absolute -right-2 top-1/2 z-10 hidden text-black/35 sm:block">→</span>}
             </div>
           ))}
@@ -105,9 +104,8 @@ const qualityGates = [
       <div>
         <h3 class="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em]">배포는 다섯 개의 서로 다른 검증을 통과해야 합니다.</h3>
         <ol class="mt-8 divide-y divide-black/20 border-y border-black/20">
-          {qualityGates.map(([number, name, description]) => (
-            <li class="grid gap-2 py-5 sm:grid-cols-[4rem_8rem_1fr] sm:items-center">
-              <span class="font-mono text-xs text-black/40">{number}</span>
+          {qualityGates.map(([name, description]) => (
+            <li class="grid gap-2 py-5 sm:grid-cols-[8rem_1fr] sm:items-center">
               <span class="font-semibold">{name}</span>
               <span class="text-sm leading-6 text-black/55">{description}</span>
             </li>
@@ -125,7 +123,7 @@ const qualityGates = [
       <p><strong class="text-black">Mermaid는 필요할 때만 불러옵니다.</strong> 상세 페이지의 최초 실행 스크립트를 608,677 bytes에서 2,784 bytes로 줄였습니다. Mermaid와 다이어그램별 의존성은 DOM에서 실제 다이어그램을 확인한 뒤 동적으로 요청됩니다. 최종 전송량을 숨기지 않고 초기 실행 경로와 지연 청크를 구분해 기록합니다.</p>
       <p><strong class="text-black">보안 업데이트도 검증 과정에 포함했습니다.</strong> Astro 6에서 7, MDX 5에서 8로 올리고 Mermaid·DOMPurify·esbuild를 수정 버전으로 갱신했습니다. 전체 타입·단위·E2E·빌드 검증 후 배포 의존성 감사 결과는 0건입니다.</p>
       <p>
-        <a href="https://github.com/mucho7/minchan-portfolio" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">GitHub에서 구현과 테스트 보기 ↗</a>
+        <a href="https://github.com/mucho7/minchan-portfolio" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">GitHub에서 구현과 테스트 보기</a>
       </p>
     </div>
   </section>

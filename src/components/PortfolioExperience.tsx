@@ -4,6 +4,7 @@ import { EMPHASIZED_EASE, SECTION_REVEAL_TRANSITION, SECTION_REVEAL_VARIANTS } f
 import type { ProjectViewModel } from '../types/portfolio';
 import { ProjectShowcase } from './portfolio/ProjectShowcase';
 import { FOCUS_CLASSNAME } from './portfolio/styles';
+import { SiteHeader } from './SiteHeader';
 
 type PortfolioExperienceProps = {
   projects: readonly ProjectViewModel[];
@@ -42,17 +43,13 @@ export default function PortfolioExperience({
         본문으로 건너뛰기
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] backdrop-blur-xl">
-        <div className={`${SHELL_CLASSNAME} flex h-16 items-center justify-between gap-6`}>
-          <a href={homeHref} className={`text-sm font-semibold tracking-[-0.02em] ${FOCUS_CLASSNAME}`}>김민찬</a>
-          <nav aria-label="주요 메뉴" className="flex items-center gap-4 text-xs font-medium text-[var(--ink-muted)] sm:gap-7 sm:text-sm">
-            <a href={workHref} className={`transition-colors hover:text-[var(--ink)] ${FOCUS_CLASSNAME}`}>Work</a>
-            <a href={aboutHref} className={`transition-colors hover:text-[var(--ink)] ${FOCUS_CLASSNAME}`}>About</a>
-            <a href={engineeringHref} className={`hidden transition-colors hover:text-[var(--ink)] sm:inline ${FOCUS_CLASSNAME}`}>Engineering</a>
-            <a href={contactHref} className={`rounded-full bg-[var(--ink)] px-4 py-2 text-white transition-transform active:scale-[0.98] ${FOCUS_CLASSNAME}`}>Contact</a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader
+        homeHref={homeHref}
+        workHref={workHref}
+        aboutHref={aboutHref}
+        engineeringHref={engineeringHref}
+        contactHref={contactHref}
+      />
 
       <main>
         <section id="hero" className={`${SHELL_CLASSNAME} flex min-h-[calc(88dvh-4rem)] flex-col items-center justify-center py-20 text-center sm:py-24`}>
@@ -71,15 +68,15 @@ export default function PortfolioExperience({
             ))}
           </h1>
           <p className="mt-8 max-w-3xl text-base leading-7 text-[var(--ink-secondary)] sm:text-xl sm:leading-8">
-            React와 TypeScript로 대용량 데이터와 복잡한 상태를 사용자가 판단하고 실행할 수 있는 화면으로 연결합니다.
+            클라우드, 비전 검사, 제조 관제 도메인의 웹 클라이언트를 개발해 왔습니다.
           </p>
         </section>
 
         <motion.section {...revealProps} id="work" className={`${SHELL_CLASSNAME} scroll-mt-24 pb-24 pt-14 sm:pb-36 sm:pt-20`}>
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-[clamp(2.6rem,6vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em]">판단과 실행을 바꾼 작업.</h2>
+            <h2 className="text-[clamp(2.6rem,6vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em]">맡은 문제와 결과.</h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[var(--ink-secondary)] sm:text-lg sm:leading-8">
-              문제를 어떻게 정의했고, 어떤 선택을 했으며, 결과를 무엇으로 확인했는지 보여드립니다.
+              문제, 선택, 검증 결과를 프로젝트별로 정리했습니다.
             </p>
           </div>
           <ProjectShowcase projects={projects} />
@@ -88,9 +85,9 @@ export default function PortfolioExperience({
         <motion.section {...revealProps} id="approach" className="bg-[var(--surface)]">
           <div className={`${SHELL_CLASSNAME} py-24 sm:py-32`}>
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.03] tracking-[-0.04em]">기술보다 먼저, 문제와 행동을 봅니다.</h2>
+              <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.03] tracking-[-0.04em]">업무 흐름과 상태를 먼저 정리합니다.</h2>
               <p className="mx-auto mt-7 max-w-3xl text-base leading-8 text-[var(--ink-secondary)] sm:text-lg">
-                익숙한 기술에 답을 맞추지 않습니다. 응답성, 시스템 비용, 사용자의 실제 행동을 기준으로 선택하고 결과를 검증합니다.
+                데이터 갱신 방식과 시스템 의존성을 파악한 뒤, 사용자가 변경 대상과 처리 결과를 확인할 수 있도록 화면을 구성합니다.
               </p>
             </div>
             <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-3">
@@ -101,7 +98,7 @@ export default function PortfolioExperience({
         </motion.section>
 
         <section id="contact" className={`${SHELL_CLASSNAME} flex min-h-[65dvh] flex-col items-center justify-center py-24 text-center sm:py-32`}>
-          <h2 className="max-w-5xl text-[clamp(3rem,8vw,6rem)] font-semibold leading-[0.98] tracking-[-0.04em]">복잡한 문제를<br />함께 풀어봅시다.</h2>
+          <h2 className="max-w-5xl text-[clamp(3rem,8vw,6rem)] font-semibold leading-[0.98] tracking-[-0.04em]">Contact</h2>
           <a href={contactHref} className={`mt-10 inline-flex min-h-12 items-center rounded-full bg-[var(--accent-blue)] px-6 text-base font-semibold text-white shadow-[0_12px_32px_rgb(0_115_235_/_0.18)] transition-[filter,transform] hover:brightness-95 active:scale-[0.98] ${FOCUS_CLASSNAME}`}>연락처 보기</a>
           <p className="mt-20 text-xs text-[var(--ink-muted)]">© {new Date().getFullYear()} 김민찬</p>
         </section>

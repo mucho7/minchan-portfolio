@@ -4,23 +4,23 @@ import { techContext } from '../data/tech-context';
 
 const experience = [
   {
-    company: 'AHHA Labs',
-    period: '2024.11 — Present',
-    scope: '제조 AI MLOps · AI Agent UI · 자동화 공정 관제',
+    company: '(주) 아하랩스',
+    period: '2024.11 - 재직중',
+    scope: '제조 AI MLOps 플랫폼 / AI Agent UI / 자동화 공정 관제',
     highlights: [
-      'SSE 채팅과 Workflow Builder를 포함한 AI Agent MVP의 프론트엔드 구현을 맡아 4주 내 완성',
-      'Frontend Engineer와 Scrum Master 역할을 함께 수행하며 1·2차 제조 관제 PoC 구현과 협업 조율, 프로젝트 수주에 기여',
-      '5천만 건 이상 시계열 데이터의 다운샘플링·상태 구독·렌더링 구조 개선',
-      'Codex Skill과 승인 기반 ClickUp 등록으로 태스크 작성·계획 수립을 약 1시간에서 10–13분으로 단축'
+      '사내용·고객사 납품용 AI Agent 웹 제품 4종 개발, 공통 패키지로 후속 웹앱 코드 재사용률 약 60% 달성',
+      '제조 관제 PoC의 프론트엔드 리드와 스크럼 마스터를 맡아 1·2차 검증 완료와 프로젝트 수주에 기여',
+      '5천만 건 이상 시계열 데이터의 축약·상태 구독·렌더링 구조 개선',
+      'Codex Skill과 승인 기반 ClickUp 등록으로 태스크 작성·계획 수립 시간을 약 2시간에서 10분대로 단축'
     ]
   },
   {
-    company: 'Tmax Cloud',
-    period: '2023.08 — 2024.11',
-    scope: '슈퍼앱 내부 Code Editor · 클라우드 플랫폼 관리 콘솔',
+    company: '티맥스 클라우드',
+    period: '2023.08 - 2024.11',
+    scope: '슈퍼앱 내부 Code Editor / 클라우드 플랫폼 관리 콘솔',
     highlights: [
       'GAIA PX Web IDE 프론트엔드를 담당하고 파일 탐색·자동완성·오류 표시·실행·로컬 저장 흐름 구현',
-      '상태 구독과 컴포넌트 경계를 개선해 주요 갱신 시 렌더링을 20–30회에서 2회로 축소',
+      'IndexedDB 기반으로 Web IDE의 프로젝트 소스를 파일 단위로 저장·복원하고 AST 분석을 편집기에 연결',
       '보안 그룹·로드밸런서·네트워크·DB 세션의 관계와 API 제약을 반영한 IaaS 관리 화면 구현'
     ]
   }
@@ -34,10 +34,10 @@ const experience = [
   <header class="grid gap-6 border-b border-black/25 pb-12 sm:grid-cols-[1fr_2fr] sm:pb-16">
     <p class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Experience & approach</p>
     <div>
-      <h1 class="text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">복잡한 현장을<br />제품의 언어로 바꿉니다.</h1>
+      <h1 class="text-4xl font-semibold tracking-[-0.04em] sm:text-6xl">B2B 업무를<br />안정적인 도구로 만듭니다.</h1>
       <p class="mt-6 max-w-2xl text-base leading-8 text-black/60">
-        AI·제조·클라우드 제품의 초기 개발부터 성능 개선과 업무 자동화까지 경험했습니다.
-        화면 구현에 머물지 않고 문제 정의, 기술 선택, 협업과 현장 검증을 연결합니다.
+        React와 TypeScript로 클라우드, 비전 검사, 제조 관제 도메인의 웹 클라이언트를 개발했습니다.
+        대용량 데이터 렌더링, 공통 UI 패키지, 시스템 간 의존성이 복잡한 화면을 다뤄왔습니다.
       </p>
     </div>
   </header>
@@ -56,7 +56,7 @@ const experience = [
               <p class="font-mono text-xs text-black/45">{item.period}</p>
             </div>
             <ul class="mt-5 space-y-3 text-sm leading-6 text-black/65">
-              {item.highlights.map((highlight) => <li class="relative pl-5 before:absolute before:left-0 before:content-['—']">{highlight}</li>)}
+              {item.highlights.map((highlight) => <li class="relative pl-5 before:absolute before:left-0 before:content-['-']">{highlight}</li>)}
             </ul>
           </article>
         ))}
@@ -72,10 +72,9 @@ const experience = [
         Agent 제품에서는 입력·실행·결과의 사용자 흐름을 설계합니다. 개발 도구로 Codex를 사용할 때는 프로젝트 맥락과 변경 제약을 먼저 제공하고, 생성된 diff를 직접 리뷰합니다.
       </p>
       <ol class="grid gap-px bg-black/20 sm:grid-cols-4">
-        {['맥락·제약 제공', '생성 diff 리뷰', '타입·테스트 확인', '브라우저 동작 검증'].map((step, index) => (
+        {['맥락·제약 제공', '생성 diff 리뷰', '타입·테스트 확인', '브라우저 동작 검증'].map((step) => (
           <li class="bg-[var(--paper)] p-5">
-            <span class="font-mono text-xs text-[var(--accent)]">0{index + 1}</span>
-            <p class="mt-4 text-sm font-medium">{step}</p>
+            <p class="text-sm font-medium">{step}</p>
           </li>
         ))}
       </ol>
@@ -108,7 +107,7 @@ const experience = [
         <h3 class="text-lg font-semibold">Open source</h3>
         <p class="mt-4 leading-7 text-black/65">
           toss/react-simplikit 공개 초기 이슈 제보<br />
-          재현 조건과 개선 방향 논의 ·
+          재현 조건과 개선 방향 논의
           <a href="https://github.com/toss/react-simplikit/issues/172" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] underline">Issue #172</a>
         </p>
       </div>

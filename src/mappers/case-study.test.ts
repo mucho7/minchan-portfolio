@@ -4,6 +4,7 @@ import { toProjectViewModel } from './case-study';
 
 const caseStudyData = {
   title: 'Typed portfolio',
+  company: '테스트 회사',
   summary: '콘텐츠와 UI 사이의 계약을 검증합니다.',
   order: 1,
   period: '2026',
