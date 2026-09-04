@@ -1,7 +1,7 @@
 ---
 title: "IndexedDB 기반 Web IDE 로컬 파일 저장 구조 설계"
 company: "티맥스 클라우드"
-summary: "브라우저 저장 용량 한계를 해결하기 위해 파일 단위의 IndexedDB 저장·복원 구조를 만들고, AST 분석 결과를 자동완성과 오류 표기에 연결했습니다."
+summary: "브라우저 저장 용량 한계를 해결하기 위해 파일 단위의 IndexedDB 저장·복원 구조를 만들고,\nAST 분석 결과를 자동완성과 오류 표기에 연결했습니다."
 order: 5
 period: "2023.08 - 2024.11"
 role: "GAIA PX Web IDE Frontend"
@@ -12,12 +12,12 @@ skills:
   - IndexedDB
   - AST
 metrics:
-  - "IndexedDB 기반 파일 저장·복원 구조 구현"
-  - "AST 분석 기반 자동완성·오류 표기 제공"
+  - "IndexedDB 기반 파일 구조 구현"
+  - "AST 분석 기반 자동완성 · 오류 표기 제공"
 preview:
   problem: "프로젝트 전체 소스와 파일 구조를 브라우저에 보존해야 했지만 기존 저장 방식은 용량이 부족했습니다."
-  decision: "소스를 파일 단위로 IndexedDB에 저장·복원하고, 저장된 소스의 AST 분석 결과를 편집기에 연결했습니다."
-  result: "파일 탐색·편집·저장·복원 흐름과 코드 자동완성·오류 표기를 하나의 Web IDE에 구현했습니다."
+  decision: "코드를 파일 단위로 IndexedDB에 저장하고,\n코드의 AST 분석 결과를 편집기에 연결했습니다."
+  result: "파일 탐색 · 편집 · 저장 · 복원 흐름과 코드 자동완성 및\n오류 표기 기능을 하나의 Web IDE에 구현했습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';

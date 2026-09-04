@@ -1,25 +1,22 @@
 ---
 title: "Agent UI 공통화로 반복 구현 영역 약 60% 재사용"
 company: "(주) 아하랩스"
-summary: "반복 구현되던 입력·실행·결과 UI를 npm 패키지로 분리·publish해 3개 이상 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
+summary: "반복 구현되던 입력·실행·결과 UI를 npm 패키지로 분리 및 publish하여\n반복적인 Agent 프로젝트의 개발·유지보수 비용을 줄였습니다."
 order: 3
 period: "2024.11 - 재직중"
 role: "Frontend / 구조 설계 / 공통 컴포넌트"
 skills:
-  - React
-  - TypeScript
   - Zustand
   - React Query
   - SSE
-  - WebSocket
   - LLM
 metrics:
-  - "반복 UI·store·훅 영역 약 60% 재사용 (추정)"
-  - "3개 이상 Agent 프로젝트 동일 수정 반복 해소"
+  - "반복 UI · store · 훅 영역 약 60% 재사용"
+  - "4개 Agent 프로젝트 동일 수정 반복 해소"
 preview:
-  problem: "고객사별 Agent 프로젝트마다 입력 폼, 실행 상태, 결과 표시 UI가 반복 구현되고 있었습니다."
-  decision: "반복 인터랙션을 npm 패키지로 publish하고, 도메인별 UI는 소비 앱에서만 확장했습니다."
-  result: "3개 Agent 프로젝트의 반복 UI를 공통 패키지로 전환해, 약 60% 수준의 재사용(추정)을 확보했습니다."
+  problem: "고객사별 Agent 프로젝트마다 입력 폼, 실행 상태,\n결과 표시 UI가 반복 구현되고 있었습니다."
+  decision: "반복 인터랙션을 npm 패키지로 publish하고,\n도메인별 UI는 소비 앱에서만 확장했습니다."
+  result: "3개 Agent 프로젝트의 반복 UI를 공통 패키지로 전환, 약 60% 수준의 재사용(추정)을 확보했습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';

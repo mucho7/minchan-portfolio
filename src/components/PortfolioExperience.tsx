@@ -73,27 +73,9 @@ export default function PortfolioExperience({
 
         <motion.section {...revealProps} id="work" className={`${SHELL_CLASSNAME} scroll-mt-24 pb-24 pt-14 sm:pb-36 sm:pt-20`}>
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-[clamp(2.6rem,6vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em]">맡은 문제와 결과.</h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[var(--ink-secondary)] sm:text-lg sm:leading-8">
-              문제, 선택, 검증 결과를 프로젝트별로 정리했습니다.
-            </p>
+            <h2 className="text-[clamp(2.6rem,6vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.04em]">주요 성과</h2>
           </div>
           <ProjectShowcase projects={projects} />
-        </motion.section>
-
-        <motion.section {...revealProps} id="approach" className="bg-[var(--surface)]">
-          <div className={`${SHELL_CLASSNAME} py-24 sm:py-32`}>
-            <div className="mx-auto max-w-4xl text-center">
-              <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.03] tracking-[-0.04em]">업무 흐름과 상태를 먼저 정리합니다.</h2>
-              <p className="mx-auto mt-7 max-w-3xl text-base leading-8 text-[var(--ink-secondary)] sm:text-lg">
-                데이터 갱신 방식과 시스템 의존성을 파악한 뒤, 사용자가 변경 대상과 처리 결과를 확인할 수 있도록 화면을 구성합니다.
-              </p>
-            </div>
-            <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-3">
-              <a href={aboutHref} className={`inline-flex min-h-11 items-center rounded-full border border-[var(--line-strong)] bg-[var(--paper)] px-5 text-sm font-semibold transition-colors hover:bg-[var(--nav-surface)] ${FOCUS_CLASSNAME}`}>경력과 작업 방식</a>
-              <a href={engineeringHref} className={`inline-flex min-h-11 items-center rounded-full border border-[var(--line-strong)] bg-[var(--paper)] px-5 text-sm font-semibold transition-colors hover:bg-[var(--nav-surface)] ${FOCUS_CLASSNAME}`}>이 사이트의 설계 기록</a>
-            </div>
-          </div>
         </motion.section>
 
         <section id="contact" className={`${SHELL_CLASSNAME} flex min-h-[65dvh] flex-col items-center justify-center py-24 text-center sm:py-32`}>

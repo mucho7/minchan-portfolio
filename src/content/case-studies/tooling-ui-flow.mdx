@@ -1,7 +1,7 @@
 ---
 title: "워크플로우 실행 흐름 재설계로 사용자 이해 비용 개선"
 company: "(주) 아하랩스"
-summary: "파이프라인 캔버스의 연결 UX·렌더링을 개선하고 단계·상태·결과 표현을 재정렬해 QA와 신규 사용자의 온보딩 비용을 낮췄습니다."
+summary: "파이프라인 캔버스의 연결 UX·렌더링을 개선하고\n단계·상태·결과 표현을 재정렬해 QA와 신규 사용자의 온보딩 비용을 낮췄습니다."
 order: 4
 period: "2024.11 - 재직중"
 role: "FE / UX 흐름 설계 / 상태 모델링"
@@ -10,12 +10,12 @@ skills:
   - UX Flow Design
   - State Modeling
 metrics:
-  - "새 노드 생성 지연 2000ms → 20ms 이하"
-  - "pipeline 노드 수정 시 100~400ms 멈춤 해소"
+  - "노드 생성 지연 2000ms → 20ms 이하"
+  - "노드 수정 시 100~400ms 멈춤 해소"
 preview:
-  problem: "연결 규칙이 UI에 드러나지 않았고, 노드 생성·수정 시 캔버스가 2초 또는 수백 ms 멈춰 흐름이 끊겼습니다."
-  decision: "타입별 색상 핸들로 연결 가능 여부를 표시하고, React Flow Node/Edge memo로 불필요 리렌더를 제거했습니다."
-  result: "생성·수정 지연을 20ms 이하로 줄이고, QA·개발 간 상태·연결 해석 불일치를 감소시켰습니다."
+  problem: "연결 규칙이 UI에 드러나지 않았고,\n수정 시 2초 또는 수백 ms 멈춰 흐름이 끊겼습니다."
+  decision: "타입별 색상 핸들로 연결 가능 여부를 표시하고,\nZustand 구독 영역을 줄여 불필요 리렌더를 제거."
+  result: "생성·수정 지연을 20ms 이하로 줄이고,\nQA·개발 간의 해석 불일치를 감소시켰습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';

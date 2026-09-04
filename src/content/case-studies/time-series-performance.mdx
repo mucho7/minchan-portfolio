@@ -1,13 +1,12 @@
 ---
 title: "5천만 건 시계열 데이터 탐색을 위한 렌더링 성능 개선"
 company: "(주) 아하랩스"
-summary: "DAISY 운영 데이터 자동 수집 이후 대량 시계열 탐색 UI에서 서버 LTTB·상태 분리·캔버스 렌더 경량화로 인터랙션 지연을 줄였습니다."
+summary: "DAISY 운영 데이터 자동 수집 이후 대량 시계열 탐색 UI에서\n서버 LTTB·상태 분리·캔버스 렌더 경량화로 인터랙션 지연을 줄였습니다."
 order: 1
 period: "2024.11 - 재직중"
 role: "DAISY FE / 시계열 탐색·차트 성능"
 skills:
-  - React
-  - TypeScript
+  - Recharts
   - Zustand
   - React Query
   - Canvas
@@ -16,9 +15,9 @@ metrics:
   - "5천만 포인트급 시계열 탐색"
   - "팬·줌 60FPS 목표로 프로파일링"
 preview:
-  problem: "운영 데이터가 DAISY로 자동 쌓이면서 차트가 임의 생략하거나, 작은 UI 변경에도 렌더 비용이 과도하게 발생했습니다."
-  decision: "서버 LTTB 다운샘플링, 화면·데이터 상태 분리, 고빈도 구간의 캔버스 렌더 파이프라인 단순화를 결합했습니다."
-  result: "대량 구간에서도 탐색·구간 비교 흐름의 지연 체감을 크게 줄였습니다."
+  problem: "운영 데이터가 쌓이면서 차트가 정보를 임의로 생략하거나, 작은 변경에도 렌더 비용이 크게 발생했습니다."
+  decision: "LTTB 다운샘플링, 화면·데이터 상태 분리, 고빈도 구간의 캔버스 렌더 파이프라인 단순화를 사용했습니다."
+  result: "대량 구간에서도 탐색·구간 비교 흐름의 지연 체감을 크게 줄여 UX를 개선했습니다."
 ---
 
 import Mermaid from '../../components/Mermaid.astro';

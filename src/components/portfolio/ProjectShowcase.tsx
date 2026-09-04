@@ -26,7 +26,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const activeProject = projects[activeIndex];
 
   if (!activeProject) {
-    return <p className="rounded-2xl bg-[var(--surface)] px-6 py-16 text-center text-[var(--ink-muted)]">표시할 Case Study가 없습니다.</p>;
+    return <p className="rounded-2xl bg-[(--surface)] px-6 py-16 text-center text-[(--ink-muted)]">표시할 Case Study가 없습니다.</p>;
   }
 
   const presentation = getPresentation(activeProject.slug);
@@ -59,7 +59,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
   return (
     <div className="mt-10 sm:mt-14">
-      <div className="mx-auto w-fit max-w-full overflow-x-auto rounded-full bg-[var(--nav-surface)] p-1.5" role="tablist" aria-label="대표 Case Study 선택">
+      <div className="mx-auto w-fit max-w-full overflow-x-auto rounded-full bg-[(--nav-surface)] p-1.5" role="tablist" aria-label="대표 Case Study 선택">
         <div className="flex min-w-max gap-1">
           {projects.map((project, index) => {
             const item = getPresentation(project.slug);
@@ -93,7 +93,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         role="tabpanel"
         aria-labelledby={`project-tab-${activeProject.slug}`}
         style={panelStyle}
-        className="mt-6 overflow-hidden rounded-[2rem] bg-[var(--surface)] sm:mt-8"
+        className="mt-6 overflow-hidden rounded-[2rem] bg-[(--surface)] sm:mt-8"
         initial={reduceMotion ? false : { opacity: 0.7, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.34, ease: [0.22, 1, 0.36, 1] }}
@@ -105,10 +105,10 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 <span className="font-normal text-[var(--ink-muted)]">{activeProject.period}</span>
               </p>
               <h3 className="mt-5 max-w-4xl text-[clamp(2.5rem,6vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
-                <span className="block text-[var(--project-accent)]">{presentation.headline[0]}</span>
-                <span className="block text-[var(--ink-muted)]">{presentation.headline[1]}</span>
+                <span className="block text-[(--ink-muted)]">{presentation.headline[0]}</span>
+                <span className="block text-[var(--project-accent)]">{presentation.headline[1]}</span>
               </h3>
-              <p className="mt-8 max-w-2xl text-base leading-7 text-[var(--ink-secondary)] sm:text-lg sm:leading-8">{activeProject.summary}</p>
+              <p className="mt-8 max-w-2xl whitespace-pre-line text-base leading-7 text-[var(--ink-secondary)] sm:text-lg sm:leading-8">{activeProject.summary}</p>
               <a
                 href={activeProject.href}
                 className={`mt-9 inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--project-accent)] px-6 text-sm font-semibold text-[var(--project-contrast)] shadow-[0_10px_28px_color-mix(in_srgb,var(--project-accent)_18%,transparent)] transition-[filter,transform] hover:brightness-95 active:scale-[0.98] sm:text-base ${FOCUS_CLASSNAME}`}
@@ -118,7 +118,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
             </div>
 
             <aside className="self-end border-t border-[var(--line)] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-              <p className="text-sm font-semibold text-[var(--ink)]">검증된 결과</p>
+              <p className="text-sm font-semibold text-[var(--ink)]">요약 정보</p>
               <ul className="mt-4 space-y-3">
                 {activeProject.metrics.map((metric) => (
                   <li key={metric} className="text-lg font-semibold leading-7 tracking-[-0.02em] text-[var(--ink)]">{metric}</li>
@@ -135,7 +135,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--ink-muted)]">
                   {PROJECT_PREVIEW_LABELS[key as keyof typeof PROJECT_PREVIEW_LABELS]}
                 </dt>
-                <dd className="mt-4 text-sm leading-7 text-[var(--ink-secondary)]">{value}</dd>
+                <dd className="mt-4 whitespace-pre-line text-sm leading-7 text-[var(--ink-secondary)]">{value}</dd>
               </div>
             ))}
           </dl>
