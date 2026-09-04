@@ -16,10 +16,10 @@ const decisions = [
     reason: '콘텐츠 필드 변경을 컴파일 단계에서 모든 소비자에 전파'
   },
   {
-    boundary: 'Dialog state',
-    before: '홈 컴포넌트가 URL·포커스·선택 상태를 모두 소유',
-    after: 'useProjectDialog와 useFocusTrap으로 상태 계약 분리',
-    reason: '상호작용을 독립적으로 테스트하고 재사용 가능하게 관리'
+    boundary: 'Project navigation',
+    before: '목록과 팝업을 오가며 프로젝트 내용을 확인',
+    after: 'React 탭과 ARIA 상태로 같은 자리에서 프로젝트를 비교',
+    reason: '탐색 단계를 줄이면서 선택 상태와 키보드 이동을 함께 관리'
   },
   {
     boundary: 'Animation',
@@ -38,8 +38,8 @@ const decisions = [
 const qualityGates = [
   ['01', 'Schema', 'MDX frontmatter를 Zod로 검증'],
   ['02', 'Type', 'Astro strict mode로 페이지와 React 경계 검사'],
-  ['03', 'Unit', 'ViewModel·URL 상태·컴포넌트 계약 검증'],
-  ['04', 'Browser', '데스크톱·모바일 팝업과 포커스 흐름 검증'],
+  ['03', 'Unit', 'ViewModel·탭 상태·컴포넌트 계약 검증'],
+  ['04', 'Browser', '데스크톱·모바일 탭과 링크 흐름 검증'],
   ['05', 'Build', 'GitHub Pages 경로로 정적 산출물 생성']
 ] as const;
 ---
@@ -75,7 +75,7 @@ const qualityGates = [
           ))}
         </div>
         <p class="mt-6 max-w-2xl text-sm leading-7 text-black/55">
-          Case Study 필드가 바뀌면 상세 페이지, 홈 팝업, 테스트 중 영향을 받는 지점이 타입 오류로 드러납니다. UI가 콘텐츠 구조를 임의로 다시 정의하지 않습니다.
+          Case Study 필드가 바뀌면 상세 페이지, 홈 프로젝트 패널, 테스트 중 영향을 받는 지점이 타입 오류로 드러납니다. UI가 콘텐츠 구조를 임의로 다시 정의하지 않습니다.
         </p>
       </div>
     </div>
@@ -121,7 +121,7 @@ const qualityGates = [
     <h2 class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Trade-offs</h2>
     <div class="space-y-5 text-sm leading-7 text-black/65 sm:text-base">
       <p><strong class="text-black">Astro와 MDX는 유지했습니다.</strong> 콘텐츠 중심 페이지까지 TSX로 옮기면 클라이언트 코드와 유지보수 비용만 늘어납니다. Astro frontmatter도 strict TypeScript 검사 대상입니다.</p>
-      <p><strong class="text-black">접근성을 상태 계약으로 다룹니다.</strong> 팝업의 시각적 open 상태는 <code>aria-expanded</code>, URL query, 배경 <code>inert</code>, 초기 포커스와 함께 움직입니다.</p>
+      <p><strong class="text-black">접근성을 상태 계약으로 다룹니다.</strong> 프로젝트 선택 상태는 <code>aria-selected</code>, 탭 패널 연결, 키보드 이동과 함께 움직입니다.</p>
       <p><strong class="text-black">Mermaid는 필요할 때만 불러옵니다.</strong> 상세 페이지의 최초 실행 스크립트를 608,677 bytes에서 2,784 bytes로 줄였습니다. Mermaid와 다이어그램별 의존성은 DOM에서 실제 다이어그램을 확인한 뒤 동적으로 요청됩니다. 최종 전송량을 숨기지 않고 초기 실행 경로와 지연 청크를 구분해 기록합니다.</p>
       <p><strong class="text-black">보안 업데이트도 검증 과정에 포함했습니다.</strong> Astro 6에서 7, MDX 5에서 8로 올리고 Mermaid·DOMPurify·esbuild를 수정 버전으로 갱신했습니다. 전체 타입·단위·E2E·빌드 검증 후 배포 의존성 감사 결과는 0건입니다.</p>
       <p>

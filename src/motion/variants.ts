@@ -11,9 +11,3 @@ export const SECTION_REVEAL_TRANSITION = {
   duration: 0.65,
   ease: EMPHASIZED_EASE
 } satisfies Transition;
-
-export const DIALOG_PANEL_VARIANTS = {
-  hidden: { y: 48, scale: 0.985 },
-  visible: { y: 0, scale: 1 },
-  exit: { y: 30, scale: 0.99 }
-} satisfies Variants;

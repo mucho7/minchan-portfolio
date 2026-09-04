@@ -18,7 +18,7 @@ const siteUrl = import.meta.env.SITE;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const socialImageUrl = socialImage ? new URL(socialImage, siteUrl).href : undefined;
 const navItems = [
-  { href: withBase(), label: 'Index' },
+  { href: withBase(), label: 'Home' },
   { href: withBase('about/'), label: 'Experience' },
   { href: withBase('case-studies/'), label: 'Work' },
   { href: withBase('engineering/'), label: 'Engineering' },
@@ -46,7 +46,7 @@ const navItems = [
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
-    <meta name="theme-color" content="#f4f1ea" />
+    <meta name="theme-color" content="#ffffff" />
     <title>{title}</title>
   </head>
   <body>
@@ -57,21 +57,23 @@ const navItems = [
       <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
         <a href={withBase()} class="text-sm font-semibold tracking-[-0.02em]">김민찬 <span class="font-normal text-black/45">/ Frontend Engineer</span></a>
         <nav aria-label="주요 메뉴" class="flex gap-3 text-xs sm:gap-6 sm:text-sm">
-          {navItems.map((item, index) => (
+          {navItems.map((item) => (
             <a
               href={item.href}
               aria-current={item.href === withBase()
                 ? Astro.url.pathname === item.href ? 'page' : undefined
                 : Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}
-              class="group flex gap-1.5 text-black/60 transition hover:text-black aria-[current=page]:text-black"
+              class="text-black/60 transition hover:text-black aria-[current=page]:text-black"
             >
-              <span class="hidden text-[10px] text-black/35 sm:inline">0{index + 1}</span>{item.label}
+              {item.label}
             </a>
           ))}
         </nav>
       </div>
     </header>}
-    <main id="main-content" class:list={[immersive ? 'min-h-screen' : 'mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20']}><slot /></main>
+    {immersive
+      ? <div id="main-content" class="min-h-screen"><slot /></div>
+      : <main id="main-content" class="mx-auto min-h-[75vh] max-w-6xl px-5 py-12 sm:px-8 sm:py-20"><slot /></main>}
     {!immersive && <footer class="border-t border-black/20">
       <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-xs text-black/55 sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <p>© {new Date().getFullYear()} 김민찬</p>

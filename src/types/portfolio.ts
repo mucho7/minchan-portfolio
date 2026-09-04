@@ -17,15 +17,9 @@ export type ProjectViewModel = CaseStudyData & {
   href: string;
 };
 
-export type EvidenceItem = {
-  value: string;
+export type ProjectPresentation = {
   label: string;
+  accent: `#${string}`;
+  contrast: `#${string}`;
+  headline: readonly [string, string];
 };
-
-export type SectionNavigationItem = {
-  number: `0${number}`;
-  label: string;
-  href: `#${string}`;
-};
-
-export type ProjectTone = `bg-[#${string}]`;

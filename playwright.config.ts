@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = 'http://127.0.0.1:4321/minchan-portfolio/';
+const port = process.env.PLAYWRIGHT_PORT ?? '4321';
+const baseURL = `http://127.0.0.1:${port}/minchan-portfolio/`;
 const isCI = Boolean(process.env.CI);
 
 export default defineConfig({
@@ -19,8 +20,8 @@ export default defineConfig({
   ],
   webServer: {
     command: isCI
-      ? 'npm run preview -- --host 127.0.0.1 --port 4321'
-      : 'npm run build && npm run preview -- --host 127.0.0.1 --port 4321',
+      ? `ASTRO_PREVIEW_BACKGROUND=1 npm run preview -- --host 127.0.0.1 --port ${port}`
+      : `npm run build && ASTRO_PREVIEW_BACKGROUND=1 npm run preview -- --host 127.0.0.1 --port ${port}`,
     url: baseURL,
     reuseExistingServer: !isCI
   }
