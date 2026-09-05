@@ -1,10 +1,10 @@
 ---
-title: "IndexedDB 기반 Web IDE 로컬 파일 저장 구조 설계"
+title: "IndexedDB 기반 Web IDE 저장 구조"
 company: "티맥스 클라우드"
-summary: "브라우저 저장 용량 한계를 해결하기 위해 파일 단위의 IndexedDB 저장·복원 구조를 만들고,\nAST 분석 결과를 자동완성과 오류 표기에 연결했습니다."
+summary: "IndexedDB에 프로젝트 파일을 저장·복원하고,\nAST 분석 결과를 자동완성과 오류 표기에 연결했습니다."
 order: 5
 period: "2023.08 - 2024.11"
-role: "GAIA PX Web IDE Frontend"
+role: "Frontend Engineer / Web IDE Storage"
 skills:
   - React
   - TypeScript
@@ -22,19 +22,19 @@ preview:
 
 import Mermaid from '../../components/Mermaid.astro';
 
-## Context
+## 배경
 
-GAIA PX는 슈퍼앱 내부에서 파일을 탐색하고 코드를 편집하는 Web IDE입니다. 코드 자동완성과 오류 분석을 위해 프로젝트 전체 소스와 파일 구조를 브라우저에 보존해야 했습니다.
+GAIA PX Web IDE에서는 브라우저 안에서 파일을 찾고 코드를 편집합니다. 자동완성과 오류 분석을 제공하려면 프로젝트의 소스와 파일 구조를 브라우저에 보관해야 했습니다.
 
-## Problem
+## 문제
 
 - 기존 저장 방식으로는 프로젝트 전체 소스를 보존하기 어려웠습니다.
 - 파일 탐색, 편집, 저장, 복원이 하나의 작업 흐름으로 연결되어야 했습니다.
 - 저장된 소스를 분석해 자동완성과 오류 정보로 제공해야 했습니다.
 
-## Decision
+## 선택
 
-브라우저 메모리에만 소스를 두지 않고, 파일 단위로 IndexedDB에 저장하고 복원하는 구조를 선택했습니다. 이 구조는 프로젝트 파일 구성을 유지하고, 저장된 소스를 AST 분석의 입력으로 다시 사용할 수 있게 했습니다.
+브라우저 메모리 대신 IndexedDB에 파일 단위로 저장했습니다. 다시 접속해도 프로젝트 구조를 복원할 수 있고, 저장한 소스를 AST 분석의 입력으로 사용할 수 있습니다.
 
 <Mermaid
   caption="IndexedDB에 저장한 파일을 분석해 편집기에 연결하는 구조"
@@ -49,18 +49,18 @@ flowchart LR
 `}
 />
 
-## Implementation
+## 구현
 
 - 프로젝트 소스를 파일 단위로 IndexedDB에 저장하고 복원했습니다.
 - 저장된 소스를 AST로 분석해 코드 구조와 오류 정보를 파악했습니다.
 - AST 분석 결과를 Monaco Editor의 자동완성과 오류 표기에 연결했습니다.
 
-## Result
+## 결과
 
-- IndexedDB 기반으로 프로젝트 소스의 파일 단위 저장·복원 구조 구현
-- 파일 탐색 → 편집 → 저장 → 복원 흐름 구현
-- AST 분석을 활용한 코드 자동완성과 오류 표기 제공
+- IndexedDB에 프로젝트 소스를 파일 단위로 저장하고 복원했습니다.
+- 파일 탐색, 편집, 저장, 복원 흐름을 연결했습니다.
+- AST 분석 결과를 자동완성과 오류 표기에 사용했습니다.
 
-## Limitation
+## 공개 범위
 
 내부 저장 코드와 제품 화면은 공개 범위에서 제외했습니다.
