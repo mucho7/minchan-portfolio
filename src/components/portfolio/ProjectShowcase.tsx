@@ -26,7 +26,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const activeProject = projects[activeIndex];
 
   if (!activeProject) {
-    return <p className="rounded-2xl bg-[(--surface)] px-6 py-16 text-center text-[(--ink-muted)]">표시할 Case Study가 없습니다.</p>;
+    return <p className="rounded-2xl bg-[var(--surface)] px-6 py-16 text-center text-[var(--ink-muted)]">표시할 Case Study가 없습니다.</p>;
   }
 
   const presentation = getPresentation(activeProject.slug);
@@ -59,7 +59,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
   return (
     <div className="mt-10 sm:mt-14">
-      <div className="mx-auto w-fit max-w-full overflow-x-auto rounded-full bg-[(--nav-surface)] p-1.5" role="tablist" aria-label="대표 Case Study 선택">
+      <div className="mx-auto w-fit max-w-full overflow-x-auto rounded-full bg-[var(--nav-surface)] p-1.5" role="tablist" aria-label="대표 Case Study 선택">
         <div className="flex min-w-max gap-1">
           {projects.map((project, index) => {
             const item = getPresentation(project.slug);
@@ -93,7 +93,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         role="tabpanel"
         aria-labelledby={`project-tab-${activeProject.slug}`}
         style={panelStyle}
-        className="mt-6 overflow-hidden rounded-[2rem] bg-[(--surface)] sm:mt-8"
+        className="mt-6 overflow-hidden rounded-[2rem] bg-[var(--surface)] sm:mt-8"
         initial={reduceMotion ? false : { opacity: 0.7, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.34, ease: [0.22, 1, 0.36, 1] }}
@@ -105,7 +105,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                 <span className="font-normal text-[var(--ink-muted)]">{activeProject.period}</span>
               </p>
               <h3 className="mt-5 max-w-4xl text-[clamp(2.5rem,6vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
-                <span className="block text-[(--ink-muted)]">{presentation.headline[0]}</span>
+                <span className="block text-[var(--ink-muted)]">{presentation.headline[0]}</span>
                 <span className="block text-[var(--project-accent)]">{presentation.headline[1]}</span>
               </h3>
               <p className="mt-8 max-w-2xl whitespace-pre-line text-base leading-7 text-[var(--ink-secondary)] sm:text-lg sm:leading-8">{activeProject.summary}</p>

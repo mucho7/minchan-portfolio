@@ -42,7 +42,7 @@ describe('ProjectShowcase', () => {
 
     expect(agentTab).toHaveAttribute('aria-selected', 'true');
     expect(agentTab).toHaveStyle({ backgroundColor: '#f26130', color: '#ffffff' });
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('반복 구현 영역,');
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('반복하던 Agent UI를,');
     expect(screen.getByRole('link', { name: '전체 Case Study 읽기' })).toHaveAttribute('href', '/case-studies/agent-ui-reuse/');
   });
 

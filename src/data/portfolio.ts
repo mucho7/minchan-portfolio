@@ -11,25 +11,25 @@ export const PROJECT_PRESENTATIONS = {
     label: '제조 관제',
     accent: '#16914f',
     contrast: '#ffffff',
-    headline: ['다양한 현장 상태,', '한 솔루션에서.']
+    headline: ['리포트와 공장 맵을,', '같은 시간축으로.']
   },
   'time-series-performance': {
     label: '시계열',
     accent: '#0073eb',
     contrast: '#ffffff',
-    headline: ['5천만의 시계열 정보,', '탐색 가능한 화면으로.']
+    headline: ['5천만 건 시계열을,', 'LTTB로 탐색 가능하게.']
   },
   'agent-ui-reuse': {
     label: 'Agent UI',
     accent: '#f26130',
     contrast: '#ffffff',
-    headline: ['반복 구현 영역,', '공통 제품 언어로.']
+    headline: ['반복하던 Agent UI를,', '공통 패키지로.']
   },
   'tooling-ui-flow': {
     label: 'Workflow',
     accent: '#16914f',
     contrast: '#ffffff',
-    headline: ['멈추던 워크플로우를,', '60FPS로.']
+    headline: ['노드 생성 지연을,', '20ms 이하로.']
   },
   'web-ide-rendering': {
     label: 'Web IDE',

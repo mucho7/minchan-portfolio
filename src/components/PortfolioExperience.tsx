@@ -11,7 +11,6 @@ type PortfolioExperienceProps = {
   homeHref: string;
   aboutHref: string;
   workHref: string;
-  engineeringHref: string;
   contactHref: string;
 };
 
@@ -23,7 +22,6 @@ export default function PortfolioExperience({
   homeHref,
   aboutHref,
   workHref,
-  engineeringHref,
   contactHref
 }: PortfolioExperienceProps) {
   const reduceMotion = useReducedMotion();
