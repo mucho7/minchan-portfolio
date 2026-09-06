@@ -38,6 +38,17 @@ test('Case Study 목록은 제목과 핵심 badge만 표시한다', async ({ pag
   await expect(page.getByText('IndexedDB', { exact: true })).toBeVisible();
 });
 
+test('Case Study 상세 헤더는 제목과 요약만 표시한다', async ({ page }) => {
+  await page.goto('./case-studies/manufacturing-monitoring-poc/');
+  await expect(page.getByRole('heading', { level: 1, name: '시뮬레이션 재생 동기화' })).toBeVisible();
+  await expect(page.getByText('공통 pose 모델로 리포트와 Konva 맵의')).toBeVisible();
+  await expect(page.getByText('Case Study', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Evidence', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Technology', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('(주) 아하랩스', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Frontend Engineer / Simulation Playback', { exact: true })).toHaveCount(0);
+});
+
 test('홈과 프로젝트 패널에서 가로 스크롤이 생기지 않는다', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
