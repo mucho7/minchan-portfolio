@@ -16,6 +16,12 @@
   --accent-orange: #f26130;
   --accent-pink: #f20151;
   --accent-green: #16914f;
+  --diagram-surface: #edf5fa;
+  --diagram-primary: #dcece5;
+  --diagram-secondary: #fae9e1;
+  --diagram-tertiary: #f8e8ef;
+  --diagram-border: #557568;
+  --diagram-line: #62727a;
 }
 
 * { box-sizing: border-box; }

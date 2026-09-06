@@ -3,19 +3,22 @@ export async function renderMermaidDiagrams() {
   if (nodes.length === 0) return;
 
   const { default: mermaid } = await import('mermaid');
+  const styles = getComputedStyle(document.documentElement);
+  const color = (token: string) => styles.getPropertyValue(token).trim();
+
   mermaid.initialize({
     startOnLoad: false,
     theme: 'base',
     securityLevel: 'loose',
     flowchart: { curve: 'basis' },
     themeVariables: {
-      background: '#f4f1ea',
-      primaryColor: '#dce6df',
-      primaryTextColor: '#171714',
-      primaryBorderColor: '#315c4c',
-      lineColor: '#6c6a63',
-      secondaryColor: '#e7e3da',
-      tertiaryColor: '#f4f1ea',
+      background: color('--diagram-surface'),
+      primaryColor: color('--diagram-primary'),
+      primaryTextColor: color('--ink'),
+      primaryBorderColor: color('--diagram-border'),
+      lineColor: color('--diagram-line'),
+      secondaryColor: color('--diagram-secondary'),
+      tertiaryColor: color('--diagram-tertiary'),
       fontFamily: 'ui-sans-serif, system-ui, sans-serif'
     }
   });

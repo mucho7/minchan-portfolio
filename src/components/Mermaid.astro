@@ -13,7 +13,7 @@ const { chart, caption } = Astro.props;
       <figcaption class="text-center text-sm text-black/50">{caption}</figcaption>
     )
   }
-  <div class="overflow-x-auto border-y border-black/20 bg-[#ebe7de] p-4 sm:p-6">
+  <div class="overflow-x-auto border-y border-[var(--diagram-border)]/30 bg-[var(--diagram-surface)] p-4 sm:p-6">
     <pre class="mermaid">{chart.trim()}</pre>
   </div>
 </figure>
