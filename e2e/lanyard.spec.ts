@@ -14,6 +14,13 @@ test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다
     await expect(card).toHaveCSS('height', '304px');
   }
   await expect(page.locator('.lanyard-stage').first()).toHaveCSS('height', '568px');
+  const ahha = page.locator('.lanyard').first();
+  await expect(ahha.locator('.static-strap')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(ahha.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(0, 0, 0)');
+  await expect(ahha.locator('.badge-face')).toHaveCSS('border-top-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.badge-face')).toHaveCSS('border-right-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.badge-face')).toHaveCSS('border-bottom-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.badge-face')).toHaveCSS('border-left-color', 'rgb(230, 0, 39)');
   const tmax = page.locator('.lanyard').nth(1);
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-width', '2px');
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(189, 40, 57)');

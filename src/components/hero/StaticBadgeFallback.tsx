@@ -13,7 +13,7 @@ type StaticBadgeFallbackProps = BadgeContentProps & {
 export const StaticBadgeFallback = memo(function StaticBadgeFallback({ title, role, period, design, metaId, interactionState }: StaticBadgeFallbackProps) {
   const resolved = resolveBadgeDesign(design);
   const style = {
-    '--badge-paper': resolved.backgroundColor, '--badge-ink': resolved.textColor,
+    '--badge-paper': resolved.backgroundColor, '--badge-ink': resolved.textColor, '--badge-border': resolved.borderColor,
     backgroundImage: resolved.backgroundImage ? `url(${JSON.stringify(resolved.backgroundImage)})` : undefined
   } as CSSProperties;
   return <div className="badge-face" style={style} data-interaction={interactionState}>

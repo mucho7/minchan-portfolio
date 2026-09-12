@@ -7,6 +7,7 @@ export type BadgeDesign = {
   strapBorderColor?: string;
   backgroundColor?: string;
   backgroundImage?: string;
+  borderColor?: string;
   textColor?: string;
   footer?: { colors: readonly [string, string]; split: number };
 };
@@ -18,6 +19,7 @@ export function resolveBadgeDesign(design: BadgeDesign = {}) {
     strapBorderColor: design.strapBorderColor ?? strapColor,
     backgroundColor: design.backgroundColor ?? '#fafafa',
     backgroundImage: design.backgroundImage,
+    borderColor: design.borderColor ?? 'transparent',
     textColor: design.textColor ?? '#252629',
     footer: design.footer
   };
