@@ -17,6 +17,7 @@ test('Work 목록에서 포트폴리오 제작기를 열고 공통 상세 레이
   await expect(page.locator('main section > a')).toHaveCount(6);
   const link = page.getByRole('link').filter({ hasText: '인터랙티브 포트폴리오 제작기' });
   await expect(link).toBeVisible();
+  await expect(link.getByText('Canvas기반 이벤트 처리', { exact: true })).toBeVisible();
   await link.click();
   await expect(page).toHaveURL(/case-studies\/portfolio-engineering\/$/);
   await expect(page.getByRole('heading', { level: 1, name: '인터랙티브 포트폴리오 제작기' })).toBeVisible();
