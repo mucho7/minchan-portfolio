@@ -107,9 +107,11 @@ test('데스크톱 물리 카드가 준비되고 취소 후 화면 안으로 복
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('./');
-  await expect(page.locator('[data-physics="ready"]')).toHaveCount(3, { timeout: 20000 });
   const card = page.locator('#career-card-tmax');
   await card.scrollIntoViewIfNeeded();
+  await card.hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
+  await expect(page.locator('canvas')).toHaveCount(1);
   const box = (await card.boundingBox())!;
   await page.mouse.move(box.x + 110, box.y + 60); await page.mouse.down();
   await page.mouse.move(box.x + 700, box.y + 95, { steps: 10 }); await page.mouse.up();
@@ -125,7 +127,8 @@ test('데스크톱 물리 카드가 준비되고 취소 후 화면 안으로 복
 test('WebGL 컨텍스트 유실 후 카드가 정적으로 복구된다', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop');
   await page.goto('./');
-  await expect(page.locator('[data-physics="ready"]')).toHaveCount(3, { timeout: 20000 });
+  await page.locator('#career-card-ahha').hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   await page.locator('canvas').first().evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
   await expect(page.locator('.lanyard').first()).toHaveAttribute('data-physics', 'fallback');
   await expect(page.locator('#career-card-ahha')).toHaveCSS('transform', 'none');
@@ -141,4 +144,19 @@ test('움직임을 끄고 다시 켜도 카드 내용과 상세 이동은 유지
   await page.getByRole('button', { name: '움직임 켜기' }).click();
   await page.getByRole('link', { name: '개인 작업 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('이 포트폴리오를 만드는 방법');
+});
+
+test('데스크톱 3D 코드는 카드 사용 의도 전까지 요청하지 않고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop');
+  const requests: string[] = [];
+  page.on('request', request => requests.push(request.url()));
+  await page.goto('./');
+  await expect(page.locator('.badge-anchor')).toHaveCount(3);
+  expect(requests.some(url => /LanyardScene/.test(url))).toBe(false);
+  await page.locator('#career-card-ahha').hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
+  expect(requests.some(url => /LanyardScene/.test(url))).toBe(true);
+  await page.locator('#career-card-tmax').hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
+  await expect(page.locator('canvas')).toHaveCount(1);
 });

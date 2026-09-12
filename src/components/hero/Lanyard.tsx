@@ -21,9 +21,16 @@ class SceneBoundary extends Component<{ children: ReactNode; onError: () => void
   render() { return this.state.failed ? null : this.props.children; }
 }
 
-type LanyardProps = BadgeContentProps & { id: string; href: string; onOpen: () => void; motionEnabled: boolean };
+type LanyardProps = BadgeContentProps & {
+  id: string;
+  href: string;
+  onOpen: () => void;
+  motionEnabled: boolean;
+  motionActive: boolean;
+  onMotionIntent: () => void;
+};
 
-export function Lanyard({ id, href, onOpen, motionEnabled, ...content }: LanyardProps) {
+export function Lanyard({ id, href, onOpen, motionEnabled, motionActive, onMotionIntent, ...content }: LanyardProps) {
   const [eligible, setEligible] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -37,7 +44,7 @@ export function Lanyard({ id, href, onOpen, motionEnabled, ...content }: Lanyard
   const armedRef = useRef(false);
   const resetAnimation = useRef<Animation | null>(null);
   const resolved = resolveBadgeDesign(content.design);
-  const enabled = eligible && motionEnabled && !failed;
+  const enabled = eligible && motionEnabled && motionActive && !failed;
   const physical = enabled && ready;
   const fallbackStyle = {
     '--strap-color': resolved.strapColor, '--strap-border': resolved.strapBorderColor,
@@ -119,8 +126,10 @@ export function Lanyard({ id, href, onOpen, motionEnabled, ...content }: Lanyard
       </Suspense></SceneBoundary></div>}
       <a ref={face} id={`career-card-${id}`} href={href} className="badge-anchor" aria-label={`${content.title} 상세 보기`}
         aria-describedby={`career-meta-${id}`} onDragStart={event => event.preventDefault()}
+        onPointerEnter={onMotionIntent} onFocus={onMotionIntent}
         onPointerDown={event => {
           if (!event.isPrimary || event.button !== 0 || pointer.current) return;
+          onMotionIntent();
           resetAnimation.current?.cancel(); suppressClick.current = false;
           pointer.current = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
           drag.current = { active: true, sequence: drag.current.sequence + 1, dx: 0, dy: 0 };

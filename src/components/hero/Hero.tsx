@@ -10,6 +10,7 @@ type Props = { projects: readonly ProjectViewModel[]; aboutHref: string; enginee
 export function Hero({ projects, aboutHref, engineeringHref }: Props) {
   const [selected, setSelected] = useState<CareerBadge | null>(null);
   const [motionEnabled, setMotionEnabled] = useState(true);
+  const [activeMotionId, setActiveMotionId] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const returnTo = useRef<string | null>(null);
@@ -27,10 +28,14 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
     {!selected ? <>
       <div className="career-shelf">
         {CAREER_BADGES.map(badge => <Lanyard key={badge.id} id={badge.id} title={badge.title} role={badge.role} period={badge.period} design={badge.design}
-          href={badge.id === 'personal' ? engineeringHref : aboutHref} onOpen={() => open(badge)} motionEnabled={motionEnabled} />)}
+          href={badge.id === 'personal' ? engineeringHref : aboutHref} onOpen={() => open(badge)} motionEnabled={motionEnabled}
+          motionActive={activeMotionId === badge.id} onMotionIntent={() => setActiveMotionId(badge.id)} />)}
       </div>
       <div className="career-guidance"><p>카드를 아래로 당겨 경험을 펼쳐 보세요.<span> 클릭이나 Enter로도 열 수 있습니다.</span></p>
-        {hydrated && <button type="button" className="career-motion" aria-pressed={!motionEnabled} onClick={() => setMotionEnabled(value => !value)}>{motionEnabled ? '움직임 끄기' : '움직임 켜기'}</button>}
+        {hydrated && <button type="button" className="career-motion" aria-pressed={!motionEnabled} onClick={() => {
+          if (motionEnabled) setActiveMotionId(null);
+          setMotionEnabled(value => !value);
+        }}>{motionEnabled ? '움직임 끄기' : '움직임 켜기'}</button>}
       </div>
     </> : <section id="career-detail" className="career-detail" aria-labelledby="career-detail-title">
       <button type="button" className="career-back" onClick={() => setSelected(null)}>경력으로 돌아가기</button>
