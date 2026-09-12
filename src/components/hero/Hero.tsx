@@ -5,9 +5,9 @@ import { LanyardShelf } from './LanyardShelf';
 import { StaticBadgeFallback } from './StaticBadgeFallback';
 import './hero.css';
 
-type Props = { projects: readonly ProjectViewModel[]; aboutHref: string; engineeringHref: string };
+type Props = { projects: readonly ProjectViewModel[]; aboutHref: string; portfolioHref: string };
 
-export function Hero({ projects, aboutHref, engineeringHref }: Props) {
+export function Hero({ projects, aboutHref, portfolioHref }: Props) {
   const [selected, setSelected] = useState<CareerBadge | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const returnTo = useRef<string | null>(null);
@@ -21,7 +21,7 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
       <h1>만들어 온 경험들.</h1>
     </header>
     {!selected ? <>
-      <LanyardShelf badges={CAREER_BADGES} aboutHref={aboutHref} engineeringHref={engineeringHref} onOpen={open} />
+      <LanyardShelf badges={CAREER_BADGES} aboutHref={aboutHref} portfolioHref={portfolioHref} onOpen={open} />
       <div className="career-guidance"><p>카드를 아래로 당겨 경험을 펼쳐 보세요.<span> 클릭이나 Enter로도 열 수 있습니다.</span></p></div>
     </> : <section id="career-detail" className="career-detail" aria-labelledby="career-detail-title">
       <button type="button" className="career-back" onClick={() => setSelected(null)}>경력으로 돌아가기</button>
@@ -30,10 +30,10 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
         <div><h2 id="career-detail-title" tabIndex={-1} ref={heading}>{selected.title}</h2><p className="career-detail-role">{selected.role}{selected.period && ` · ${selected.period}`}</p><p className="career-summary">{selected.summary}</p></div>
       </div>
       <div className="career-projects">
-        {selected.projects.length ? selected.projects.map(slug => {
+        {selected.projects.map(slug => {
           const project = projects.find(item => item.slug === slug);
           return project ? <a className="career-project" key={slug} href={project.href}><h3>{project.title}</h3><p>{project.summary}</p><span>Case Study 읽기</span></a> : null;
-        }) : <a className="career-project" href={`${engineeringHref}#lanyard-interaction`}><h3>출입증을 경력 탐색으로 바꾸기</h3><p>Ship 2024에서 느낀 흥미를 출발점으로, 물리 효과와 콘텐츠 전달·접근성·초기 로딩 사이에서 내린 판단을 기록했습니다.</p><span>구현 기록 읽기</span></a>}
+        })}
       </div>
     </section>}
   </section>;

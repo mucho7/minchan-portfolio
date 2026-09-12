@@ -38,7 +38,7 @@ test('키보드 진입, 회사별 상세 링크, 돌아온 카드의 포커스�
   await expect(card).toBeFocused();
   await page.getByRole('link', { name: '개인 프로젝트 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('Vercel Ship 2024');
-  await expect(page.locator('#career-detail .career-project')).toHaveAttribute('href', /engineering\/#lanyard-interaction/);
+  await expect(page.locator('#career-detail .career-project')).toHaveAttribute('href', /case-studies\/portfolio-engineering\/$/);
 });
 
 test('짧게 당기면 복귀하고 충분히 당겨 놓으면 상세가 열린다', async ({ page }) => {
@@ -134,7 +134,7 @@ test('JS 없이도 세 카드와 기존 경력·개인 작업 링크를 제공�
   await page.goto('http://127.0.0.1:' + (process.env.PLAYWRIGHT_PORT ?? '4321') + '/minchan-portfolio/');
   await expect(page.locator('.badge-anchor')).toHaveCount(3);
   await page.getByRole('link', { name: '개인 프로젝트 상세 보기', exact: true }).click();
-  await expect(page).toHaveURL(/engineering/);
+  await expect(page).toHaveURL(/case-studies\/portfolio-engineering\/$/);
   await context.close();
 });
 
@@ -177,13 +177,13 @@ test('WebGL 컨텍스트 유실 후 카드가 정적으로 복구된다', async 
   await expect(page.getByRole('heading', { name: '아하랩스', exact: true })).toBeVisible();
 });
 
-test('개인 작업의 구현 기록은 Ship 2024의 계기와 기술적 판단을 설명한다', async ({ page }) => {
-  await page.goto('./engineering/#lanyard-interaction');
-  await expect(page.getByRole('heading', { name: '행사 출입증을, 경력을 여는 인터페이스로.' })).toBeVisible();
-  await expect(page.locator('#lanyard-interaction')).toContainText('Vercel Ship 2024에 참여했을 때');
-  await expect(page.locator('#lanyard-interaction')).toContainText('물리와 콘텐츠의 렌더링 경계 나누기');
-  await expect(page.locator('#lanyard-interaction')).toContainText('무거운 코드는 사용 의도 뒤로 미루기');
-  await expect(page.locator('#lanyard-interaction')).toContainText('조작 실패를 정상 경로로 다루기');
+test('개인 작업의 Case Study는 Ship 2024의 계기와 기술적 판단을 설명한다', async ({ page }) => {
+  await page.goto('./case-studies/portfolio-engineering/');
+  await expect(page.getByRole('heading', { level: 1, name: '인터랙티브 포트폴리오 제작기' })).toBeVisible();
+  await expect(page.locator('.case-study-body')).toContainText('Vercel Ship 2024에 참여했을 때');
+  await expect(page.locator('.case-study-body')).toContainText('효과와 콘텐츠의 렌더링 경계');
+  await expect(page.locator('.case-study-body')).toContainText('세 카드를 하나의 물리 월드에 배치');
+  await expect(page.locator('.case-study-body')).toContainText('실패를 별도 화면으로 만들지 않기');
 });
 
 test('데스크톱 3D 코드는 카드 사용 의도 전까지 요청하지 않고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {

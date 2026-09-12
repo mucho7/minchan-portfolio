@@ -28,11 +28,11 @@ class SceneBoundary extends Component<{ children: ReactNode; onError: () => void
 type Props = {
   badges: readonly CareerBadge[];
   aboutHref: string;
-  engineeringHref: string;
+  portfolioHref: string;
   onOpen: (badge: CareerBadge) => void;
 };
 
-export function LanyardShelf({ badges, aboutHref, engineeringHref, onOpen }: Props) {
+export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props) {
   const shelf = useRef<HTMLDivElement>(null);
   const layoutSignature = useRef('');
   const [layouts, setLayouts] = useState<Record<string, LanyardLayout>>({});
@@ -159,7 +159,7 @@ export function LanyardShelf({ badges, aboutHref, engineeringHref, onOpen }: Pro
     {badges.map((badge, index) => {
       const layout = layouts[badge.id];
       return <Lanyard key={badge.id} item={items[index]} title={badge.title} role={badge.role} period={badge.period} design={badge.design}
-        href={badge.id === 'personal' ? engineeringHref : aboutHref} onOpen={() => onOpen(badge)}
+        href={badge.id === 'personal' ? portfolioHref : aboutHref} onOpen={() => onOpen(badge)}
         physicsReady={physicsState === 'ready'} onMotionIntent={() => { if (eligible) setRequested(true); }}
         cancelSignal={cancelSignal} horizontalBounds={eligible && layout ? { min: layout.minDx, max: layout.maxDx } : undefined} />;
     })}

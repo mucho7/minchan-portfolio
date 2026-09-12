@@ -1,47 +1,4 @@
-import type {
-  FeaturedProjectSlug,
-  ProjectPresentation,
-  ProjectPreviewKey
-} from '../types/portfolio';
-
-export const PROJECT_PRESENTATIONS = {
-  'manufacturing-monitoring-poc': {
-    label: '제조 관제',
-    accent: '#16914f',
-    contrast: '#ffffff',
-    headline: ['리포트와 공장 맵을,', '같은 시간축으로.']
-  },
-  'time-series-performance': {
-    label: '시계열',
-    accent: '#0073eb',
-    contrast: '#ffffff',
-    headline: ['5천만 건 시계열을,', '탐색 가능하게.']
-  },
-  'agent-ui-reuse': {
-    label: 'Agent UI',
-    accent: '#f26130',
-    contrast: '#ffffff',
-    headline: ['반복하던 Agent UI를,', '공통 패키지로.']
-  },
-  'tooling-ui-flow': {
-    label: 'Workflow',
-    accent: '#16914f',
-    contrast: '#ffffff',
-    headline: ['노드 생성 지연을,', '20ms 이하로.']
-  },
-  'web-ide-rendering': {
-    label: 'Web IDE',
-    accent: '#f20151',
-    contrast: '#ffffff',
-    headline: ['브라우저 저장 한계를,', 'IndexedDB 구조로.']
-  }
-} as const satisfies Record<FeaturedProjectSlug, ProjectPresentation>;
-
-export const PROJECT_PREVIEW_LABELS = {
-  problem: 'Problem',
-  decision: 'Decision',
-  result: 'Result'
-} as const satisfies Record<ProjectPreviewKey, string>;
+import type { CareerProjectSlug } from '../types/portfolio';
 
 export const PROFILE = {
   name: '김민찬', englishName: 'Minchan Kim', role: 'Frontend Engineer',
@@ -56,7 +13,7 @@ export type CareerBadge = {
   role: string;
   design?: import('../components/hero/badge-design').BadgeDesign;
   summary: string;
-  projects: readonly FeaturedProjectSlug[];
+  projects: readonly CareerProjectSlug[];
 };
 
 export const CAREER_BADGES: readonly CareerBadge[] = [
@@ -78,6 +35,6 @@ export const CAREER_BADGES: readonly CareerBadge[] = [
   {
     id: 'personal', title: '개인 프로젝트', role: '포트폴리오 · 사이드 프로젝트',
     summary: 'Vercel Ship 2024에서 직접 접한 인터랙티브 출입증이 오래 기억에 남았습니다. 그 경험을 효과로 복제하기보다, 회사와 개인 작업을 실제 사원증처럼 당겨서 탐색하는 포트폴리오 구조로 바꿔 보았습니다.',
-    projects: []
+    projects: ['portfolio-engineering']
   }
 ];

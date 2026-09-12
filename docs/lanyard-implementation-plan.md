@@ -72,7 +72,7 @@ Astro check, Vitest, production build 및 Playwright에서 크기·배색, 키�
 - Vercel Ship 2024에 참여해 인터랙티브 출입증을 직접 접한 경험을 개인 프로젝트의 출발점으로 기록한다.
 - 원본 효과를 복제한 사례가 아니라 회사 경력과 개인 작업을 선택하는 포트폴리오 정보 구조로 바꾼 이유를 설명한다.
 - 물리와 HTML 콘텐츠의 경계, 의도 기반 지연 로딩, 단일 Canvas, 포인터 취소와 정적 폴백을 핵심 기술 판단으로 정리한다.
-- 개인 프로젝트 카드의 상세에서 Engineering 페이지의 해당 기록으로 바로 이동한다.
+- 개인 프로젝트 카드의 상세에서 포트폴리오 제작 Case Study로 바로 이동한다.
 
 검증 결과:
 
@@ -151,6 +151,22 @@ Astro check, Vitest, production build 및 Playwright에서 크기·배색, 키�
 - `npm run test:e2e -- e2e/lanyard.spec.ts`: 데스크톱·모바일 23개 통과, 모바일 비대상 3D 검사 3개 제외
 - 4321 실제 화면에서 검정 줄의 빨간 테두리와 외곽선 없는 카드 확인
 
+## 체크포인트 — 홈 단순화와 포트폴리오 Case Study
+
+상태: 구현 및 자동·화면 검증 완료. 사용자 확인 대기.
+
+- 홈의 `주요 성과` 탭과 최하단 Contact 섹션을 제거해 경력 카드 탐색에 집중한다.
+- 포트폴리오 제작 기록을 Content Collection의 `portfolio-engineering.mdx`로 옮겨 다른 글과 같은 목록·상세 레이아웃을 사용한다.
+- Work 목록에 포트폴리오 제작기를 여섯 번째 Case Study로 노출하고 개인 프로젝트 카드에서 같은 상세로 연결한다.
+- 기존 `/engineering/` 주소는 새 Case Study로 리디렉션한다.
+- 홈 전용 `ProjectShowcase`와 Framer Motion 의존성을 제거한다.
+
+검증 결과:
+
+- `npm run verify`: Astro 진단 0건, Vitest 5개 통과, 정적 페이지 11개 빌드
+- Lanyard·Portfolio Playwright: 데스크톱·모바일 33개 통과, 모바일 비대상 3D 검사 3개 제외
+- Work 목록의 여섯 번째 카드와 공통 Case Study 상세 레이아웃을 4321 실제 화면에서 확인
+
 ## 범위
 
-기존 프로젝트 탭, 상세 페이지 URL, about/contact/engineering 페이지를 유지한다. 원본 brief 수치 후보는 현재 MDX와 달라 게시하지 않는다. 개인 작업은 근거가 있는 포트폴리오 구현 기록에 연결하며 새 사이드 프로젝트를 만들어 넣지 않는다.
+홈의 중복 프로젝트 탭은 제거하고 상세 페이지 URL과 about/contact 페이지를 유지한다. 기존 `/engineering/`은 포트폴리오 제작 Case Study로 연결한다. 원본 brief 수치 후보는 현재 MDX와 달라 게시하지 않는다. 개인 작업은 근거가 있는 포트폴리오 구현 기록에 연결하며 새 사이드 프로젝트를 만들어 넣지 않는다.

@@ -26,24 +26,20 @@ MDX frontmatter
   → Zod schema
   → CollectionEntry<'case-studies'>
   → toProjectViewModel()
-  → Astro 상세 페이지 / React 프로젝트 탭 패널
+  → Astro 목록·상세 페이지 / React 경력 카드 상세
 ```
 
 필드가 추가·삭제되면 스키마, ViewModel, React Props와 테스트가 컴파일 단계에서 함께 영향을 받는다.
 
-### 프로젝트 탐색 상태 계약
+### 경력 탐색 상태 계약
 
-`ProjectShowcase` 하나가 선택된 탭, 표시할 패널, Case Study 링크를 같은 `activeIndex`에서 파생한다. 사용자는 모달을 열고 닫지 않고도 같은 자리에서 네 개의 작업을 비교할 수 있다.
+홈은 회사 경력 두 장과 개인 프로젝트 한 장을 같은 `Lanyard` 계약으로 렌더링한다. 선택한 카드에서 경력 상세와 관련 Case Study 링크를 파생하며, 카드의 클릭·Enter·당김 동작이 같은 진입 함수를 사용한다.
 
-- `role="tablist"`, `role="tab"`, `role="tabpanel"` 구조
-- `aria-selected`, `aria-controls`, `aria-labelledby` 연결
-- 좌·우 방향키와 Home·End 키로 선택과 포커스 이동
-- 선택된 프로젝트의 색상, 카피, 성과, 링크를 동시에 갱신
-- 시각적 화살표 버튼 없이 탭 목록을 수평 스크롤
-
-### 모션도 타입 있는 디자인 토큰으로 관리
-
-Framer Motion의 easing과 section reveal을 `src/motion/variants.ts`로 분리했다. `Variants`와 `Transition`의 `satisfies` 검사를 통해 잘못된 모션 속성을 컴파일 단계에서 발견한다. `useReducedMotion()` 분기는 계속 유지한다.
+- 카드 선택 시 상세 제목으로 포커스 이동
+- `경력으로 돌아가기`에서 선택했던 카드로 포커스 복귀
+- 회사명·직급·기간은 HTML에 유지하고 줄의 움직임만 공유 Canvas에서 계산
+- 모바일·모션 감소·WebGL 실패·JavaScript 비활성 환경에서 정적 카드와 링크 유지
+- 개인 프로젝트도 Content Collection의 Case Study를 사용해 Work 목록과 같은 상세 레이아웃 제공
 
 ### Mermaid 지연 로딩
 
@@ -81,16 +77,17 @@ Astro 7이 요구하는 Node 22.12 이상은 기존 `engines` 조건과 일치�
 Vitest와 Testing Library가 다음을 검증한다.
 
 - Content Entry → Project ViewModel 변환
-- 탭 클릭 시 `aria-selected`, 패널, Case Study 링크의 동기화
-- 방향키 입력 시 다음 탭 선택과 포커스 이동
+- 카드 디자인 기본값과 회사별 디자인 입력
+- 카드 스테이지와 상세 진입 임계값
 
 ### `npm run test:e2e`
 
 Playwright가 데스크톱 Chrome과 모바일 viewport에서 다음 실제 사용자 흐름을 검증한다.
 
-- 프로젝트 탭 클릭 후 선택 상태와 패널 카피 갱신
-- 선택된 프로젝트의 Case Study 링크 갱신
-- 홈과 프로젝트 패널의 가로 스크롤 부재
+- 경력 카드의 클릭·키보드·당김 상세 진입과 포커스 복귀
+- 공유 Canvas 지연 로딩과 WebGL 실패 폴백
+- Work 목록에서 포트폴리오 제작 Case Study로 이동
+- 홈의 가로 스크롤 부재
 
 ### `npm run verify`
 
@@ -107,11 +104,11 @@ Playwright가 데스크톱 Chrome과 모바일 viewport에서 다음 실제 사�
 
 - `src/types/portfolio.ts`: 콘텐츠에서 파생한 공통 타입과 대표 프로젝트 slug
 - `src/mappers/case-study.ts`: 서버 콘텐츠를 클라이언트 ViewModel로 변환
-- `src/data/portfolio.ts`: 프로젝트별 색상·탭 레이블·헤드라인 계약
-- `src/components/portfolio/ProjectShowcase.tsx`: 접근 가능한 탭·패널 탐색 UI
-- `src/motion/variants.ts`: 타입 있는 모션 토큰
+- `src/data/portfolio.ts`: 경력 카드와 관련 Case Study 계약
+- `src/components/hero/`: 경력 카드, 공유 물리 장면과 정적 폴백
+- `src/content/case-studies/portfolio-engineering.mdx`: 포트폴리오 제작 과정과 기술적 판단
 - `src/scripts/render-mermaid.ts`: 조건부 Mermaid 로더
-- `src/pages/engineering.astro`: 방문자가 읽을 수 있는 설계 요약
+- `src/pages/engineering.astro`: 기존 Engineering URL의 Case Study 연결 경로
 
 ## 7. 개발자가 알아야 할 명령
 
@@ -127,6 +124,6 @@ npm run verify    # check + test + build
 ## 8. 트레이드오프와 후속 과제
 
 - 모든 `.astro` 파일을 TSX로 바꾸지 않았다. 정적 HTML에 React hydration 비용을 추가할 이유가 없기 때문이다.
-- 홈 탭 선택은 현재 URL에 보존하지 않는다. 특정 프로젝트를 직접 공유해야 할 요구가 생기면 query 또는 hash 상태를 다시 검토한다.
+- 홈의 카드 선택은 현재 URL에 보존하지 않는다. 각 프로젝트는 공유 가능한 Case Study URL을 별도로 제공한다.
 - E2E 테스트는 핵심 흐름만 다룬다. 시각 회귀 테스트는 디자인이 더 안정된 뒤 스냅샷 유지 비용과 함께 검토한다.
 - 의존성 감사 경고는 기능 변경과 분리해 원인 패키지·실제 배포 영향·업데이트 위험을 확인한 뒤 처리한다. 자동 `npm audit fix`는 실행하지 않는다.
