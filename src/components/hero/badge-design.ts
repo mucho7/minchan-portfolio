@@ -5,6 +5,8 @@ export const BADGE_STAGE = { height: 568, cardTop: 124, strapRest: 144 } as cons
 export type BadgeDesign = {
   strapColor?: string;
   strapBorderColor?: string;
+  strapLabel?: string;
+  strapLabelGap?: number;
   backgroundColor?: string;
   backgroundImage?: string;
   borderColor?: string;
@@ -17,6 +19,8 @@ export function resolveBadgeDesign(design: BadgeDesign = {}) {
   return {
     strapColor,
     strapBorderColor: design.strapBorderColor ?? strapColor,
+    strapLabel: design.strapLabel,
+    strapLabelGap: design.strapLabelGap ?? 48,
     backgroundColor: design.backgroundColor ?? '#fafafa',
     backgroundImage: design.backgroundImage,
     borderColor: design.borderColor ?? 'transparent',

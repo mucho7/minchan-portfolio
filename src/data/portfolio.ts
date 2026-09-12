@@ -19,7 +19,7 @@ export type CareerBadge = {
 export const CAREER_BADGES: readonly CareerBadge[] = [
   {
     id: 'ahha', title: '아하랩스', period: '2024.11 – 재직 중', role: 'Frontend 연구원',
-    design: { strapColor: '#000000', strapBorderColor: '#e60027' },
+    design: { strapColor: '#000000', strapBorderColor: '#e60027', strapLabel: 'AHHA Labs', strapLabelGap: 48 },
     summary: 'AI 워크플로우와 제조 관제 제품에서 복잡한 데이터와 상태를 다룹니다. 노드 UI의 응답성을 개선하고, 여러 화면이 같은 시간과 위치를 보여주도록 재생 구조를 설계했습니다.',
     projects: ['tooling-ui-flow', 'manufacturing-monitoring-poc', 'time-series-performance', 'agent-ui-reuse']
   },
