@@ -7,14 +7,13 @@ type LanyardProps = BadgeContentProps & {
   item: LanyardRuntime;
   href: string;
   onOpen: () => void;
-  motionEnabled: boolean;
   physicsReady: boolean;
   onMotionIntent: () => void;
   cancelSignal: number;
   horizontalBounds?: { min: number; max: number };
 };
 
-export function Lanyard({ item, href, onOpen, motionEnabled, physicsReady, onMotionIntent, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
+export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
   const [armed, setArmed] = useState(false);
   const [dragging, setDragging] = useState(false);
   const pointer = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
@@ -42,7 +41,7 @@ export function Lanyard({ item, href, onOpen, motionEnabled, physicsReady, onMot
       const transform = item.face.current.style.transform;
       item.face.current.style.transform = '';
       item.root.current?.style.setProperty('--pull', '0px');
-      if (motionEnabled && typeof item.face.current.animate === 'function') {
+      if (matchMedia('(prefers-reduced-motion: no-preference)').matches && typeof item.face.current.animate === 'function') {
         resetAnimation.current = item.face.current.animate(
           [{ transform }, { transform: 'translate3d(0,0,0) rotate(0deg)' }],
           { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' }

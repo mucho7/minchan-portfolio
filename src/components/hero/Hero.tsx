@@ -9,11 +9,8 @@ type Props = { projects: readonly ProjectViewModel[]; aboutHref: string; enginee
 
 export function Hero({ projects, aboutHref, engineeringHref }: Props) {
   const [selected, setSelected] = useState<CareerBadge | null>(null);
-  const [motionEnabled, setMotionEnabled] = useState(true);
-  const [hydrated, setHydrated] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const returnTo = useRef<string | null>(null);
-  useEffect(() => setHydrated(true), []);
   useEffect(() => {
     if (selected) heading.current?.focus({ preventScroll: true });
     else if (returnTo.current) document.getElementById(`career-card-${returnTo.current}`)?.focus({ preventScroll: true });
@@ -24,12 +21,8 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
       <h1>만들어 온 경험들.</h1>
     </header>
     {!selected ? <>
-      <LanyardShelf badges={CAREER_BADGES} aboutHref={aboutHref} engineeringHref={engineeringHref} motionEnabled={motionEnabled} onOpen={open} />
-      <div className="career-guidance"><p>카드를 아래로 당겨 경험을 펼쳐 보세요.<span> 클릭이나 Enter로도 열 수 있습니다.</span></p>
-        {hydrated && <button type="button" className="career-motion" aria-pressed={!motionEnabled} onClick={() => {
-          setMotionEnabled(value => !value);
-        }}>{motionEnabled ? '움직임 끄기' : '움직임 켜기'}</button>}
-      </div>
+      <LanyardShelf badges={CAREER_BADGES} aboutHref={aboutHref} engineeringHref={engineeringHref} onOpen={open} />
+      <div className="career-guidance"><p>카드를 아래로 당겨 경험을 펼쳐 보세요.<span> 클릭이나 Enter로도 열 수 있습니다.</span></p></div>
     </> : <section id="career-detail" className="career-detail" aria-labelledby="career-detail-title">
       <button type="button" className="career-back" onClick={() => setSelected(null)}>경력으로 돌아가기</button>
       <div className="career-detail-heading">

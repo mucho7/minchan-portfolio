@@ -29,11 +29,10 @@ type Props = {
   badges: readonly CareerBadge[];
   aboutHref: string;
   engineeringHref: string;
-  motionEnabled: boolean;
   onOpen: (badge: CareerBadge) => void;
 };
 
-export function LanyardShelf({ badges, aboutHref, engineeringHref, motionEnabled, onOpen }: Props) {
+export function LanyardShelf({ badges, aboutHref, engineeringHref, onOpen }: Props) {
   const shelf = useRef<HTMLDivElement>(null);
   const layoutSignature = useRef('');
   const [layouts, setLayouts] = useState<Record<string, LanyardLayout>>({});
@@ -132,7 +131,7 @@ export function LanyardShelf({ badges, aboutHref, engineeringHref, motionEnabled
     ? [{ ...item, ...layouts[item.id] } satisfies LanyardSceneItem]
     : []), [items, layouts]);
   const hasLayout = sceneItems.length === items.length;
-  const enabled = eligible && motionEnabled && requested && hasLayout && !failed;
+  const enabled = eligible && requested && hasLayout && !failed;
   const physicsState = failed ? 'fallback' : enabled && ready ? 'ready' : 'static';
   const worldKey = layoutSignature.current;
 
@@ -160,8 +159,8 @@ export function LanyardShelf({ badges, aboutHref, engineeringHref, motionEnabled
     {badges.map((badge, index) => {
       const layout = layouts[badge.id];
       return <Lanyard key={badge.id} item={items[index]} title={badge.title} role={badge.role} period={badge.period} design={badge.design}
-        href={badge.id === 'personal' ? engineeringHref : aboutHref} onOpen={() => onOpen(badge)} motionEnabled={motionEnabled}
-        physicsReady={physicsState === 'ready'} onMotionIntent={() => { if (eligible && motionEnabled) setRequested(true); }}
+        href={badge.id === 'personal' ? engineeringHref : aboutHref} onOpen={() => onOpen(badge)}
+        physicsReady={physicsState === 'ready'} onMotionIntent={() => { if (eligible) setRequested(true); }}
         cancelSignal={cancelSignal} horizontalBounds={eligible && layout ? { min: layout.minDx, max: layout.maxDx } : undefined} />;
     })}
   </div>;

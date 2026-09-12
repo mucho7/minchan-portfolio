@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다', async ({ page }) => {
+test('세 카드의 내용과 공통 크기 및 회사별 배색을 유지한다', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('link', { name: '김민찬 포트폴리오', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /움직임 (끄기|켜기)/ })).toHaveCount(0);
   await expect(page.locator('.career-intro p')).toHaveCount(0);
   const cards = page.locator('.badge-anchor');
   await expect(cards).toHaveCount(3);
@@ -16,11 +17,9 @@ test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다
   await expect(page.locator('.lanyard-stage').first()).toHaveCSS('height', '568px');
   const ahha = page.locator('.lanyard').first();
   await expect(ahha.locator('.static-strap')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
-  await expect(ahha.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(0, 0, 0)');
-  await expect(ahha.locator('.badge-face')).toHaveCSS('border-top-color', 'rgb(230, 0, 39)');
-  await expect(ahha.locator('.badge-face')).toHaveCSS('border-right-color', 'rgb(230, 0, 39)');
-  await expect(ahha.locator('.badge-face')).toHaveCSS('border-bottom-color', 'rgb(230, 0, 39)');
-  await expect(ahha.locator('.badge-face')).toHaveCSS('border-left-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.static-strap')).toHaveCSS('border-right-color', 'rgb(230, 0, 39)');
+  await expect(ahha.locator('.badge-face')).toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
   const tmax = page.locator('.lanyard').nth(1);
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-width', '2px');
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(189, 40, 57)');
@@ -30,7 +29,6 @@ test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다
 
 test('키보드 진입, 회사별 상세 링크, 돌아온 카드의 포커스를 유지한다', async ({ page }) => {
   await page.goto('./');
-  await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
   const card = page.getByRole('link', { name: '티맥스 클라우드 상세 보기', exact: true });
   await card.focus(); await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: '티맥스 클라우드', exact: true })).toBeFocused();
@@ -46,7 +44,6 @@ test('키보드 진입, 회사별 상세 링크, 돌아온 카드의 포커스�
 test('짧게 당기면 복귀하고 충분히 당겨 놓으면 상세가 열린다', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
-  await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
   const card = page.locator('#career-card-ahha');
   await card.scrollIntoViewIfNeeded();
   const box = (await card.boundingBox())!;
@@ -93,7 +90,6 @@ test('드래그 중에만 기간 아래 안내를 표시하고 임계점에서 �
 test('pointercancel과 Escape는 상세 진입 없이 드래그를 해제한다', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
-  await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
   const card = page.locator('#career-card-ahha');
   await card.scrollIntoViewIfNeeded();
   const box = (await card.boundingBox())!;
@@ -127,7 +123,6 @@ test('WebGL 초기화 실패 시 정적 카드로 계속 탐색한다', async ({
     } as typeof original;
   });
   await page.goto('./');
-  await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
   if (testInfo.project.name === 'desktop') await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'fallback');
   await page.getByRole('link', { name: '아하랩스 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('React Flow 렌더링 최적화');
@@ -180,16 +175,6 @@ test('WebGL 컨텍스트 유실 후 카드가 정적으로 복구된다', async 
   await expect(page.locator('#career-card-ahha')).toHaveCSS('transform', 'none');
   await page.getByRole('link', { name: '아하랩스 상세 보기', exact: true }).click();
   await expect(page.getByRole('heading', { name: '아하랩스', exact: true })).toBeVisible();
-});
-
-test('움직임을 끄고 다시 켜도 카드 내용과 상세 이동은 유지된다', async ({ page }) => {
-  await page.goto('./');
-  await page.getByRole('button', { name: '움직임 끄기' }).click();
-  await expect(page.locator('canvas')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: '움직임 켜기' })).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: '움직임 켜기' }).click();
-  await page.getByRole('link', { name: '개인 프로젝트 상세 보기', exact: true }).click();
-  await expect(page.locator('#career-detail')).toContainText('출입증을 경력 탐색으로 바꾸기');
 });
 
 test('개인 작업의 구현 기록은 Ship 2024의 계기와 기술적 판단을 설명한다', async ({ page }) => {
