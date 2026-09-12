@@ -4,8 +4,6 @@ import type {
   ProjectPreviewKey
 } from '../types/portfolio';
 
-export const HERO_LINES = ['복잡한 B2B 업무를', '안정적인 도구로.'] as const;
-
 export const PROJECT_PRESENTATIONS = {
   'manufacturing-monitoring-poc': {
     label: '제조 관제',
@@ -78,7 +76,7 @@ export const CAREER_BADGES: readonly CareerBadge[] = [
   },
   {
     id: 'personal', title: '개인 프로젝트', role: '포트폴리오 · 사이드 프로젝트',
-    summary: '직접 기획하고 만드는 작업을 기록합니다. 이 포트폴리오는 Astro와 React를 사용해 콘텐츠와 인터랙션의 경계를 나누고, TypeScript와 테스트로 연결한 개인 작업입니다.',
+    summary: 'Vercel Ship 2024에서 직접 접한 인터랙티브 출입증이 오래 기억에 남았습니다. 그 경험을 효과로 복제하기보다, 회사와 개인 작업을 실제 사원증처럼 당겨서 탐색하는 포트폴리오 구조로 바꿔 보았습니다.',
     projects: []
   }
 ];

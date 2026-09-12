@@ -47,7 +47,7 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
         {selected.projects.length ? selected.projects.map(slug => {
           const project = projects.find(item => item.slug === slug);
           return project ? <a className="career-project" key={slug} href={project.href}><h3>{project.title}</h3><p>{project.summary}</p><span>Case Study 읽기</span></a> : null;
-        }) : <a className="career-project" href={engineeringHref}><h3>이 포트폴리오를 만드는 방법</h3><p>Astro와 React의 역할 분리, 콘텐츠 타입 설계와 인터랙션 구현을 기록합니다.</p><span>구현 기록 읽기</span></a>}
+        }) : <a className="career-project" href={`${engineeringHref}#lanyard-interaction`}><h3>출입증을 경력 탐색으로 바꾸기</h3><p>Ship 2024에서 느낀 흥미를 출발점으로, 물리 효과와 콘텐츠 전달·접근성·초기 로딩 사이에서 내린 판단을 기록했습니다.</p><span>구현 기록 읽기</span></a>}
       </div>
     </section>}
   </section>;

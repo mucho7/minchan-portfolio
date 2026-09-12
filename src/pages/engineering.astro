@@ -42,6 +42,25 @@ const qualityGates = [
   ['Browser', '데스크톱·모바일 탭과 링크 흐름 검증'],
   ['Build', 'GitHub Pages 경로로 정적 산출물 생성']
 ] as const;
+
+const lanyardDecisions = [
+  {
+    title: '효과를 경력 탐색으로 바꾸기',
+    body: '행사 출입증의 형태를 그대로 복제하지 않고, 회사 경력 두 장과 개인 작업 한 장을 첫 화면의 목차로 사용했습니다. 카드를 충분히 당겨 놓으면 해당 경험이 펼쳐집니다.'
+  },
+  {
+    title: '물리와 콘텐츠의 렌더링 경계 나누기',
+    body: '줄과 흔들림은 R3F·Rapier가 계산하지만 회사명, 직급, 기간은 HTML로 유지했습니다. WebGL이 실패하거나 JavaScript를 사용할 수 없어도 같은 내용을 읽고 이동할 수 있습니다.'
+  },
+  {
+    title: '무거운 코드는 사용 의도 뒤로 미루기',
+    body: '약 3.16MB인 물리 청크는 첫 화면에서 요청하지 않습니다. 포인터나 키보드 포커스가 카드에 들어올 때 활성 카드 한 장에만 Canvas와 물리 월드를 만들도록 제한했습니다.'
+  },
+  {
+    title: '조작 실패를 정상 경로로 다루기',
+    body: '당김 임계값과 범위를 고정하고 pointer cancel, 포커스 이탈, 창 비활성화 때 드래그를 해제합니다. 모션 감소 환경과 모바일에서는 정적 카드가 같은 상세 진입을 담당합니다.'
+  }
+] as const;
 ---
 
 <BaseLayout
@@ -59,6 +78,28 @@ const qualityGates = [
       </p>
     </div>
   </header>
+
+  <section id="lanyard-interaction" class="scroll-mt-24 border-b border-black/25 py-14 sm:py-20" aria-labelledby="lanyard-heading">
+    <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
+      <h2 id="lanyard-heading" class="font-mono text-xs uppercase tracking-[0.16em] text-black/45">Lanyard interaction</h2>
+      <div>
+        <h3 class="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em]">
+          행사 출입증을,<br />경력을 여는 인터페이스로.
+        </h3>
+        <p class="mt-7 max-w-2xl text-base leading-8 text-black/60 sm:text-lg">
+          Vercel Ship 2024에 참여했을 때, 화면 속 출입증을 잡아당기고 놓으면 줄의 장력과 카드의 무게가 느껴지는 인터랙션이 인상적이었습니다. 포트폴리오에 옮길 때는 재미있는 첫인상에서 끝나지 않고, 제가 거쳐 온 회사와 개인 작업을 선택하는 진입점이 되어야 한다고 생각했습니다.
+        </p>
+        <dl class="mt-10 border-y border-black/20">
+          {lanyardDecisions.map(({ title, body }) => (
+            <div class="grid gap-3 border-b border-black/20 py-6 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-8">
+              <dt class="font-semibold leading-6">{title}</dt>
+              <dd class="max-w-2xl text-sm leading-7 text-black/60">{body}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
 
   <section class="border-b border-black/25 py-14 sm:py-20" aria-labelledby="type-flow-heading">
     <div class="grid gap-8 sm:grid-cols-[1fr_2fr]">
