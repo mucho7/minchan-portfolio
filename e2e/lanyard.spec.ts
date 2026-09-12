@@ -65,7 +65,7 @@ test('드래그 중에만 기간 아래 안내를 표시하고 임계점에서 �
   await expect(hint.locator('.badge-drag-hint-pull')).toHaveCSS('opacity', '0');
   await page.mouse.move(x, y); await page.mouse.down();
   await expect(face).toHaveAttribute('data-interaction', 'pull');
-  await expect(hint).toHaveCSS('max-height', '18px');
+  await expect(hint).toHaveCSS('height', '26px');
   await expect(hint).toHaveCSS('font-size', '13px');
   await expect(hint).toHaveCSS('text-align', 'center');
   await expect(hint.locator('.badge-drag-hint-pull')).toHaveCSS('opacity', '1');
@@ -76,7 +76,7 @@ test('드래그 중에만 기간 아래 안내를 표시하고 임계점에서 �
   await expect(hint.locator('.badge-drag-hint-release')).toHaveCSS('opacity', '1');
   await card.dispatchEvent('pointercancel', { pointerId: 1 }); await page.mouse.up();
   await expect(face).toHaveAttribute('data-interaction', 'idle');
-  await expect(hint).toHaveCSS('max-height', '0px');
+  await expect(hint).toHaveCSS('height', '0px');
   await expect(hint.locator('.badge-drag-hint-release')).toHaveCSS('opacity', '0');
 });
 
@@ -118,7 +118,7 @@ test('WebGL 초기화 실패 시 정적 카드로 계속 탐색한다', async ({
   });
   await page.goto('./');
   await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
-  if (testInfo.project.name === 'desktop') await expect(page.locator('[data-physics="fallback"]')).toHaveCount(3);
+  if (testInfo.project.name === 'desktop') await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'fallback');
   await page.getByRole('link', { name: '아하랩스 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('React Flow 렌더링 최적화');
 });
@@ -133,7 +133,7 @@ test('JS 없이도 세 카드와 기존 경력·개인 작업 링크를 제공�
   await context.close();
 });
 
-test('데스크톱 물리 카드가 준비되고 취소 후 화면 안으로 복귀한다', async ({ page }, testInfo) => {
+test('데스크톱 물리 카드는 선반 전체 폭에서 겹쳐 움직이고 취소 후 복귀한다', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop');
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -144,8 +144,13 @@ test('데스크톱 물리 카드가 준비되고 취소 후 화면 안으로 복
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   await expect(page.locator('canvas')).toHaveCount(1);
   const box = (await card.boundingBox())!;
+  const ahha = page.locator('#career-card-ahha');
+  const ahhaBox = (await ahha.boundingBox())!;
   await page.mouse.move(box.x + 110, box.y + 60); await page.mouse.down();
-  await page.mouse.move(box.x + 700, box.y + 95, { steps: 10 }); await page.mouse.up();
+  await page.mouse.move(box.x + 700, box.y + 40, { steps: 10 });
+  await expect.poll(async () => (await card.boundingBox())!.x - box.x).toBeGreaterThan(250);
+  expect(Math.abs((await ahha.boundingBox())!.x - ahhaBox.x)).toBeLessThan(35);
+  await page.keyboard.press('Escape'); await page.mouse.up();
   await expect(page.locator('#career-detail')).toHaveCount(0);
   await expect.poll(async () => {
     const current = (await card.boundingBox())!;
@@ -161,7 +166,7 @@ test('WebGL 컨텍스트 유실 후 카드가 정적으로 복구된다', async 
   await page.locator('#career-card-ahha').hover();
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   await page.locator('canvas').first().evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
-  await expect(page.locator('.lanyard').first()).toHaveAttribute('data-physics', 'fallback');
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'fallback');
   await expect(page.locator('#career-card-ahha')).toHaveCSS('transform', 'none');
   await page.getByRole('link', { name: '아하랩스 상세 보기', exact: true }).click();
   await expect(page.getByRole('heading', { name: '아하랩스', exact: true })).toBeVisible();
@@ -196,7 +201,9 @@ test('데스크톱 3D 코드는 카드 사용 의도 전까지 요청하지 않�
   await page.locator('#career-card-ahha').hover();
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   expect(requests.some(url => /LanyardScene/.test(url))).toBe(true);
+  await page.locator('canvas').evaluate(canvas => canvas.dataset.instance = 'shared');
   await page.locator('#career-card-tmax').hover();
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   await expect(page.locator('canvas')).toHaveCount(1);
+  await expect(page.locator('canvas')).toHaveAttribute('data-instance', 'shared');
 });

@@ -1,17 +1,18 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRapier, useRopeJoint, useSphericalJoint, type RapierRigidBody } from '@react-three/rapier';
-import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, DoubleSide, Euler, Quaternion, Vector3 } from 'three';
-import { BADGE_SIZE, type BadgeDrag, type resolveBadgeDesign } from './badge-design';
+import { BADGE_SIZE } from './badge-design';
+import type { LanyardSceneItem } from './lanyard-runtime';
 
 type Props = {
-  face: RefObject<HTMLAnchorElement | null>;
-  drag: RefObject<BadgeDrag>;
-  design: ReturnType<typeof resolveBadgeDesign>;
+  items: readonly LanyardSceneItem[];
+  worldKey: string;
   active: boolean;
   onReady: () => void;
   onFailure: () => void;
 };
+
 const ZOOM = 100;
 const STAGE_HEIGHT = 528;
 const REST_Y = .08;
@@ -31,7 +32,7 @@ function ribbonGeometry() {
   return geometry;
 }
 
-function Band({ face, drag, design, active, onReady }: Props) {
+function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boolean; onReady: (id: string) => void }) {
   const anchor = useRef<RapierRigidBody>(null!);
   const first = useRef<RapierRigidBody>(null!);
   const second = useRef<RapierRigidBody>(null!);
@@ -53,44 +54,58 @@ function Band({ face, drag, design, active, onReady }: Props) {
   const sequence = useRef(-1);
   const initialized = useRef(false);
   const lastFrame = useRef('');
+
   useEffect(() => {
     invalidate();
-    return () => { objects.outer.dispose(); objects.inner.dispose(); if (face.current) face.current.style.transform = ''; };
-  }, [objects, face, invalidate]);
+    return () => {
+      objects.outer.dispose();
+      objects.inner.dispose();
+      if (item.face.current) item.face.current.style.transform = '';
+    };
+  }, [invalidate, item.face, objects]);
   useEffect(() => { if (active) invalidate(); }, [active, invalidate]);
+
   useFrame(() => {
-    if (!card.current || !anchor.current || !first.current || !second.current || !third.current || !face.current) return;
+    if (!card.current || !anchor.current || !first.current || !second.current || !third.current || !item.face.current) return;
     const body = card.current;
-    if (drag.current.active && sequence.current !== drag.current.sequence) {
-      sequence.current = drag.current.sequence;
+    if (item.drag.current.active && sequence.current !== item.drag.current.sequence) {
+      sequence.current = item.drag.current.sequence;
       objects.start.copy(body.translation());
-      first.current.wakeUp(); second.current.wakeUp(); third.current.wakeUp();
+      first.current.wakeUp();
+      second.current.wakeUp();
+      third.current.wakeUp();
     }
-    if (mode.current !== drag.current.active) {
-      mode.current = drag.current.active;
+    if (mode.current !== item.drag.current.active) {
+      mode.current = item.drag.current.active;
       body.setBodyType(mode.current ? rapier.RigidBodyType.KinematicPositionBased : rapier.RigidBodyType.Dynamic, true);
-      // Clamp release velocity; rapid pointer movement must not launch the badge.
-      if (!mode.current) { body.setLinvel({ x: 0, y: 0, z: 0 }, true); body.setAngvel({ x: 0, y: 0, z: 0 }, true); }
+      if (!mode.current) {
+        body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        body.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      }
     }
     if (mode.current) {
-      objects.target.set(objects.start.x + drag.current.dx / ZOOM, objects.start.y - drag.current.dy / ZOOM, 0);
-      objects.target.x = Math.max(-.45, Math.min(.45, objects.target.x));
+      objects.target.set(objects.start.x + item.drag.current.dx / ZOOM, objects.start.y - item.drag.current.dy / ZOOM, 0);
+      objects.target.x = Math.max(item.minX, Math.min(item.maxX, objects.target.x));
       objects.target.y = Math.max(REST_Y - BADGE_SIZE.maxPull / ZOOM, Math.min(REST_Y + .4, objects.target.y));
       body.setNextKinematicTranslation(objects.target);
-      first.current.wakeUp(); second.current.wakeUp(); third.current.wakeUp();
+      first.current.wakeUp();
+      second.current.wakeUp();
+      third.current.wakeUp();
     }
     const position = body.translation();
     objects.quaternion.copy(body.rotation());
     objects.euler.setFromQuaternion(objects.quaternion);
-    // Front-facing restoration is deliberately stronger than free tumbling.
     if (!mode.current && !body.isSleeping()) {
       objects.angular.copy(body.angvel());
       objects.angular.x -= objects.euler.x * .12;
       objects.angular.y -= objects.euler.y * .16;
       body.setAngvel(objects.angular, false);
     }
-    const transform = `translate3d(${position.x * ZOOM}px,${(REST_Y - position.y) * ZOOM}px,0) rotateZ(${-objects.euler.z}rad) rotateY(${objects.euler.y}rad) rotateX(${objects.euler.x}rad)`;
-    if (transform !== lastFrame.current) { face.current.style.transform = transform; lastFrame.current = transform; }
+    const transform = `translate3d(${(position.x - item.restX) * ZOOM}px,${(REST_Y - position.y) * ZOOM}px,0) rotateZ(${-objects.euler.z}rad) rotateY(${objects.euler.y}rad) rotateX(${objects.euler.x}rad)`;
+    if (transform !== lastFrame.current) {
+      item.face.current.style.transform = transform;
+      lastFrame.current = transform;
+    }
     objects.curve.points[0].copy(anchor.current.translation());
     objects.curve.points[1].copy(first.current.translation());
     objects.curve.points[2].copy(second.current.translation());
@@ -109,31 +124,47 @@ function Band({ face, drag, design, active, onReady }: Props) {
       }
       attr.needsUpdate = true;
     }
-    if (!initialized.current) { initialized.current = true; onReady(); }
+    if (!initialized.current) {
+      initialized.current = true;
+      onReady(item.id);
+    }
   });
+
   return <>
-    <RigidBody ref={anchor} type="fixed" position={[0, ANCHOR_Y, 0]} colliders={false} />
-    <RigidBody ref={first} position={[0, ANCHOR_Y - SEGMENT, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
-    <RigidBody ref={second} position={[0, ANCHOR_Y - SEGMENT * 2, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
-    <RigidBody ref={third} position={[0, ANCHOR_Y - SEGMENT * 3, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
-    <RigidBody ref={card} position={[.05, REST_Y + .12, 0]} colliders={false} linearDamping={5} angularDamping={7} enabledTranslations={[true, true, false]}><CuboidCollider args={[1.12, 1.52, .04]} mass={1} collisionGroups={0} /></RigidBody>
-    <mesh geometry={objects.outer} frustumCulled={false}><meshBasicMaterial color={design.strapBorderColor} side={DoubleSide} /></mesh>
-    <mesh geometry={objects.inner} frustumCulled={false}><meshBasicMaterial color={design.strapColor} side={DoubleSide} /></mesh>
+    <RigidBody ref={anchor} type="fixed" position={[item.restX, ANCHOR_Y, 0]} colliders={false} />
+    <RigidBody ref={first} position={[item.restX, ANCHOR_Y - SEGMENT, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
+    <RigidBody ref={second} position={[item.restX, ANCHOR_Y - SEGMENT * 2, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
+    <RigidBody ref={third} position={[item.restX, ANCHOR_Y - SEGMENT * 3, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
+    <RigidBody ref={card} position={[item.restX + .05, REST_Y + .12, 0]} colliders={false} linearDamping={5} angularDamping={7} enabledTranslations={[true, true, false]}><CuboidCollider args={[1.12, 1.52, .04]} mass={1} collisionGroups={0} /></RigidBody>
+    <mesh geometry={objects.outer} frustumCulled={false}><meshBasicMaterial color={item.design.strapBorderColor} side={DoubleSide} /></mesh>
+    <mesh geometry={objects.inner} frustumCulled={false}><meshBasicMaterial color={item.design.strapColor} side={DoubleSide} /></mesh>
   </>;
 }
 
-export default function LanyardScene(props: Props) {
+export default function LanyardScene({ items, worldKey, active, onReady, onFailure }: Props) {
   const canvas = useRef<HTMLCanvasElement | null>(null);
+  const readyIds = useRef(new Set<string>());
+  useEffect(() => { readyIds.current.clear(); }, [worldKey]);
+  const markReady = useCallback((id: string) => {
+    readyIds.current.add(id);
+    if (readyIds.current.size === items.length) onReady();
+  }, [items.length, onReady]);
   useEffect(() => {
     const node = canvas.current;
-    const failure = (event: Event) => { event.preventDefault(); props.onFailure(); };
+    const failure = (event: Event) => {
+      event.preventDefault();
+      onFailure();
+    };
     node?.addEventListener('webglcontextlost', failure);
     return () => node?.removeEventListener('webglcontextlost', failure);
-  }, [props.onFailure]);
+  }, [onFailure]);
+
   return <Canvas ref={canvas} orthographic camera={{ position: [0, 0, 10], zoom: ZOOM, near: .1, far: 30 }}
-    dpr={[1, 1.5]} frameloop={props.active ? 'always' : 'never'} gl={{ alpha: true, antialias: true }}>
-    <Suspense fallback={null}><Physics gravity={[0, -28, 0]} timeStep={1 / 60} paused={!props.active} colliders={false}>
-      <Band {...props} />
-    </Physics></Suspense>
+    dpr={[1, 1.5]} frameloop={active ? 'always' : 'never'} gl={{ alpha: true, antialias: true }}>
+    <Suspense fallback={null}>
+      <Physics key={worldKey} gravity={[0, -28, 0]} timeStep={1 / 60} paused={!active} colliders={false}>
+        {items.map(item => <Band key={item.id} item={item} active={active} onReady={markReady} />)}
+      </Physics>
+    </Suspense>
   </Canvas>;
 }

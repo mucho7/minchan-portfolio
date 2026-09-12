@@ -23,8 +23,10 @@ export const StaticBadgeFallback = memo(function StaticBadgeFallback({ title, ro
       <span className="badge-role">{role}</span>
       {period && <span className="badge-period">{period}</span>}
       {interactionState && <span className="badge-drag-hint" aria-hidden="true">
-        <span className="badge-drag-hint-pull">아래로 당겨서 열기</span>
-        <span className="badge-drag-hint-release">놓아서 상세 보기</span>
+        <span className="badge-drag-hint-clip">
+          <span className="badge-drag-hint-pull">아래로 당겨서 열기</span>
+          <span className="badge-drag-hint-release">놓아서 상세 보기</span>
+        </span>
       </span>}
     </div>
     {resolved.footer && <span className="badge-footer" aria-hidden="true" style={{ background: resolved.footer.colors[1] }}>

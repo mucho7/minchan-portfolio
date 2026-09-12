@@ -3,13 +3,14 @@
 .career-intro h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 3.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
 .career-intro p { margin: 18px 0 0; color: var(--ink-secondary); font-size: 15px; }
 .career-intro p span { margin-inline: 8px; color: var(--ink-muted); }
-.career-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
-.lanyard { position: relative; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
+.career-shelf { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
+.lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
+.lanyard[data-dragging="true"] { z-index: 2; }
 .lanyard-stage { position: relative; height: 528px; width: 100%; }
 .static-strap { position: absolute; top: 0; left: calc(50% - var(--strap-width) / 2); width: var(--strap-width); height: calc(124px + var(--pull)); background: var(--strap-color); border-inline: var(--strap-border-width) solid var(--strap-border); border-radius: 0 0 3px 3px; }
-.lanyard-canvas { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
-.lanyard[data-physics="ready"] .lanyard-canvas { opacity: 1; }
-.lanyard[data-physics="ready"] .static-strap { visibility: hidden; }
+.lanyard-canvas { position: absolute; z-index: 0; inset: 0 0 auto; height: 528px; pointer-events: none; opacity: 0; }
+.career-shelf[data-physics="ready"] .lanyard-canvas { opacity: 1; }
+.career-shelf[data-physics="ready"] .static-strap { visibility: hidden; }
 .badge-anchor { position: absolute; top: 104px; left: calc(50% - var(--badge-width) / 2); display: block; width: var(--badge-width); height: var(--badge-height); border-radius: 12px; color: inherit; text-decoration: none; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; transform-origin: center; will-change: transform; }
 .badge-anchor:active { cursor: grabbing; }
 .badge-face { position: relative; display: flex; flex-direction: column; width: 224px; height: 304px; overflow: hidden; border-radius: 12px; padding: 54px 23px 30px; text-align: left; background-color: var(--badge-paper, #fafafa); background-size: cover; background-position: center; color: var(--badge-ink, #252629); box-shadow: 0 12px 22px -12px rgb(29 29 31 / .22), 0 2px 5px rgb(29 29 31 / .07); }
@@ -19,10 +20,11 @@
 .badge-information { display: flex; flex-direction: column; margin-top: auto; }
 .badge-role { margin-bottom: 12px; font-size: 13px; font-weight: 500; line-height: 1.6; }
 .badge-period { font-size: 12px; font-variant-numeric: tabular-nums; }
-.badge-drag-hint { position: relative; display: grid; max-height: 0; margin-top: 0; overflow: hidden; opacity: 0; transform: translateY(6px); font-size: 13px; font-weight: 600; line-height: 18px; text-align: center; color: var(--ink-muted); transition: max-height .22s cubic-bezier(.16, 1, .3, 1), margin-top .22s cubic-bezier(.16, 1, .3, 1), opacity .16s ease, transform .22s cubic-bezier(.16, 1, .3, 1); }
-.badge-drag-hint > span { grid-area: 1 / 1; opacity: 0; transform: translateY(5px); transition: opacity .16s ease, transform .2s cubic-bezier(.16, 1, .3, 1), color .16s ease; }
+.badge-drag-hint { position: relative; display: grid; grid-template-rows: 0fr; overflow: hidden; opacity: 0; transform: translateY(6px); font-size: 13px; font-weight: 600; line-height: 18px; text-align: center; color: var(--ink-muted); transition: grid-template-rows .22s cubic-bezier(.16, 1, .3, 1), opacity .16s ease, transform .22s cubic-bezier(.16, 1, .3, 1); }
+.badge-drag-hint-clip { position: relative; display: grid; min-height: 0; overflow: hidden; }
+.badge-drag-hint-clip > span { grid-area: 1 / 1; padding-top: 8px; opacity: 0; transform: translateY(5px); transition: opacity .16s ease, transform .2s cubic-bezier(.16, 1, .3, 1), color .16s ease; }
 .badge-face[data-interaction="pull"] .badge-drag-hint,
-.badge-face[data-interaction="release"] .badge-drag-hint { max-height: 18px; margin-top: 8px; opacity: 1; transform: translateY(0); }
+.badge-face[data-interaction="release"] .badge-drag-hint { grid-template-rows: 1fr; opacity: 1; transform: translateY(0); }
 .badge-face[data-interaction="pull"] .badge-drag-hint-pull,
 .badge-face[data-interaction="release"] .badge-drag-hint-release { opacity: 1; transform: translateY(0); }
 .badge-face[data-interaction="release"] .badge-drag-hint-release { color: var(--accent); }
