@@ -3,6 +3,8 @@ import { expect, test } from '@playwright/test';
 test('프로젝트 탭의 선택 상태와 Case Study 이동을 유지한다', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
+  await expect(page.locator('main > #contact')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Contact', exact: true })).toHaveAttribute('href', /contact\/$/);
   const agentTab = page.getByRole('tab', { name: 'Agent UI' });
   await agentTab.click();
   await expect(agentTab).toHaveAttribute('aria-selected', 'true');
