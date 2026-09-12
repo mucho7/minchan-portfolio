@@ -23,7 +23,7 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-[90rem] items-center justify-between gap-6 px-5 sm:px-8 lg:px-14">
-        <a href={homeHref} className={`text-sm font-semibold tracking-[-0.02em] ${FOCUS_CLASSNAME}`}>김민찬</a>
+        <a href={homeHref} className={`text-sm font-semibold tracking-[-0.02em] ${FOCUS_CLASSNAME}`}>김민찬 포트폴리오</a>
         <nav aria-label="주요 메뉴" className="flex items-center gap-4 text-xs font-medium text-[var(--ink-muted)] sm:gap-7 sm:text-sm">
           {links.map(({ href, label }) => (
             <a

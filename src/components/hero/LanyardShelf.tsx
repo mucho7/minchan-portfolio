@@ -1,6 +1,6 @@
-import { Component, Suspense, createRef, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { Component, Suspense, createRef, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import type { CareerBadge } from '../../data/portfolio';
-import { BADGE_SIZE, resolveBadgeDesign, type BadgeDrag } from './badge-design';
+import { BADGE_SIZE, BADGE_STAGE, resolveBadgeDesign, type BadgeDrag } from './badge-design';
 import { Lanyard } from './Lanyard';
 import type { LanyardLayout, LanyardRuntime, LanyardSceneItem } from './lanyard-runtime';
 
@@ -145,7 +145,13 @@ export function LanyardShelf({ badges, aboutHref, engineeringHref, motionEnabled
     return () => clearTimeout(timeout);
   }, [enabled, fail, ready, visible]);
 
-  return <div ref={shelf} className="career-shelf" data-physics={physicsState}>
+  const stageStyle = {
+    '--stage-height': `${BADGE_STAGE.height}px`,
+    '--badge-top': `${BADGE_STAGE.cardTop}px`,
+    '--strap-rest': `${BADGE_STAGE.strapRest}px`
+  } as CSSProperties;
+
+  return <div ref={shelf} className="career-shelf" data-physics={physicsState} style={stageStyle}>
     {enabled && <div className="lanyard-canvas" aria-hidden="true">
       <SceneBoundary onError={fail}><Suspense fallback={null}>
         <Scene items={sceneItems} worldKey={worldKey} active={visible} onReady={() => setReady(true)} onFailure={fail} />

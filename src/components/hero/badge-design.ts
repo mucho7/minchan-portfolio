@@ -1,5 +1,6 @@
 /** Shared physical dimensions in CSS pixels, never overridden per card. */
-export const BADGE_SIZE = { width: 224, height: 304, strapWidth: 24, strapBorder: 2, pullThreshold: 80, maxPull: 112 } as const;
+export const BADGE_SIZE = { width: 224, height: 304, strapWidth: 24, strapBorder: 2, pullThreshold: 100, maxPull: 112 } as const;
+export const BADGE_STAGE = { height: 568, cardTop: 124, strapRest: 144 } as const;
 
 export type BadgeDesign = {
   strapColor?: string;

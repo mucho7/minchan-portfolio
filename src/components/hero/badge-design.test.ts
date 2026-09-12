@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveBadgeDesign } from './badge-design';
+import { BADGE_SIZE, BADGE_STAGE, resolveBadgeDesign } from './badge-design';
 
 describe('badge design fallbacks', () => {
   it('디자인을 생략해도 모든 필수 색상을 제공한다', () => {
@@ -10,5 +10,9 @@ describe('badge design fallbacks', () => {
   });
   it('명시한 테두리와 배경 이미지는 기본값으로 덮어쓰지 않는다', () => {
     expect(resolveBadgeDesign({ strapColor: '#123456', strapBorderColor: '#abcdef', backgroundImage: '/badge.svg' })).toMatchObject({ strapBorderColor: '#abcdef', backgroundImage: '/badge.svg' });
+  });
+  it('공통 스테이지와 상세 열기 거리를 고정한다', () => {
+    expect(BADGE_STAGE).toEqual({ height: 568, cardTop: 124, strapRest: 144 });
+    expect(BADGE_SIZE).toMatchObject({ pullThreshold: 100, maxPull: 112 });
   });
 });

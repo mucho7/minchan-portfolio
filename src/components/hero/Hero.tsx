@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CAREER_BADGES, PROFILE, type CareerBadge } from '../../data/portfolio';
+import { CAREER_BADGES, type CareerBadge } from '../../data/portfolio';
 import type { ProjectViewModel } from '../../types/portfolio';
 import { LanyardShelf } from './LanyardShelf';
 import { StaticBadgeFallback } from './StaticBadgeFallback';
@@ -22,7 +22,6 @@ export function Hero({ projects, aboutHref, engineeringHref }: Props) {
   return <section id="hero" className="career-hero" aria-label="경력과 개인 작업">
     <header className="career-intro">
       <h1>만들어 온 경험들.</h1>
-      <p>{PROFILE.name}<span aria-hidden="true"> / </span>{PROFILE.role}</p>
     </header>
     {!selected ? <>
       <LanyardShelf badges={CAREER_BADGES} aboutHref={aboutHref} engineeringHref={engineeringHref} motionEnabled={motionEnabled} onOpen={open} />

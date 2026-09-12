@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다', async ({ page }) => {
   await page.goto('./');
+  await expect(page.getByRole('link', { name: '김민찬 포트폴리오', exact: true })).toBeVisible();
+  await expect(page.locator('.career-intro p')).toHaveCount(0);
   const cards = page.locator('.badge-anchor');
   await expect(cards).toHaveCount(3);
   await expect(cards.nth(0)).toContainText('Frontend 연구원');
@@ -11,6 +13,7 @@ test('세 카드의 내용과 공통 크기 및 티맥스 배색을 유지한다
     await expect(card).toHaveCSS('width', '224px');
     await expect(card).toHaveCSS('height', '304px');
   }
+  await expect(page.locator('.lanyard-stage').first()).toHaveCSS('height', '568px');
   const tmax = page.locator('.lanyard').nth(1);
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-width', '2px');
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(189, 40, 57)');
@@ -41,10 +44,10 @@ test('짧게 당기면 복귀하고 충분히 당겨 놓으면 상세가 열린�
   await card.scrollIntoViewIfNeeded();
   const box = (await card.boundingBox())!;
   const x = box.x + box.width / 2, y = box.y + 75;
-  await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x + 12, y + 35, { steps: 5 }); await page.mouse.up();
+  await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x + 8, y + 16, { steps: 4 }); await page.mouse.up();
   await expect(page.locator('#career-detail')).toHaveCount(0);
   await expect(card).toHaveCSS('transform', 'none');
-  await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x, y + 95, { steps: 6 });
+  await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x, y + 105, { steps: 6 });
   await expect(page.locator('.lanyard').first()).toHaveAttribute('data-armed', 'true');
   await page.mouse.up();
   await expect(page.getByRole('heading', { name: '아하랩스', exact: true })).toBeVisible();
@@ -71,7 +74,7 @@ test('드래그 중에만 기간 아래 안내를 표시하고 임계점에서 �
   await expect(hint.locator('.badge-drag-hint-pull')).toHaveCSS('opacity', '1');
   expect(periodBefore.y - (await period.boundingBox())!.y).toBeGreaterThan(12);
 
-  await page.mouse.move(x, y + 90, { steps: 6 });
+  await page.mouse.move(x, y + 105, { steps: 6 });
   await expect(face).toHaveAttribute('data-interaction', 'release');
   await expect(hint.locator('.badge-drag-hint-release')).toHaveCSS('opacity', '1');
   await card.dispatchEvent('pointercancel', { pointerId: 1 }); await page.mouse.up();

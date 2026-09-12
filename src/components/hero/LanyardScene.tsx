@@ -2,7 +2,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRapier, useRopeJoint, useSphericalJoint, type RapierRigidBody } from '@react-three/rapier';
 import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, DoubleSide, Euler, Quaternion, Vector3 } from 'three';
-import { BADGE_SIZE } from './badge-design';
+import { BADGE_SIZE, BADGE_STAGE } from './badge-design';
 import type { LanyardSceneItem } from './lanyard-runtime';
 
 type Props = {
@@ -14,9 +14,8 @@ type Props = {
 };
 
 const ZOOM = 100;
-const STAGE_HEIGHT = 528;
 const REST_Y = .08;
-const ANCHOR_Y = STAGE_HEIGHT / ZOOM / 2;
+const ANCHOR_Y = BADGE_STAGE.height / ZOOM / 2;
 const SEGMENT = (ANCHOR_Y - REST_Y - 1.4) / 3;
 const SAMPLES = 32;
 
