@@ -44,3 +44,41 @@ export const PROJECT_PREVIEW_LABELS = {
   decision: 'Decision',
   result: 'Result'
 } as const satisfies Record<ProjectPreviewKey, string>;
+
+export const PROFILE = {
+  name: '김민찬', englishName: 'Minchan Kim', role: 'Frontend Engineer',
+  stack: 'React / TypeScript',
+  email: 'mailto:ydjm1994@gmail.com', github: 'https://github.com/mucho7'
+} as const;
+
+export type CareerBadge = {
+  id: string;
+  title: string;
+  period?: string;
+  role: string;
+  design?: import('../components/hero/badge-design').BadgeDesign;
+  summary: string;
+  projects: readonly FeaturedProjectSlug[];
+};
+
+export const CAREER_BADGES: readonly CareerBadge[] = [
+  {
+    id: 'ahha', title: '아하랩스', period: '2024.11 – 재직 중', role: 'Frontend 연구원',
+    summary: 'AI 워크플로우와 제조 관제 제품에서 복잡한 데이터와 상태를 다룹니다. 노드 UI의 응답성을 개선하고, 여러 화면이 같은 시간과 위치를 보여주도록 재생 구조를 설계했습니다.',
+    projects: ['tooling-ui-flow', 'manufacturing-monitoring-poc', 'time-series-performance', 'agent-ui-reuse']
+  },
+  {
+    id: 'tmax', title: '티맥스 클라우드', period: '2023.08 – 2024.11', role: 'Frontend 연구원',
+    design: {
+      backgroundColor: '#ffffff', strapColor: '#183b80', strapBorderColor: '#bd2839',
+      footer: { colors: ['#bd2839', '#183b80'], split: 70 }
+    },
+    summary: '브라우저에서 파일을 탐색하고 편집·저장·복원하는 Web IDE와 클라우드 플랫폼 관리 화면을 개발했습니다. IndexedDB 저장 구조와 AST 분석 결과를 편집 흐름에 연결했습니다.',
+    projects: ['web-ide-rendering']
+  },
+  {
+    id: 'personal', title: '개인 프로젝트', role: '포트폴리오 · 사이드 프로젝트',
+    summary: '직접 기획하고 만드는 작업을 기록합니다. 이 포트폴리오는 Astro와 React를 사용해 콘텐츠와 인터랙션의 경계를 나누고, TypeScript와 테스트로 연결한 개인 작업입니다.',
+    projects: []
+  }
+];

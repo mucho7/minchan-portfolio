@@ -1,0 +1,64 @@
+.career-hero { padding: 48px 24px 32px; background: var(--surface); }
+.career-intro { text-align: center; }
+.career-intro h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 3.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
+.career-intro p { margin: 18px 0 0; color: var(--ink-secondary); font-size: 15px; }
+.career-intro p span { margin-inline: 8px; color: var(--ink-muted); }
+.career-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
+.lanyard { position: relative; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
+.lanyard-stage { position: relative; height: 528px; width: 100%; }
+.static-strap { position: absolute; top: 0; left: calc(50% - var(--strap-width) / 2); width: var(--strap-width); height: calc(124px + var(--pull)); background: var(--strap-color); border-inline: var(--strap-border-width) solid var(--strap-border); border-radius: 0 0 3px 3px; }
+.lanyard-canvas { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.lanyard[data-physics="ready"] .lanyard-canvas { opacity: 1; }
+.lanyard[data-physics="ready"] .static-strap { visibility: hidden; }
+.badge-anchor { position: absolute; top: 104px; left: calc(50% - var(--badge-width) / 2); display: block; width: var(--badge-width); height: var(--badge-height); border-radius: 12px; color: inherit; text-decoration: none; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; transform-origin: center; will-change: transform; }
+.badge-anchor:active { cursor: grabbing; }
+.badge-face { position: relative; display: flex; flex-direction: column; width: 224px; height: 304px; overflow: hidden; border-radius: 12px; padding: 54px 23px 30px; text-align: left; background-color: var(--badge-paper, #fafafa); background-size: cover; background-position: center; color: var(--badge-ink, #252629); box-shadow: 0 12px 22px -12px rgb(29 29 31 / .22), 0 2px 5px rgb(29 29 31 / .07); }
+.badge-face::after { content: ''; position: absolute; inset: 6px; border: 1px solid rgb(29 29 31 / .07); border-radius: 7px; pointer-events: none; }
+.badge-slot { position: absolute; top: 14px; left: calc(50% - 17px); width: 34px; height: 7px; border-radius: 4px; background: #d9dadd; box-shadow: inset 0 1px 2px rgb(0 0 0 / .12); }
+.badge-title { font-size: 23px; font-weight: 650; line-height: 1.4; letter-spacing: -.04em; word-break: keep-all; }
+.badge-information { display: flex; flex-direction: column; gap: 12px; margin-top: auto; }
+.badge-role { font-size: 13px; font-weight: 500; line-height: 1.6; }
+.badge-period { font-size: 12px; font-variant-numeric: tabular-nums; }
+.badge-footer { position: absolute; height: 10px; left: 0; right: 0; bottom: 0; display: flex; }
+.badge-footer > span { height: 100%; }
+.badge-anchor:hover .badge-face { box-shadow: 0 16px 28px -12px rgb(29 29 31 / .28), 0 2px 5px rgb(29 29 31 / .09); }
+.lanyard-hint { position: absolute; top: 443px; inset-inline: 0; margin: 0; font-size: 12px; color: var(--ink-muted); pointer-events: none; }
+.lanyard[data-armed="true"] .lanyard-hint { top: 534px; color: var(--accent); }
+.career-open-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 500; color: var(--ink-secondary); text-decoration: underline; }
+.career-open-link:hover { color: var(--accent); }
+.career-guidance { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 24px; max-width: 1040px; margin: 22px auto 0; }
+.career-guidance p { margin: 0; font-size: 13px; color: var(--ink-secondary); line-height: 1.7; }
+.career-guidance p span { color: var(--ink-muted); }
+.career-motion, .career-back { min-height: 44px; padding: 10px 16px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--nav-surface); color: var(--ink-secondary); transition: background-color .16s, transform .16s; }
+.career-motion:hover, .career-back:hover { background: var(--line); }
+.career-motion:active, .career-back:active { transform: scale(.98); }
+.career-motion[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.career-detail { max-width: 960px; margin: 32px auto 20px; }
+.career-back { margin-bottom: 28px; }
+.career-detail-heading { display: grid; grid-template-columns: 224px 1fr; align-items: center; gap: 56px; }
+.career-detail-heading h2 { margin: 0; font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.2; }
+.career-detail-role { font-size: 14px; color: var(--ink-muted); margin-top: 16px; }
+.career-summary { max-width: 60ch; margin-top: 24px; color: var(--ink-secondary); line-height: 1.9; font-size: 16px; word-break: keep-all; }
+.career-projects { margin-top: 48px; }
+.career-project { display: block; padding: 28px 0; border-top: 1px solid var(--line); text-decoration: none; }
+.career-project h3 { font-size: 21px; letter-spacing: -.025em; font-weight: 600; }
+.career-project p { max-width: 65ch; margin-top: 12px; font-size: 15px; line-height: 1.8; color: var(--ink-secondary); white-space: pre-line; }
+.career-project span { display: inline-block; margin-top: 16px; color: var(--accent); font-size: 13px; text-decoration: underline; }
+.career-project:hover h3 { color: var(--accent); }
+@media (max-width: 959px) {
+  .career-hero { padding: 36px 20px 28px; }
+  .career-shelf { grid-template-columns: 1fr; max-width: 400px; gap: 24px; }
+  .lanyard + .lanyard { border-top: 1px solid var(--line); }
+  .career-guidance { text-align: center; }
+  .career-guidance p span { display: block; }
+  .career-detail-heading { grid-template-columns: 1fr; gap: 32px; }
+  .career-selected-badge { justify-self: center; }
+  .career-summary { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .badge-anchor { will-change: auto; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .career-detail { animation: career-reveal 280ms cubic-bezier(.16, 1, .3, 1); }
+  @keyframes career-reveal { from { opacity: .6; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+}
