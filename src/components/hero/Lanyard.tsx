@@ -36,6 +36,7 @@ export function Lanyard({ id, href, onOpen, motionEnabled, motionActive, onMotio
   const [failed, setFailed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [armed, setArmed] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const face = useRef<HTMLAnchorElement>(null);
   const drag = useRef<BadgeDrag>({ active: false, sequence: 0, dx: 0, dy: 0 });
@@ -59,7 +60,7 @@ export function Lanyard({ id, href, onOpen, motionEnabled, motionActive, onMotio
     const shouldOpen = !cancelled && drag.current.dy >= BADGE_SIZE.pullThreshold;
     suppressClick.current = current.moved || cancelled || shouldOpen;
     drag.current.active = false;
-    armedRef.current = false; setArmed(false);
+    armedRef.current = false; setArmed(false); setDragging(false);
     if (face.current?.hasPointerCapture(current.id)) face.current.releasePointerCapture(current.id);
     if (!physical && face.current) {
       const transform = face.current.style.transform;
@@ -131,6 +132,7 @@ export function Lanyard({ id, href, onOpen, motionEnabled, motionActive, onMotio
           if (!event.isPrimary || event.button !== 0 || pointer.current) return;
           onMotionIntent();
           resetAnimation.current?.cancel(); suppressClick.current = false;
+          setDragging(true);
           pointer.current = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
           drag.current = { active: true, sequence: drag.current.sequence + 1, dx: 0, dy: 0 };
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -138,10 +140,9 @@ export function Lanyard({ id, href, onOpen, motionEnabled, motionActive, onMotio
         onPointerMove={move} onPointerUp={() => finish()} onPointerCancel={() => finish(true)} onLostPointerCapture={() => finish(true)}
         onKeyDown={event => { if (event.key === 'Escape') finish(true); }}
         onClick={event => { event.preventDefault(); if (event.detail === 0 || !suppressClick.current) onOpen(); suppressClick.current = false; }}>
-        <StaticBadgeFallback {...content} metaId={`career-meta-${id}`} />
+        <StaticBadgeFallback {...content} metaId={`career-meta-${id}`} interactionState={dragging ? (armed ? 'release' : 'pull') : 'idle'} />
       </a>
     </div>
-    <p className="lanyard-hint" aria-live="polite">{armed ? '놓아서 상세 보기' : '아래로 당겨서 열기'}</p>
-    <a className="career-open-link" href={href} onClick={event => { event.preventDefault(); onOpen(); }}>{content.title === '개인 프로젝트' ? '개인 작업 보기' : `${content.title} 경력 보기`}</a>
+    <span className="lanyard-status" aria-live="polite" aria-atomic="true">{dragging ? (armed ? '놓아서 상세 보기' : '아래로 당겨서 열기') : ''}</span>
   </div>;
 }

@@ -50,6 +50,36 @@ test('짧게 당기면 복귀하고 충분히 당겨 놓으면 상세가 열린�
   await expect(page.getByRole('heading', { name: '아하랩스', exact: true })).toBeVisible();
 });
 
+test('드래그 중에만 기간 아래 안내를 표시하고 임계점에서 문구를 전환한다', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  const card = page.locator('#career-card-ahha');
+  const face = card.locator('.badge-face');
+  const period = card.locator('.badge-period');
+  const hint = card.locator('.badge-drag-hint');
+  const periodBefore = (await period.boundingBox())!;
+  const box = (await card.boundingBox())!;
+  const x = box.x + box.width / 2, y = box.y + 70;
+
+  await expect(face).toHaveAttribute('data-interaction', 'idle');
+  await expect(hint.locator('.badge-drag-hint-pull')).toHaveCSS('opacity', '0');
+  await page.mouse.move(x, y); await page.mouse.down();
+  await expect(face).toHaveAttribute('data-interaction', 'pull');
+  await expect(hint).toHaveCSS('max-height', '18px');
+  await expect(hint).toHaveCSS('font-size', '13px');
+  await expect(hint).toHaveCSS('text-align', 'center');
+  await expect(hint.locator('.badge-drag-hint-pull')).toHaveCSS('opacity', '1');
+  expect(periodBefore.y - (await period.boundingBox())!.y).toBeGreaterThan(12);
+
+  await page.mouse.move(x, y + 90, { steps: 6 });
+  await expect(face).toHaveAttribute('data-interaction', 'release');
+  await expect(hint.locator('.badge-drag-hint-release')).toHaveCSS('opacity', '1');
+  await card.dispatchEvent('pointercancel', { pointerId: 1 }); await page.mouse.up();
+  await expect(face).toHaveAttribute('data-interaction', 'idle');
+  await expect(hint).toHaveCSS('max-height', '0px');
+  await expect(hint.locator('.badge-drag-hint-release')).toHaveCSS('opacity', '0');
+});
+
 test('pointercancel과 Escape는 상세 진입 없이 드래그를 해제한다', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
@@ -73,7 +103,7 @@ test('모션 감소 시 3D를 요청하지 않고 같은 상세를 연다', asyn
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await page.goto('./');
-  await page.getByRole('link', { name: '티맥스 클라우드 경력 보기', exact: true }).click();
+  await page.getByRole('link', { name: '티맥스 클라우드 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toBeVisible();
   expect(requests.some(url => /LanyardScene|rapier/.test(url))).toBe(false);
 });
@@ -89,7 +119,7 @@ test('WebGL 초기화 실패 시 정적 카드로 계속 탐색한다', async ({
   await page.goto('./');
   await expect(page.getByRole('button', { name: '움직임 끄기' })).toBeAttached();
   if (testInfo.project.name === 'desktop') await expect(page.locator('[data-physics="fallback"]')).toHaveCount(3);
-  await page.getByRole('link', { name: '아하랩스 경력 보기', exact: true }).click();
+  await page.getByRole('link', { name: '아하랩스 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('React Flow 렌더링 최적화');
 });
 
@@ -143,7 +173,7 @@ test('움직임을 끄고 다시 켜도 카드 내용과 상세 이동은 유지
   await expect(page.locator('canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: '움직임 켜기' })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: '움직임 켜기' }).click();
-  await page.getByRole('link', { name: '개인 작업 보기', exact: true }).click();
+  await page.getByRole('link', { name: '개인 프로젝트 상세 보기', exact: true }).click();
   await expect(page.locator('#career-detail')).toContainText('출입증을 경력 탐색으로 바꾸기');
 });
 
