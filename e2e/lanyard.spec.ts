@@ -1,5 +1,68 @@
 import { expect, test } from '@playwright/test';
 
+test('물리 로딩 중에는 spinner와 드래그 잠금을 표시하고 완료 후 해제한다', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop');
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*LanyardScene*', async route => { await gate; await route.continue(); });
+  await page.goto('./');
+  await page.locator('astro-island:not([ssr])').waitFor();
+  const card = page.locator('#career-card-ahha');
+  await card.hover();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'loading');
+  await expect(card.locator('.badge-loading')).toBeVisible();
+  const box = (await card.boundingBox())!;
+  await page.mouse.move(box.x + 110, box.y + 70);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 110, box.y + 100, { steps: 3 });
+  await expect(page.locator('.lanyard').first()).toHaveAttribute('data-dragging', 'false');
+  await expect(card).toHaveCSS('transform', 'none');
+  await page.mouse.move(10, 10); await page.mouse.up();
+  release();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'ready', { timeout: 20000 });
+  await expect(card.locator('.badge-loading')).toBeHidden();
+  await card.hover(); await page.mouse.down();
+  await expect(page.locator('.lanyard').first()).toHaveAttribute('data-dragging', 'true');
+  await page.keyboard.press('Escape'); await page.mouse.up();
+});
+
+test('모션 감소 환경은 spinner 없이 정적 드래그를 제공한다', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  await page.locator('astro-island:not([ssr])').waitFor();
+  await expect(page.locator('.badge-loading').first()).toBeHidden();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'static');
+  const response = await page.request.get('./assets/tmax-strap.webp');
+  expect(response.ok()).toBe(true);
+  expect((await response.body()).byteLength).toBeLessThan(10000);
+});
+
+test('큰 화면에서 카드 섹션이 GNB 아래를 채우고 카드 크기를 유지한다', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop');
+  await page.setViewportSize({ width: 1920, height: 1200 });
+  await page.goto('./');
+  const hero = page.locator('#hero');
+  await expect.poll(async () => {
+    const box = (await hero.boundingBox())!;
+    return Math.round(box.y + box.height);
+  }).toBe(1200);
+  await expect(page.locator('.badge-anchor').first()).toHaveCSS('width', '224px');
+  await expect(page.locator('.badge-anchor').first()).toHaveCSS('height', '304px');
+  const guidance = (await page.locator('.career-guidance').boundingBox())!;
+  expect(1200 - guidance.y - guidance.height).toBeCloseTo(32, 0);
+  const stage = page.locator('.lanyard-stage').first();
+  expect((await stage.boundingBox())!.height).toBeGreaterThan(568);
+  await page.locator('#career-card-ahha').hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1);
+  await expect.poll(async () => Math.abs((await page.locator('canvas').boundingBox())!.height - (await stage.boundingBox())!.height)).toBeLessThan(2);
+  await page.locator('canvas').evaluate(node => node.dataset.instance = 'resize');
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await expect.poll(async () => Math.abs((await page.locator('canvas').boundingBox())!.height - (await stage.boundingBox())!.height)).toBeLessThan(2);
+  await expect(page.locator('canvas')).toHaveAttribute('data-instance', 'resize');
+  await page.setViewportSize({ width: 1280, height: 720 });
+  expect((await hero.boundingBox())!.height).toBeGreaterThan(720 - 65);
+});
+
 test('세 카드의 내용과 공통 크기 및 회사별 배색을 유지한다', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('link', { name: '김민찬 포트폴리오', exact: true })).toBeVisible();
@@ -191,14 +254,12 @@ test('개인 작업의 Case Study는 Ship 2024의 계기와 기술적 판단을 
   await expect(page.locator('.case-study-body')).toContainText('실패를 별도 화면으로 만들지 않기');
 });
 
-test('데스크톱 3D 코드는 카드 사용 의도 전까지 요청하지 않고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {
+test('데스크톱은 사용자 조작 없이 물리를 준비하고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop');
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await page.goto('./');
   await expect(page.locator('.badge-anchor')).toHaveCount(3);
-  expect(requests.some(url => /LanyardScene/.test(url))).toBe(false);
-  await page.locator('#career-card-ahha').hover();
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   expect(requests.some(url => /LanyardScene/.test(url))).toBe(true);
   await page.locator('canvas').evaluate(canvas => canvas.dataset.instance = 'shared');

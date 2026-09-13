@@ -1,17 +1,23 @@
-.career-hero { padding: 48px 24px 32px; background: var(--surface); }
+.career-hero { display: flex; flex: 1; flex-direction: column; padding: 48px 24px 32px; background: var(--surface); }
 .career-intro { text-align: center; }
 .career-intro h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 3.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
-.career-shelf { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
-.lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
+.career-shelf { position: relative; display: grid; flex: 1; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
+.lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; --pull: 0px; }
 .lanyard[data-dragging="true"] { z-index: 2; }
-.lanyard-stage { position: relative; height: var(--stage-height); width: 100%; }
+.lanyard-stage { position: relative; min-height: var(--stage-height); height: 100%; width: 100%; }
 .static-strap { position: absolute; top: 0; left: calc(50% - var(--strap-width) / 2); width: var(--strap-width); height: calc(var(--strap-rest) + var(--pull)); background: var(--strap-color); border-inline: var(--strap-border-width) solid var(--strap-border); border-radius: 0 0 3px 3px; }
 .static-strap { background-image: var(--strap-pattern); background-size: 100% var(--strap-pattern-size); background-repeat: repeat-y; }
-.lanyard-canvas { position: absolute; z-index: 0; inset: 0 0 auto; height: var(--stage-height); pointer-events: none; opacity: 0; }
+.lanyard-canvas { position: absolute; z-index: 0; inset: 0; pointer-events: none; opacity: 0; }
 .career-shelf[data-physics="ready"] .lanyard-canvas { opacity: 1; }
 .career-shelf[data-physics="ready"] .static-strap { visibility: hidden; }
 .badge-anchor { position: absolute; top: var(--badge-top); left: calc(50% - var(--badge-width) / 2); display: block; width: var(--badge-width); height: var(--badge-height); border-radius: 12px; color: inherit; text-decoration: none; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; transform-origin: center; will-change: transform; }
 .badge-anchor:active { cursor: grabbing; }
+.badge-loading { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; pointer-events: none; }
+.lanyard[data-loading="true"] .badge-loading { display: flex; }
+.lanyard[data-loading="true"] .badge-anchor { cursor: progress; }
+.badge-spinner { width: 22px; height: 22px; border: 2px solid var(--line); border-top-color: var(--ink-secondary); border-radius: 50%; animation: badge-loading-spin .8s linear infinite; }
+@keyframes badge-loading-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .badge-spinner { animation: none; } }
 .badge-face { position: relative; display: flex; flex-direction: column; width: 224px; height: 304px; overflow: hidden; border: 2px solid var(--badge-border, transparent); border-radius: 12px; padding: 52px 21px 28px; text-align: left; background-color: var(--badge-paper, #fafafa); background-size: cover; background-position: center; color: var(--badge-ink, #252629); box-shadow: 0 12px 22px -12px rgb(29 29 31 / .22), 0 2px 5px rgb(29 29 31 / .07); }
 .badge-face::after { content: ''; position: absolute; inset: 6px; border: 1px solid rgb(29 29 31 / .07); border-radius: 7px; pointer-events: none; }
 .badge-slot { position: absolute; top: 14px; left: calc(50% - 17px); width: 34px; height: 7px; border-radius: 4px; background: #d9dadd; box-shadow: inset 0 1px 2px rgb(0 0 0 / .12); }

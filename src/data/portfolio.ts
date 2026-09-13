@@ -27,7 +27,7 @@ export const CAREER_BADGES: readonly CareerBadge[] = [
     id: 'tmax', title: '티맥스 클라우드', period: '2023.08 – 2024.11', role: 'Frontend 연구원',
     design: {
       backgroundColor: '#ffffff', strapColor: '#183b80', strapBorderColor: '#bd2839',
-      strapPattern: { src: `${import.meta.env.BASE_URL}assets/tmax-strap.svg`, repeatLength: 108 },
+      strapPattern: { src: `${import.meta.env.BASE_URL}assets/tmax-strap.webp`, repeatLength: 108 },
       footer: { colors: ['#bd2839', '#183b80'], split: 70 }
     },
     summary: '브라우저에서 파일을 탐색하고 편집·저장·복원하는 Web IDE와 클라우드 플랫폼 관리 화면을 개발했습니다. IndexedDB 저장 구조와 AST 분석 결과를 편집 흐름에 연결했습니다.',

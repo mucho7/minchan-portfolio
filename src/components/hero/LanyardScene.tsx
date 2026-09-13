@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRapier, useRopeJoint, useSphericalJoint, type RapierRigidBody } from '@react-three/rapier';
-import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, DoubleSide, Euler, Quaternion, RepeatWrapping, SRGBColorSpace, Texture, TextureLoader, Vector3 } from 'three';
 import { BADGE_SIZE, BADGE_STAGE } from './badge-design';
 import type { LanyardSceneItem } from './lanyard-runtime';
@@ -18,6 +18,17 @@ const REST_Y = .08;
 const ANCHOR_Y = BADGE_STAGE.height / ZOOM / 2;
 const SEGMENT = (ANCHOR_Y - REST_Y - 1.4) / 3;
 const SAMPLES = 32;
+
+function StageCamera() {
+  const camera = useThree(state => state.camera);
+  const height = useThree(state => state.size.height);
+  useLayoutEffect(() => {
+    // Keep the world's top edge fixed while the orthographic viewport grows.
+    camera.position.y = (BADGE_STAGE.height - height) / ZOOM / 2;
+    camera.updateMatrixWorld();
+  }, [camera, height]);
+  return null;
+}
 
 function ribbonGeometry(repeatCount = 1) {
   const geometry = new BufferGeometry();
@@ -127,7 +138,7 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
       objects.angular.y -= objects.euler.y * .16;
       body.setAngvel(objects.angular, false);
     }
-    const transform = `translate3d(${(position.x - item.restX) * ZOOM}px,${(REST_Y - position.y) * ZOOM}px,0) rotateZ(${-objects.euler.z}rad) rotateY(${objects.euler.y}rad) rotateX(${objects.euler.x}rad)`;
+    const transform = `translate3d(${(position.x - item.restX) * ZOOM}px,${(REST_Y - position.y) * ZOOM}px,0) rotateZ(${-objects.euler.z}rad)`;
     if (transform !== lastFrame.current) {
       item.face.current.style.transform = transform;
       lastFrame.current = transform;
@@ -135,7 +146,8 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
     objects.curve.points[0].copy(anchor.current.translation());
     objects.curve.points[1].copy(first.current.translation());
     objects.curve.points[2].copy(second.current.translation());
-    objects.curve.points[3].copy(third.current.translation());
+    // Attach the rendered ribbon to the card, even while the joint solver catches up.
+    objects.curve.points[3].set(0, 1.4, 0).applyQuaternion(objects.quaternion).add(position);
     for (let layer = 0; layer < 2; layer++) {
       const geometry = layer === 0 ? objects.outer : objects.inner;
       const attr = geometry.getAttribute('position') as BufferAttribute;
@@ -161,7 +173,7 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
     <RigidBody ref={first} position={[item.restX, ANCHOR_Y - SEGMENT, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
     <RigidBody ref={second} position={[item.restX, ANCHOR_Y - SEGMENT * 2, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
     <RigidBody ref={third} position={[item.restX, ANCHOR_Y - SEGMENT * 3, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
-    <RigidBody ref={card} position={[item.restX + .05, REST_Y + .12, 0]} colliders={false} linearDamping={5} angularDamping={7} enabledTranslations={[true, true, false]}><CuboidCollider args={[1.12, 1.52, .04]} mass={1} collisionGroups={0} /></RigidBody>
+    <RigidBody ref={card} position={[item.restX + .05, REST_Y + .12, 0]} colliders={false} linearDamping={5} angularDamping={7} enabledTranslations={[true, true, false]} enabledRotations={[false, false, true]}><CuboidCollider args={[1.12, 1.52, .04]} mass={1} collisionGroups={0} /></RigidBody>
     <mesh geometry={objects.outer} frustumCulled={false}><meshBasicMaterial color={item.design.strapBorderColor} side={DoubleSide} /></mesh>
     <mesh geometry={objects.inner} frustumCulled={false}><meshBasicMaterial color={pattern ? '#ffffff' : item.design.strapColor} map={pattern} toneMapped={false} side={DoubleSide} /></mesh>
   </>;
@@ -187,6 +199,7 @@ export default function LanyardScene({ items, worldKey, active, onReady, onFailu
 
   return <Canvas ref={canvas} orthographic camera={{ position: [0, 0, 10], zoom: ZOOM, near: .1, far: 30 }}
     dpr={[1, 1.5]} frameloop={active ? 'always' : 'never'} gl={{ alpha: true, antialias: true }}>
+    <StageCamera />
     <Suspense fallback={null}>
       <Physics key={worldKey} gravity={[0, -28, 0]} timeStep={1 / 60} paused={!active} colliders={false}>
         {items.map(item => item.design.strapPattern
