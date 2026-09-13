@@ -8,12 +8,14 @@ type LanyardProps = BadgeContentProps & {
   href: string;
   onOpen: () => void;
   physicsReady: boolean;
+  loading: boolean;
+  dragDisabled: boolean;
   onMotionIntent: () => void;
   cancelSignal: number;
   horizontalBounds?: { min: number; max: number };
 };
 
-export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
+export function Lanyard({ item, href, onOpen, physicsReady, loading, dragDisabled, onMotionIntent, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
   const [armed, setArmed] = useState(false);
   const [dragging, setDragging] = useState(false);
   const pointer = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
@@ -56,6 +58,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
   finishRef.current = finish;
 
   useEffect(() => { finishRef.current(true); }, [cancelSignal]);
+  useEffect(() => { if (dragDisabled) finishRef.current(true); }, [dragDisabled]);
   useEffect(() => {
     if (!physicsReady && item.face.current && !pointer.current) item.face.current.style.transform = '';
   }, [item.face, physicsReady]);
@@ -80,7 +83,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
     }
   }
 
-  return <div ref={item.root} className="lanyard" style={fallbackStyle} data-armed={armed} data-dragging={dragging}>
+  return <div ref={item.root} className="lanyard" style={fallbackStyle} data-armed={armed} data-dragging={dragging} data-loading={loading}>
     <div className="lanyard-stage">
       <div className="static-strap" aria-hidden="true" />
       <a ref={item.face} id={`career-card-${item.id}`} href={href} className="badge-anchor" aria-label={`${content.title} 상세 보기`}
@@ -89,6 +92,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
         onPointerDown={event => {
           if (!event.isPrimary || event.button !== 0 || pointer.current) return;
           onMotionIntent();
+          if (dragDisabled) return;
           resetAnimation.current?.cancel();
           suppressClick.current = false;
           setDragging(true);
@@ -100,6 +104,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
         onKeyDown={event => { if (event.key === 'Escape') finish(true); }}
         onClick={event => { event.preventDefault(); if (event.detail === 0 || !suppressClick.current) onOpen(); suppressClick.current = false; }}>
         <StaticBadgeFallback {...content} metaId={`career-meta-${item.id}`} interactionState={dragging ? (armed ? 'release' : 'pull') : 'idle'} />
+        <span className="badge-loading" aria-hidden="true"><span className="badge-spinner" /></span>
       </a>
     </div>
     <span className="lanyard-status" aria-live="polite" aria-atomic="true">{dragging ? (armed ? '놓아서 상세 보기' : '아래로 당겨서 열기') : ''}</span>

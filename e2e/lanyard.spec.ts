@@ -1,5 +1,42 @@
 import { expect, test } from '@playwright/test';
 
+test('물리 로딩 중에는 spinner와 드래그 잠금을 표시하고 완료 후 해제한다', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop');
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*LanyardScene*', async route => { await gate; await route.continue(); });
+  await page.goto('./');
+  await page.locator('astro-island:not([ssr])').waitFor();
+  const card = page.locator('#career-card-ahha');
+  await card.hover();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'loading');
+  await expect(card.locator('.badge-loading')).toBeVisible();
+  const box = (await card.boundingBox())!;
+  await page.mouse.move(box.x + 110, box.y + 70);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 110, box.y + 100, { steps: 3 });
+  await expect(page.locator('.lanyard').first()).toHaveAttribute('data-dragging', 'false');
+  await expect(card).toHaveCSS('transform', 'none');
+  await page.mouse.move(10, 10); await page.mouse.up();
+  release();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'ready', { timeout: 20000 });
+  await expect(card.locator('.badge-loading')).toBeHidden();
+  await card.hover(); await page.mouse.down();
+  await expect(page.locator('.lanyard').first()).toHaveAttribute('data-dragging', 'true');
+  await page.keyboard.press('Escape'); await page.mouse.up();
+});
+
+test('모션 감소 환경은 spinner 없이 정적 드래그를 제공한다', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  await page.locator('astro-island:not([ssr])').waitFor();
+  await expect(page.locator('.badge-loading').first()).toBeHidden();
+  await expect(page.locator('.career-shelf')).toHaveAttribute('data-physics', 'static');
+  const response = await page.request.get('./assets/tmax-strap.webp');
+  expect(response.ok()).toBe(true);
+  expect((await response.body()).byteLength).toBeLessThan(10000);
+});
+
 test('큰 화면에서 카드 섹션이 GNB 아래를 채우고 카드 크기를 유지한다', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop');
   await page.setViewportSize({ width: 1920, height: 1200 });

@@ -41,6 +41,7 @@ export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const [cancelSignal, setCancelSignal] = useState(0);
   const items = useMemo<readonly LanyardRuntime[]>(() => badges.map(badge => ({
     id: badge.id,
@@ -94,6 +95,7 @@ export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props
   useEffect(() => {
     const media = matchMedia('(min-width: 960px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
     const update = () => {
+      setHydrated(true);
       cancelAll();
       const nextEligible = media.matches && supportsWebGL();
       setEligible(nextEligible);
@@ -132,7 +134,8 @@ export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props
     : []), [items, layouts]);
   const hasLayout = sceneItems.length === items.length;
   const enabled = eligible && requested && hasLayout && !failed;
-  const physicsState = failed ? 'fallback' : enabled && ready ? 'ready' : 'static';
+  const loading = !hydrated || (enabled && !ready);
+  const physicsState = !hydrated ? 'initializing' : failed ? 'fallback' : enabled ? (ready ? 'ready' : 'loading') : 'static';
   const worldKey = layoutSignature.current;
 
   useEffect(() => {
@@ -151,6 +154,7 @@ export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props
   } as CSSProperties;
 
   return <div ref={shelf} className="career-shelf" data-physics={physicsState} style={stageStyle}>
+    <span className="lanyard-status" role="status">{loading ? '카드 움직임을 준비하고 있습니다. 클릭이나 Enter로 상세를 열 수 있습니다.' : ''}</span>
     {enabled && <div className="lanyard-canvas" aria-hidden="true">
       <SceneBoundary onError={fail}><Suspense fallback={null}>
         <Scene items={sceneItems} worldKey={worldKey} active={visible} onReady={() => setReady(true)} onFailure={fail} />
@@ -161,6 +165,7 @@ export function LanyardShelf({ badges, aboutHref, portfolioHref, onOpen }: Props
       return <Lanyard key={badge.id} item={items[index]} title={badge.title} role={badge.role} period={badge.period} design={badge.design}
         href={badge.id === 'personal' ? portfolioHref : aboutHref} onOpen={() => onOpen(badge)}
         physicsReady={physicsState === 'ready'} onMotionIntent={() => { if (eligible) setRequested(true); }}
+        loading={loading} dragDisabled={!hydrated || (eligible && !ready && !failed)}
         cancelSignal={cancelSignal} horizontalBounds={eligible && layout ? { min: layout.minDx, max: layout.maxDx } : undefined} />;
     })}
   </div>;

@@ -189,6 +189,13 @@ Astro check, Vitest, production build 및 Playwright에서 크기·배색, 키�
 
 ## 범위
 
+### 로딩 상태와 텍스처 경량화
+
+- React 초기화 및 요청한 물리 Scene 준비 중에만 카드 중앙 spinner를 표시한다. 준비 중 드래그 시작을 막고, 클릭·Enter 링크 동작은 유지한다.
+- 모바일·모션 감소·WebGL 실패는 최종 정적 상태이므로 초기화 후 spinner를 숨긴다. JavaScript 비활성 환경에서는 noscript 스타일로 spinner와 로딩 안내를 숨긴다.
+- 티맥스 줄의 850,425바이트 SVG 대신 80×432px 무손실 WebP(2,220바이트)를 사용한다. 기존 원본 자산은 남겨 두되 화면에서는 요청하지 않는다.
+- verify 통과, 전체 Playwright 37개 통과·모바일 비대상 5개 제외. 로딩 지연 테스트로 spinner·드래그 잠금·준비 후 해제를 확인하고 실제 로딩·완료 화면을 비교했다.
+
 ### 큰 화면의 카드 섹션 높이
 
 - 홈 루트와 main을 세로 Flex로 구성하고 Hero가 GNB 아래 남은 화면 높이를 채우게 한다.
