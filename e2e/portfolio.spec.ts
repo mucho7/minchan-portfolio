@@ -1,27 +1,34 @@
 import { expect, test } from '@playwright/test';
 
-test('프로젝트 탭의 선택 상태와 Case Study 이동을 유지한다', async ({ page }) => {
+test('홈은 경력 카드에 집중하고 Work 탐색은 GNB에서 제공한다', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
-  const agentTab = page.getByRole('tab', { name: 'Agent UI' });
-  await agentTab.click();
-  await expect(agentTab).toHaveAttribute('aria-selected', 'true');
-  await expect(agentTab).toHaveCSS('background-color', 'rgb(242, 97, 48)');
-  await expect(agentTab).toHaveCSS('color', 'rgb(255, 255, 255)');
-  await expect(page.getByRole('tabpanel')).toContainText('반복하던 Agent UI를');
-  const caseStudyLink = page.getByRole('link', { name: '전체 Case Study 읽기' });
-  await expect(caseStudyLink).toHaveCSS('color', 'rgb(255, 255, 255)');
-  await expect(caseStudyLink).toHaveAttribute('href', /agent-ui-reuse/);
+  await expect(page.locator('main > #contact')).toHaveCount(0);
+  await expect(page.locator('main > #work')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: '주요 성과' })).toHaveCount(0);
+  await expect(page.getByRole('tablist')).toHaveCount(0);
+  await expect(page.locator('.badge-anchor')).toHaveCount(3);
+  await expect(page.getByRole('link', { name: 'Work', exact: true })).toHaveAttribute('href', /case-studies\/$/);
+  await expect(page.getByRole('link', { name: 'Contact', exact: true })).toHaveAttribute('href', /contact\/$/);
 });
 
-test('Web IDE를 마지막 탭에 두고 IndexedDB 성과를 보여준다', async ({ page }) => {
-  await page.goto('./');
-  await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
-  const tabs = page.getByRole('tab');
-  await expect(tabs.last()).toHaveText('Web IDE');
-  await tabs.last().click();
-  await expect(page.getByRole('tabpanel')).toContainText('IndexedDB');
-  await expect(page.getByRole('tabpanel')).toContainText('티맥스 클라우드');
+test('Work 목록에서 포트폴리오 제작기를 열고 공통 상세 레이아웃으로 읽는다', async ({ page }) => {
+  await page.goto('./case-studies/');
+  await expect(page.locator('main section > a')).toHaveCount(6);
+  const link = page.getByRole('link').filter({ hasText: '인터랙티브 포트폴리오 제작기' });
+  await expect(link).toBeVisible();
+  await expect(link.getByText('Canvas기반 이벤트 처리', { exact: true })).toBeVisible();
+  await link.click();
+  await expect(page).toHaveURL(/case-studies\/portfolio-engineering\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: '인터랙티브 포트폴리오 제작기' })).toBeVisible();
+  await expect(page.locator('.case-study-body')).toContainText('Vercel Ship 2024에 참여했을 때');
+  await expect(page.locator('.case-study-body')).toContainText('세 카드를 하나의 물리 월드에 배치');
+});
+
+test('기존 Engineering 주소는 포트폴리오 Case Study로 연결한다', async ({ page }) => {
+  await page.goto('./engineering/');
+  await expect(page).toHaveURL(/case-studies\/portfolio-engineering\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: '인터랙티브 포트폴리오 제작기' })).toBeVisible();
 });
 
 test('Case Study 목록은 제목과 핵심 badge만 표시한다', async ({ page }) => {
@@ -49,12 +56,9 @@ test('Case Study 상세 헤더는 제목과 요약만 표시한다', async ({ pa
   await expect(page.getByText('Frontend Engineer / Simulation Playback', { exact: true })).toHaveCount(0);
 });
 
-test('홈과 프로젝트 패널에서 가로 스크롤이 생기지 않는다', async ({ page }) => {
+test('홈에서 가로 스크롤이 생기지 않는다', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
   const getOverflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(await getOverflow()).toBe(0);
-
-  await page.getByRole('tab', { name: 'Workflow' }).click();
   expect(await getOverflow()).toBe(0);
 });

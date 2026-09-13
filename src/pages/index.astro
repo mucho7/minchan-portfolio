@@ -3,11 +3,11 @@ import { getCollection } from 'astro:content';
 import PortfolioExperience from '../components/PortfolioExperience';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { toProjectViewModel } from '../mappers/case-study';
-import { FEATURED_PROJECT_SLUGS } from '../types/portfolio';
+import { CAREER_PROJECT_SLUGS } from '../types/portfolio';
 import { withBase } from '../utils/withBase';
 
 const allCaseStudies = await getCollection('case-studies');
-const projects = FEATURED_PROJECT_SLUGS
+const projects = CAREER_PROJECT_SLUGS
   .map((id) => allCaseStudies.find((study) => study.id === id))
   .filter((study): study is (typeof allCaseStudies)[number] => Boolean(study))
   .map((study) => toProjectViewModel(study, (slug) => withBase(`case-studies/${slug}/`)));
@@ -25,5 +25,6 @@ const projects = FEATURED_PROJECT_SLUGS
     aboutHref={withBase('about/')}
     workHref={withBase('case-studies/')}
     contactHref={withBase('contact/')}
+    portfolioHref={withBase('case-studies/portfolio-engineering/')}
   />
 </BaseLayout>
