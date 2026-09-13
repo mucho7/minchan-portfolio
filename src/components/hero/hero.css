@@ -2,12 +2,12 @@
 .career-intro { text-align: center; }
 .career-intro h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 3.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
 .career-shelf { position: relative; display: grid; flex: 1; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
-.lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
+.lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; --pull: 0px; }
 .lanyard[data-dragging="true"] { z-index: 2; }
-.lanyard-stage { position: relative; height: var(--stage-height); width: 100%; }
+.lanyard-stage { position: relative; min-height: var(--stage-height); height: 100%; width: 100%; }
 .static-strap { position: absolute; top: 0; left: calc(50% - var(--strap-width) / 2); width: var(--strap-width); height: calc(var(--strap-rest) + var(--pull)); background: var(--strap-color); border-inline: var(--strap-border-width) solid var(--strap-border); border-radius: 0 0 3px 3px; }
 .static-strap { background-image: var(--strap-pattern); background-size: 100% var(--strap-pattern-size); background-repeat: repeat-y; }
-.lanyard-canvas { position: absolute; z-index: 0; inset: 0 0 auto; height: var(--stage-height); pointer-events: none; opacity: 0; }
+.lanyard-canvas { position: absolute; z-index: 0; inset: 0; pointer-events: none; opacity: 0; }
 .career-shelf[data-physics="ready"] .lanyard-canvas { opacity: 1; }
 .career-shelf[data-physics="ready"] .static-strap { visibility: hidden; }
 .badge-anchor { position: absolute; top: var(--badge-top); left: calc(50% - var(--badge-width) / 2); display: block; width: var(--badge-width); height: var(--badge-height); border-radius: 12px; color: inherit; text-decoration: none; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; transform-origin: center; will-change: transform; }

@@ -13,6 +13,15 @@ test('큰 화면에서 카드 섹션이 GNB 아래를 채우고 카드 크기를
   await expect(page.locator('.badge-anchor').first()).toHaveCSS('height', '304px');
   const guidance = (await page.locator('.career-guidance').boundingBox())!;
   expect(1200 - guidance.y - guidance.height).toBeCloseTo(32, 0);
+  const stage = page.locator('.lanyard-stage').first();
+  expect((await stage.boundingBox())!.height).toBeGreaterThan(568);
+  await page.locator('#career-card-ahha').hover();
+  await expect(page.locator('[data-physics="ready"]')).toHaveCount(1);
+  await expect.poll(async () => Math.abs((await page.locator('canvas').boundingBox())!.height - (await stage.boundingBox())!.height)).toBeLessThan(2);
+  await page.locator('canvas').evaluate(node => node.dataset.instance = 'resize');
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await expect.poll(async () => Math.abs((await page.locator('canvas').boundingBox())!.height - (await stage.boundingBox())!.height)).toBeLessThan(2);
+  await expect(page.locator('canvas')).toHaveAttribute('data-instance', 'resize');
   await page.setViewportSize({ width: 1280, height: 720 });
   expect((await hero.boundingBox())!.height).toBeGreaterThan(720 - 65);
 });
