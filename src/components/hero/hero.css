@@ -1,7 +1,7 @@
-.career-hero { padding: 48px 24px 32px; background: var(--surface); }
+.career-hero { display: flex; flex: 1; flex-direction: column; padding: 48px 24px 32px; background: var(--surface); }
 .career-intro { text-align: center; }
 .career-intro h1 { margin: 0; font-size: clamp(2.3rem, 4vw, 3.75rem); line-height: 1.15; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
-.career-shelf { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
+.career-shelf { position: relative; display: grid; flex: 1; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1040px; margin: 28px auto 0; border-top: 1px solid var(--line); }
 .lanyard { position: relative; z-index: 1; min-width: 0; text-align: center; perspective: 1000px; --pull: 0px; }
 .lanyard[data-dragging="true"] { z-index: 2; }
 .lanyard-stage { position: relative; height: var(--stage-height); width: 100%; }

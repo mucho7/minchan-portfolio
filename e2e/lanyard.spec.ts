@@ -1,5 +1,22 @@
 import { expect, test } from '@playwright/test';
 
+test('큰 화면에서 카드 섹션이 GNB 아래를 채우고 카드 크기를 유지한다', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop');
+  await page.setViewportSize({ width: 1920, height: 1200 });
+  await page.goto('./');
+  const hero = page.locator('#hero');
+  await expect.poll(async () => {
+    const box = (await hero.boundingBox())!;
+    return Math.round(box.y + box.height);
+  }).toBe(1200);
+  await expect(page.locator('.badge-anchor').first()).toHaveCSS('width', '224px');
+  await expect(page.locator('.badge-anchor').first()).toHaveCSS('height', '304px');
+  const guidance = (await page.locator('.career-guidance').boundingBox())!;
+  expect(1200 - guidance.y - guidance.height).toBeCloseTo(32, 0);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  expect((await hero.boundingBox())!.height).toBeGreaterThan(720 - 65);
+});
+
 test('세 카드의 내용과 공통 크기 및 회사별 배색을 유지한다', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('link', { name: '김민찬 포트폴리오', exact: true })).toBeVisible();

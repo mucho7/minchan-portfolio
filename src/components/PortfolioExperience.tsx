@@ -11,7 +11,7 @@ type PortfolioExperienceProps = {
   portfolioHref: string;
 };
 
-const ROOT_CLASSNAME = 'min-h-[100dvh] overflow-clip bg-[var(--paper)] text-[var(--ink)]';
+const ROOT_CLASSNAME = 'flex min-h-[100dvh] flex-col overflow-clip bg-[var(--paper)] text-[var(--ink)]';
 
 export default function PortfolioExperience({
   projects,
@@ -34,7 +34,7 @@ export default function PortfolioExperience({
         contactHref={contactHref}
       />
 
-      <main>
+      <main className="flex flex-1 flex-col">
         <Hero projects={projects} aboutHref={aboutHref} portfolioHref={portfolioHref} />
       </main>
     </div>
