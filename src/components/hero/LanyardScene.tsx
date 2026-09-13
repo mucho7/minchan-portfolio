@@ -1,7 +1,7 @@
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRapier, useRopeJoint, useSphericalJoint, type RapierRigidBody } from '@react-three/rapier';
 import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react';
-import { BufferAttribute, BufferGeometry, CanvasTexture, CatmullRomCurve3, DoubleSide, Euler, Quaternion, RepeatWrapping, SRGBColorSpace, Vector3 } from 'three';
+import { BufferAttribute, BufferGeometry, CatmullRomCurve3, DoubleSide, Euler, Quaternion, RepeatWrapping, SRGBColorSpace, Texture, TextureLoader, Vector3 } from 'three';
 import { BADGE_SIZE, BADGE_STAGE } from './badge-design';
 import type { LanyardSceneItem } from './lanyard-runtime';
 
@@ -18,7 +18,6 @@ const REST_Y = .08;
 const ANCHOR_Y = BADGE_STAGE.height / ZOOM / 2;
 const SEGMENT = (ANCHOR_Y - REST_Y - 1.4) / 3;
 const SAMPLES = 32;
-const LABEL_HEIGHT = 40;
 
 function ribbonGeometry() {
   const geometry = new BufferGeometry();
@@ -41,29 +40,14 @@ function ribbonGeometry() {
   return geometry;
 }
 
-function labelTexture(label: string, gap: number) {
-  const scale = 4;
-  const width = BADGE_SIZE.strapWidth - BADGE_SIZE.strapBorder * 2;
-  const height = LABEL_HEIGHT + gap;
-  const canvas = document.createElement('canvas');
-  canvas.width = width * scale;
-  canvas.height = height * scale;
-  const context = canvas.getContext('2d')!;
-  context.scale(scale, scale);
-  context.translate(width / 2, height - LABEL_HEIGHT / 2);
-  context.rotate(Math.PI / 2);
-  context.fillStyle = '#ffffff';
-  context.font = '700 7px Arial, sans-serif';
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillText(label, 0, 0);
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace = SRGBColorSpace;
-  texture.wrapT = RepeatWrapping;
-  return texture;
+type BandProps = { item: LanyardSceneItem; active: boolean; onReady: (id: string) => void };
+
+function PatternBand(props: BandProps) {
+  const texture = useLoader(TextureLoader, props.item.design.strapPattern!.src);
+  return <Band {...props} texture={texture} />;
 }
 
-function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boolean; onReady: (id: string) => void }) {
+function Band({ item, active, onReady, texture }: BandProps & { texture?: Texture }) {
   const anchor = useRef<RapierRigidBody>(null!);
   const first = useRef<RapierRigidBody>(null!);
   const second = useRef<RapierRigidBody>(null!);
@@ -75,13 +59,22 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
   useRopeJoint(first, second, [[0, 0, 0], [0, 0, 0], SEGMENT]);
   useRopeJoint(second, third, [[0, 0, 0], [0, 0, 0], SEGMENT]);
   useSphericalJoint(third, card, [[0, 0, 0], [0, 1.4, 0]]);
+  const pattern = useMemo(() => {
+    if (!texture) return undefined;
+    const map = texture.clone();
+    map.colorSpace = SRGBColorSpace;
+    map.wrapT = RepeatWrapping;
+    map.flipY = false;
+    map.needsUpdate = true;
+    return map;
+  }, [texture]);
+  useEffect(() => () => pattern?.dispose(), [pattern]);
   const objects = useMemo(() => ({
     curve: new CatmullRomCurve3([new Vector3(), new Vector3(), new Vector3(), new Vector3()]),
     point: new Vector3(), tangent: new Vector3(), start: new Vector3(), target: new Vector3(),
     quaternion: new Quaternion(), euler: new Euler(), angular: new Vector3(),
-    outer: ribbonGeometry(), inner: ribbonGeometry(), label: ribbonGeometry(),
-    labelTexture: item.design.strapLabel ? labelTexture(item.design.strapLabel, item.design.strapLabelGap) : undefined
-  }), [item.design.strapLabel, item.design.strapLabelGap]);
+    outer: ribbonGeometry(), inner: ribbonGeometry()
+  }), []);
   const mode = useRef(false);
   const sequence = useRef(-1);
   const initialized = useRef(false);
@@ -92,8 +85,6 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
     return () => {
       objects.outer.dispose();
       objects.inner.dispose();
-      objects.label.dispose();
-      objects.labelTexture?.dispose();
       if (item.face.current) item.face.current.style.transform = '';
     };
   }, [invalidate, item.face, objects]);
@@ -144,8 +135,9 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
     objects.curve.points[1].copy(first.current.translation());
     objects.curve.points[2].copy(second.current.translation());
     objects.curve.points[3].copy(third.current.translation());
-    for (let layer = 0; layer < (objects.labelTexture ? 3 : 2); layer++) {
-      const geometry = layer === 0 ? objects.outer : layer === 1 ? objects.inner : objects.label;
+    for (let layer = 0; layer < 2; layer++) {
+      const geometry = layer === 0 ? objects.outer : objects.inner;
+      const uv = geometry.getAttribute('uv') as BufferAttribute;
       const attr = geometry.getAttribute('position') as BufferAttribute;
       const width = (BADGE_SIZE.strapWidth - (layer > 0 ? BADGE_SIZE.strapBorder * 2 : 0)) / ZOOM / 2;
       let curveLength = 0;
@@ -153,10 +145,14 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
       let lastY = 0;
       for (let i = 0; i <= SAMPLES; i++) {
         objects.curve.getPoint(i / SAMPLES, objects.point);
-        if (layer === 2) {
+        if (layer === 1 && pattern) {
           if (i > 0) curveLength += Math.hypot(objects.point.x - lastX, objects.point.y - lastY);
           lastX = objects.point.x;
           lastY = objects.point.y;
+          // Arc-length UVs keep lettering and blank space uniform around bends.
+          const v = curveLength * ZOOM / item.design.strapPattern!.repeatLength;
+          uv.setXY(i * 2, 1, v);
+          uv.setXY(i * 2 + 1, 0, v);
         }
         objects.curve.getTangent(i / SAMPLES, objects.tangent);
         const nx = -objects.tangent.y * width;
@@ -165,9 +161,7 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
         attr.setXYZ(i * 2 + 1, objects.point.x - nx, objects.point.y - ny, .1 + layer * .01);
       }
       attr.needsUpdate = true;
-      if (layer === 2 && objects.labelTexture) {
-        objects.labelTexture.repeat.y = curveLength * ZOOM / (LABEL_HEIGHT + item.design.strapLabelGap);
-      }
+      if (layer === 1 && pattern) uv.needsUpdate = true;
     }
     if (!initialized.current) {
       initialized.current = true;
@@ -182,8 +176,7 @@ function Band({ item, active, onReady }: { item: LanyardSceneItem; active: boole
     <RigidBody ref={third} position={[item.restX, ANCHOR_Y - SEGMENT * 3, 0]} colliders={false} linearDamping={5} angularDamping={5}><BallCollider args={[.06]} mass={.1} collisionGroups={0} /></RigidBody>
     <RigidBody ref={card} position={[item.restX + .05, REST_Y + .12, 0]} colliders={false} linearDamping={5} angularDamping={7} enabledTranslations={[true, true, false]}><CuboidCollider args={[1.12, 1.52, .04]} mass={1} collisionGroups={0} /></RigidBody>
     <mesh geometry={objects.outer} frustumCulled={false}><meshBasicMaterial color={item.design.strapBorderColor} side={DoubleSide} /></mesh>
-    <mesh geometry={objects.inner} frustumCulled={false}><meshBasicMaterial color={item.design.strapColor} side={DoubleSide} /></mesh>
-    {objects.labelTexture && <mesh geometry={objects.label} frustumCulled={false}><meshBasicMaterial map={objects.labelTexture} transparent alphaTest={.1} depthWrite={false} toneMapped={false} side={DoubleSide} /></mesh>}
+    <mesh geometry={objects.inner} frustumCulled={false}><meshBasicMaterial color={pattern ? '#ffffff' : item.design.strapColor} map={pattern} toneMapped={false} side={DoubleSide} /></mesh>
   </>;
 }
 
@@ -209,7 +202,9 @@ export default function LanyardScene({ items, worldKey, active, onReady, onFailu
     dpr={[1, 1.5]} frameloop={active ? 'always' : 'never'} gl={{ alpha: true, antialias: true }}>
     <Suspense fallback={null}>
       <Physics key={worldKey} gravity={[0, -28, 0]} timeStep={1 / 60} paused={!active} colliders={false}>
-        {items.map(item => <Band key={item.id} item={item} active={active} onReady={markReady} />)}
+        {items.map(item => item.design.strapPattern
+          ? <PatternBand key={item.id} item={item} active={active} onReady={markReady} />
+          : <Band key={item.id} item={item} active={active} onReady={markReady} />)}
       </Physics>
     </Suspense>
   </Canvas>;

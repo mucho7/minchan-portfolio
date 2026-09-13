@@ -19,9 +19,11 @@ test('세 카드의 내용과 공통 크기 및 회사별 배색을 유지한다
   await expect(ahha.locator('.static-strap')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
   await expect(ahha.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(230, 0, 39)');
   await expect(ahha.locator('.static-strap')).toHaveCSS('border-right-color', 'rgb(230, 0, 39)');
-  await expect(ahha.locator('.static-strap-labels')).toHaveCSS('row-gap', '48px');
-  await expect(ahha.locator('.static-strap-label').first()).toContainText('AHHA Labs');
-  await expect(ahha.locator('.static-strap-label b').first()).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(ahha.locator('.static-strap')).toHaveCSS('background-image', /ahha-strap\.svg/);
+  await expect(ahha.locator('.static-strap')).toHaveCSS('background-size', '100% 108px');
+  const patternResponse = await page.request.get('./assets/ahha-strap.svg');
+  expect(patternResponse.ok()).toBe(true);
+  expect(await patternResponse.text()).toContain('AHHA Labs');
   await expect(ahha.locator('.badge-face')).toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
   const tmax = page.locator('.lanyard').nth(1);
   await expect(tmax.locator('.static-strap')).toHaveCSS('border-left-width', '2px');

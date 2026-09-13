@@ -168,6 +168,24 @@ Astro check, Vitest, production build 및 Playwright에서 크기·배색, 키�
 - Lanyard·Portfolio Playwright: 데스크톱·모바일 33개 통과, 모바일 비대상 3D 검사 3개 제외
 - Work 목록의 여섯 번째 카드와 공통 Case Study 상세 레이아웃을 4321 실제 화면에서 확인
 
+## 체크포인트 — 줄 인쇄 패턴을 리본 재질에 통합
+
+상태: 구현 및 자동·화면 검증 완료. 사용자 확인 대기.
+
+- 투명 CanvasTexture 글자 메시를 제거하고 검정 바탕과 흰 `AHHA Labs` 문구를 담은 SVG를 내부 리본 재질에 직접 매핑한다.
+- 빨간 외부 리본은 유지한다. 줄 geometry는 카드당 두 겹이며, 정적 DOM 줄도 같은 SVG를 반복 배경으로 사용한다.
+- 디자인 입력은 `strapPattern: { src, repeatLength }`로 변경했다. 아하랩스 패턴은 문구 길이 60px와 빈 공간 48px를 합친 108px 주기이며 글자 크기는 12px다.
+- 곡선의 누적 길이로 UV를 계산해 굴곡마다 글자와 간격이 불균일하게 늘어나는 것을 줄인다.
+- 파비콘과 카드 로고 장식은 사용자가 새 로고를 제공할 때까지 범위에서 제외한다.
+
+검증 결과:
+
+- `npm run verify`: Astro 진단 0건, Vitest 5개 통과, 정적 페이지 11개 빌드
+- `CI=1 PLAYWRIGHT_PORT=4322 npm run test:e2e`: 33개 통과, 모바일 비대상 물리 검사 3개 제외
+- Impeccable detector: 변경 UI 파일 지적 사항 0건
+- 데스크톱 정지·드래그 및 모바일 캡처에서 문구 방향, 줄 굴곡, 테두리와 정적 패턴 확인
+- 개발 서버의 오래된 optimize dependency 응답과 초기화 타이밍 때문에 개발 모드 검사는 실패가 발생했다. 서버를 재시작하고 별도 포트의 빌드 결과로 전체 회귀 검사를 완료했다.
+
 ## 범위
 
 홈의 중복 프로젝트 탭은 제거하고 상세 페이지 URL과 about/contact 페이지를 유지한다. 기존 `/engineering/`은 포트폴리오 제작 Case Study로 연결한다. 원본 brief 수치 후보는 현재 MDX와 달라 게시하지 않는다. 개인 작업은 근거가 있는 포트폴리오 구현 기록에 연결하며 새 사이드 프로젝트를 만들어 넣지 않는다.

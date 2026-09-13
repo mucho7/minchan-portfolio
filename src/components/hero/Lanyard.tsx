@@ -24,7 +24,8 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
     '--strap-color': item.design.strapColor, '--strap-border': item.design.strapBorderColor,
     '--badge-width': `${BADGE_SIZE.width}px`, '--badge-height': `${BADGE_SIZE.height}px`,
     '--strap-width': `${BADGE_SIZE.strapWidth}px`, '--strap-border-width': `${BADGE_SIZE.strapBorder}px`,
-    '--strap-label-gap': `${item.design.strapLabelGap}px`
+    '--strap-pattern': item.design.strapPattern ? `url(${JSON.stringify(item.design.strapPattern.src)})` : 'none',
+    '--strap-repeat-length': `${item.design.strapPattern?.repeatLength ?? 108}px`
   } as CSSProperties;
 
   function finish(cancelled = false) {
@@ -81,11 +82,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
 
   return <div ref={item.root} className="lanyard" style={fallbackStyle} data-armed={armed} data-dragging={dragging}>
     <div className="lanyard-stage">
-      <div className="static-strap" aria-hidden="true">
-        {item.design.strapLabel && <span className="static-strap-labels">
-          {Array.from({ length: 8 }, (_, index) => <span className="static-strap-label" key={index}><b>{item.design.strapLabel}</b></span>)}
-        </span>}
-      </div>
+      <div className="static-strap" aria-hidden="true" />
       <a ref={item.face} id={`career-card-${item.id}`} href={href} className="badge-anchor" aria-label={`${content.title} 상세 보기`}
         aria-describedby={`career-meta-${item.id}`} onDragStart={event => event.preventDefault()}
         onPointerEnter={onMotionIntent} onFocus={onMotionIntent}
