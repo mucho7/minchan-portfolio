@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
-import { BADGE_SIZE } from './badge-design';
+import { BADGE_SIZE, BADGE_STAGE } from './badge-design';
 import type { LanyardRuntime } from './lanyard-runtime';
 import { StaticBadgeFallback, type BadgeContentProps } from './StaticBadgeFallback';
 
@@ -25,7 +25,7 @@ export function Lanyard({ item, href, onOpen, physicsReady, onMotionIntent, canc
     '--badge-width': `${BADGE_SIZE.width}px`, '--badge-height': `${BADGE_SIZE.height}px`,
     '--strap-width': `${BADGE_SIZE.strapWidth}px`, '--strap-border-width': `${BADGE_SIZE.strapBorder}px`,
     '--strap-pattern': item.design.strapPattern ? `url(${JSON.stringify(item.design.strapPattern.src)})` : 'none',
-    '--strap-repeat-length': `${item.design.strapPattern?.repeatLength ?? 108}px`
+    '--strap-pattern-size': `${(item.design.strapPattern?.repeatLength ?? 108) / BADGE_STAGE.strapRest * 100}%`
   } as CSSProperties;
 
   function finish(cancelled = false) {

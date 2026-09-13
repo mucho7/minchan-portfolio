@@ -20,7 +20,7 @@ test('세 카드의 내용과 공통 크기 및 회사별 배색을 유지한다
   await expect(ahha.locator('.static-strap')).toHaveCSS('border-left-color', 'rgb(230, 0, 39)');
   await expect(ahha.locator('.static-strap')).toHaveCSS('border-right-color', 'rgb(230, 0, 39)');
   await expect(ahha.locator('.static-strap')).toHaveCSS('background-image', /ahha-strap\.svg/);
-  await expect(ahha.locator('.static-strap')).toHaveCSS('background-size', '100% 108px');
+  await expect(ahha.locator('.static-strap')).toHaveCSS('background-size', '100% 75%');
   const patternResponse = await page.request.get('./assets/ahha-strap.svg');
   expect(patternResponse.ok()).toBe(true);
   expect(await patternResponse.text()).toContain('AHHA Labs');

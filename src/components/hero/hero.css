@@ -6,7 +6,7 @@
 .lanyard[data-dragging="true"] { z-index: 2; }
 .lanyard-stage { position: relative; height: var(--stage-height); width: 100%; }
 .static-strap { position: absolute; top: 0; left: calc(50% - var(--strap-width) / 2); width: var(--strap-width); height: calc(var(--strap-rest) + var(--pull)); background: var(--strap-color); border-inline: var(--strap-border-width) solid var(--strap-border); border-radius: 0 0 3px 3px; }
-.static-strap { background-image: var(--strap-pattern); background-size: 100% var(--strap-repeat-length); background-repeat: repeat-y; }
+.static-strap { background-image: var(--strap-pattern); background-size: 100% var(--strap-pattern-size); background-repeat: repeat-y; }
 .lanyard-canvas { position: absolute; z-index: 0; inset: 0 0 auto; height: var(--stage-height); pointer-events: none; opacity: 0; }
 .career-shelf[data-physics="ready"] .lanyard-canvas { opacity: 1; }
 .career-shelf[data-physics="ready"] .static-strap { visibility: hidden; }

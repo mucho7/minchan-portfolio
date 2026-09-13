@@ -19,17 +19,17 @@ const ANCHOR_Y = BADGE_STAGE.height / ZOOM / 2;
 const SEGMENT = (ANCHOR_Y - REST_Y - 1.4) / 3;
 const SAMPLES = 32;
 
-function ribbonGeometry() {
+function ribbonGeometry(repeatCount = 1) {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new BufferAttribute(new Float32Array((SAMPLES + 1) * 6), 3));
   const uv = new Float32Array((SAMPLES + 1) * 4);
   const indices: number[] = [];
   for (let i = 0; i <= SAMPLES; i++) {
     const offset = i * 4;
-    uv[offset] = 0;
-    uv[offset + 1] = i / SAMPLES;
-    uv[offset + 2] = 1;
-    uv[offset + 3] = i / SAMPLES;
+    uv[offset] = 1;
+    uv[offset + 1] = i / SAMPLES * repeatCount;
+    uv[offset + 2] = 0;
+    uv[offset + 3] = i / SAMPLES * repeatCount;
   }
   geometry.setAttribute('uv', new BufferAttribute(uv, 2));
   for (let i = 0; i < SAMPLES; i++) {
@@ -73,8 +73,9 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
     curve: new CatmullRomCurve3([new Vector3(), new Vector3(), new Vector3(), new Vector3()]),
     point: new Vector3(), tangent: new Vector3(), start: new Vector3(), target: new Vector3(),
     quaternion: new Quaternion(), euler: new Euler(), angular: new Vector3(),
-    outer: ribbonGeometry(), inner: ribbonGeometry()
-  }), []);
+    // Fixed UVs attach the print to the material, so stretching never adds copies.
+    outer: ribbonGeometry(), inner: ribbonGeometry(item.design.strapPattern ? BADGE_STAGE.strapRest / item.design.strapPattern.repeatLength : 1)
+  }), [item.design.strapPattern?.repeatLength]);
   const mode = useRef(false);
   const sequence = useRef(-1);
   const initialized = useRef(false);
@@ -137,23 +138,10 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
     objects.curve.points[3].copy(third.current.translation());
     for (let layer = 0; layer < 2; layer++) {
       const geometry = layer === 0 ? objects.outer : objects.inner;
-      const uv = geometry.getAttribute('uv') as BufferAttribute;
       const attr = geometry.getAttribute('position') as BufferAttribute;
       const width = (BADGE_SIZE.strapWidth - (layer > 0 ? BADGE_SIZE.strapBorder * 2 : 0)) / ZOOM / 2;
-      let curveLength = 0;
-      let lastX = 0;
-      let lastY = 0;
       for (let i = 0; i <= SAMPLES; i++) {
         objects.curve.getPoint(i / SAMPLES, objects.point);
-        if (layer === 1 && pattern) {
-          if (i > 0) curveLength += Math.hypot(objects.point.x - lastX, objects.point.y - lastY);
-          lastX = objects.point.x;
-          lastY = objects.point.y;
-          // Arc-length UVs keep lettering and blank space uniform around bends.
-          const v = curveLength * ZOOM / item.design.strapPattern!.repeatLength;
-          uv.setXY(i * 2, 1, v);
-          uv.setXY(i * 2 + 1, 0, v);
-        }
         objects.curve.getTangent(i / SAMPLES, objects.tangent);
         const nx = -objects.tangent.y * width;
         const ny = objects.tangent.x * width;
@@ -161,7 +149,6 @@ function Band({ item, active, onReady, texture }: BandProps & { texture?: Textur
         attr.setXYZ(i * 2 + 1, objects.point.x - nx, objects.point.y - ny, .1 + layer * .01);
       }
       attr.needsUpdate = true;
-      if (layer === 1 && pattern) uv.needsUpdate = true;
     }
     if (!initialized.current) {
       initialized.current = true;

@@ -5,6 +5,7 @@ export const BADGE_STAGE = { height: 568, cardTop: 124, strapRest: 144 } as cons
 export type BadgeDesign = {
   strapColor?: string;
   strapBorderColor?: string;
+  /** repeatLength is the nominal period at rest; print stretches with the strap. */
   strapPattern?: { src: string; repeatLength: number };
   backgroundColor?: string;
   backgroundImage?: string;
