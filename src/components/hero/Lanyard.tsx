@@ -10,12 +10,11 @@ type LanyardProps = BadgeContentProps & {
   physicsReady: boolean;
   loading: boolean;
   dragDisabled: boolean;
-  onMotionIntent: () => void;
   cancelSignal: number;
   horizontalBounds?: { min: number; max: number };
 };
 
-export function Lanyard({ item, href, onOpen, physicsReady, loading, dragDisabled, onMotionIntent, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
+export function Lanyard({ item, href, onOpen, physicsReady, loading, dragDisabled, cancelSignal, horizontalBounds, ...content }: LanyardProps) {
   const [armed, setArmed] = useState(false);
   const [dragging, setDragging] = useState(false);
   const pointer = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
@@ -88,10 +87,8 @@ export function Lanyard({ item, href, onOpen, physicsReady, loading, dragDisable
       <div className="static-strap" aria-hidden="true" />
       <a ref={item.face} id={`career-card-${item.id}`} href={href} className="badge-anchor" aria-label={`${content.title} 상세 보기`}
         aria-describedby={`career-meta-${item.id}`} onDragStart={event => event.preventDefault()}
-        onPointerEnter={onMotionIntent} onFocus={onMotionIntent}
         onPointerDown={event => {
           if (!event.isPrimary || event.button !== 0 || pointer.current) return;
-          onMotionIntent();
           if (dragDisabled) return;
           resetAnimation.current?.cancel();
           suppressClick.current = false;

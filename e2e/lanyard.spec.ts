@@ -254,14 +254,12 @@ test('개인 작업의 Case Study는 Ship 2024의 계기와 기술적 판단을 
   await expect(page.locator('.case-study-body')).toContainText('실패를 별도 화면으로 만들지 않기');
 });
 
-test('데스크톱 3D 코드는 카드 사용 의도 전까지 요청하지 않고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {
+test('데스크톱은 사용자 조작 없이 물리를 준비하고 Canvas를 하나만 유지한다', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop');
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await page.goto('./');
   await expect(page.locator('.badge-anchor')).toHaveCount(3);
-  expect(requests.some(url => /LanyardScene/.test(url))).toBe(false);
-  await page.locator('#career-card-ahha').hover();
   await expect(page.locator('[data-physics="ready"]')).toHaveCount(1, { timeout: 20000 });
   expect(requests.some(url => /LanyardScene/.test(url))).toBe(true);
   await page.locator('canvas').evaluate(canvas => canvas.dataset.instance = 'shared');
