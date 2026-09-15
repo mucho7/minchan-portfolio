@@ -35,6 +35,10 @@ export const CAREER_BADGES: readonly CareerBadge[] = [
   },
   {
     id: 'personal', title: '개인 프로젝트', role: '포트폴리오 · 사이드 프로젝트',
+    design: {
+      strapColor: '#1d1d1f',
+      footer: { colors: ['#0073eb', '#0073eb'], split: 100 }
+    },
     summary: 'Vercel Ship 2024에서 직접 접한 인터랙티브 출입증이 오래 기억에 남았습니다. 그 경험을 효과로 복제하기보다, 회사와 개인 작업을 실제 사원증처럼 당겨서 탐색하는 포트폴리오 구조로 바꿔 보았습니다.',
     projects: ['portfolio-engineering']
   }
